@@ -22,3 +22,19 @@ class XiangqiGame:
         alg_num = int(alg_str[1:])  # TODO: wrap in try block
 
         return (alg_num - 1, XiangqiGame._ALPHABET_DCT[alg_letter])
+
+    @staticmethod
+    def get_ALPHABET():
+        return XiangqiGame._ALPHABET
+
+    @staticmethod
+    def get_ROW_COUNT():
+        return XiangqiGame._ROW_COUNT
+
+    @staticmethod
+    def get_COL_COUNT():
+        return XiangqiGame._COL_COUNT
+
+    @staticmethod
+    def get_ALPHABET_DCT():
+        return XiangqiGame._ALPHABET_DCT

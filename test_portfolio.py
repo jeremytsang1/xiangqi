@@ -138,3 +138,18 @@ class XiangQiGameTest(unittest.TestCase):
         for case in test_cases:
             with self.assertRaises(xg.AlgLetterError):
                 xg.XiangqiGame.alg_to_row_col(case)
+
+    def test_alg_to_row_col_invalid_number_format(self):
+        test_cases = (
+            "a!",
+            "ib",
+            "g ",
+            "c1.",
+            "d.1",
+            "e  ",
+            "f3p",
+        )
+
+        for case in test_cases:
+            with self.assertRaises(xg.AlgNumFormatError):
+                xg.XiangqiGame.alg_to_row_col(case)

@@ -40,23 +40,30 @@ class XiangqiGame:
             Size 2 tuple of integers indicating row and column indices.
 
         """
-        if not (2
+        # Validate algebraic string's length.
+        if not (2  # Min 2 chars (1 for col 1 for row).
                 <= len(alg_str)
-                <= 1 + len(str(XiangqiGame._ROW_COUNT))):
+                <= 1 + len(str(XiangqiGame._ROW_COUNT))):  # Max row num digits
             raise AlgStrLengthError
-        alg_letter = alg_str[0]
 
+        alg_letter = alg_str[0]  # Grab the column letter.
+
+        # Validate the algebraic string's column letter.
         if alg_letter not in XiangqiGame._ALPHABET_DCT:
             raise AlgLetterError
 
+        # Try to convert all characters after the column letter into
+        # an integer.
         try:
             alg_num = int(alg_str[1:])
         except ValueError:
             raise AlgNumFormatError
 
+        # Validate the row number to make sure falls within permissible range.
         if not (1 <= alg_num <= XiangqiGame._ROW_COUNT):
             raise AlgNumOutOfBoundsError
 
+        # Return the row and column indices.
         return (alg_num - 1, XiangqiGame._ALPHABET_DCT[alg_letter])
 
     @staticmethod

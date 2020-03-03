@@ -29,7 +29,6 @@ class XiangqiGame:
         Parameters
         ----------
         alg_str: str
-
             Location on board in valid "algebraic notation" with
             columns labeled a-i and rows labeled 1-10. Row 1 being red
             side and row 10 being black side.

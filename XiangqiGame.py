@@ -67,6 +67,8 @@ class AlgStrFormattingError(Error):
 
 
 class AlgStrLengthError(AlgStrFormattingError):
+    """Exception class for when Algebraic notation string has invalid
+    length."""
     def __init__(self):
         max_row_digits = len(str(XiangqiGame._ROW_COUNT))
         super().__init__('Algebraic string must be between 2 to '
@@ -75,17 +77,23 @@ class AlgStrLengthError(AlgStrFormattingError):
 
 
 class AlgLetterError(AlgStrFormattingError):
+    """Exception class for when Algebraic notation string's column letter is
+    invalid."""
     def __init__(self):
         letters = XiangqiGame.get_ALPHABET()[:XiangqiGame.get_COL_COUNT()]
         super().__init__(f'Algebraic column letter must be in "{letters}".')
 
 
 class AlgNumFormatError(AlgStrFormattingError):
+    """Exception class for when Algebraic notation string's row number is not a
+    proper integer."""
     def __init__(self):
         super().__init__('Algebraic row number must be a valid integer.')
 
 
 class AlgNumOutOfBoundsError(AlgStrFormattingError):
+    """Exception class for when Algebraic notation string's row number is not
+    within bounds."""
     def __init__(self):
         super().__init__('Algebraic row number must fall between 1 and '
                          + f'{XiangqiGame.get_ROW_COUNT()} '

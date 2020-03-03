@@ -6,6 +6,8 @@
 class XiangqiGame:
     # Class level constants
     _ALPHABET_DCT = {letter: i for i, letter in enumerate('abcdefghi')}
+    _ROW_COUNT = 10
+    _COL_COUNT = 9
 
     @staticmethod
     def alg_to_row_col(alg_str):

@@ -13,11 +13,33 @@ class XiangqiGame:
 
     @staticmethod
     def alg_to_row_col(alg_str):
-        # TODO: Add exception handling for
-        #   - OOB
-        #   - short strings
-        #   - long strings
-        #   - invalid chars
+        """Converts an Algebraic notation for a board position to a standard
+        row and column indices tuple.
+
+        Row and column indices correspond as follows:
+          |-----------+-------------|
+          | algebraic | row/col     |
+          |-----------+-------------|
+          | a         | col index 0 |
+          | i         | col index 8 |
+          | 1         | row index 0 |
+          | 10        | row index 9 |
+          |-----------+-------------|
+
+        Parameters
+        ----------
+        alg_str: str
+
+            Location on board in valid "algebraic notation" with
+            columns labeled a-i and rows labeled 1-10. Row 1 being red
+            side and row 10 being black side.
+
+        Returns
+        -------
+        tuple of int
+            Size 2 tuple of integers indicating row and column indices.
+
+        """
         if not (2
                 <= len(alg_str)
                 <= 1 + len(str(XiangqiGame._ROW_COUNT))):

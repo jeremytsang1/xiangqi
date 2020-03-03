@@ -18,8 +18,22 @@ class XiangqiGame:
         #   - short strings
         #   - long strings
         #   - invalid chars
+        if not (2
+                <= len(alg_str)
+                <= 1 + len(str(XiangqiGame._ROW_COUNT))):
+            raise AlgStrLengthError
         alg_letter = alg_str[0]
-        alg_num = int(alg_str[1:])  # TODO: wrap in try block
+
+        if alg_letter not in XiangqiGame._ALPHABET_DCT:
+            raise AlgLetterError
+
+        try:
+            alg_num = int(alg_str[1:])
+        except ValueError:
+            raise AlgNumFormatError
+
+        if not (1 <= alg_num <= XiangqiGame._ROW_COUNT):
+            raise AlgNumOutOfBoundsError
 
         return (alg_num - 1, XiangqiGame._ALPHABET_DCT[alg_letter])
 

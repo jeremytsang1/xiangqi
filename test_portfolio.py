@@ -123,3 +123,16 @@ class XiangQiGameTest(unittest.TestCase):
         for case in test_cases:
             with self.assertRaises(xg.AlgStrLengthError):
                 xg.XiangqiGame.alg_to_row_col(case)
+
+    def test_alg_to_row_col_invalid_letter(self):
+        test_cases = (
+            "11",
+            "1b",
+            "!23",
+            ")10",
+            " 2",
+        )
+
+        for case in test_cases:
+            with self.assertRaises(xg.AlgLetterError):
+                xg.XiangqiGame.alg_to_row_col(case)

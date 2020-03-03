@@ -153,3 +153,15 @@ class XiangQiGameTest(unittest.TestCase):
         for case in test_cases:
             with self.assertRaises(xg.AlgNumFormatError):
                 xg.XiangqiGame.alg_to_row_col(case)
+
+    def test_alg_to_row_col_number_OOB(self):
+        test_cases = (
+            "a-2",
+            "b21",
+            "i0",
+            "h99",
+        )
+
+        for case in test_cases:
+            with self.assertRaises(xg.AlgNumOutOfBoundsError):
+                xg.XiangqiGame.alg_to_row_col(case)

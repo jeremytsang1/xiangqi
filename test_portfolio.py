@@ -106,7 +106,7 @@ class XiangQiGameTest(unittest.TestCase):
             "i10": (9, 8),
         }
         for param, expected in test_cases.items():
-            actual = xg.AlgebraicNotation.alg_to_row_col(param)
+            actual = xg.AlgNot.alg_to_row_col(param)
             self.assertEqual(expected, actual)
 
     def test_alg_to_row_col_invalid_len(self):
@@ -122,7 +122,7 @@ class XiangQiGameTest(unittest.TestCase):
 
         for case in test_cases:
             with self.assertRaises(xg.AlgStrLengthError):
-                xg.AlgebraicNotation.alg_to_row_col(case)
+                xg.AlgNot.alg_to_row_col(case)
 
     def test_alg_to_row_col_invalid_letter(self):
         test_cases = (
@@ -137,7 +137,7 @@ class XiangQiGameTest(unittest.TestCase):
 
         for case in test_cases:
             with self.assertRaises(xg.AlgLetterError):
-                xg.AlgebraicNotation.alg_to_row_col(case)
+                xg.AlgNot.alg_to_row_col(case)
 
     def test_alg_to_row_col_invalid_number_format(self):
         test_cases = (
@@ -152,7 +152,7 @@ class XiangQiGameTest(unittest.TestCase):
 
         for case in test_cases:
             with self.assertRaises(xg.AlgNumFormatError):
-                xg.AlgebraicNotation.alg_to_row_col(case)
+                xg.AlgNot.alg_to_row_col(case)
 
     def test_alg_to_row_col_number_OOB(self):
         test_cases = (
@@ -164,4 +164,4 @@ class XiangQiGameTest(unittest.TestCase):
 
         for case in test_cases:
             with self.assertRaises(xg.AlgNumOutOfBoundsError):
-                xg.AlgebraicNotation.alg_to_row_col(case)
+                xg.AlgNot.alg_to_row_col(case)

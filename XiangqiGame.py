@@ -16,6 +16,5 @@ class XiangqiGame:
         #   - invalid chars
         alg_letter = alg_str[0]
         alg_num = int(alg_str[1:])  # TODO: wrap in try block
-        print(f'(alg_letter, alg_num): {alg_letter}, {alg_num}')
 
         return (alg_num - 1, XiangqiGame.ALPHABET_DCT[alg_letter])

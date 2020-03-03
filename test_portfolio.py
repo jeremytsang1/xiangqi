@@ -131,6 +131,8 @@ class XiangQiGameTest(unittest.TestCase):
             "!23",
             ")10",
             " 2",
+            "p2",
+            "A5",
         )
 
         for case in test_cases:

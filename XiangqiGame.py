@@ -7,9 +7,26 @@ class XiangqiGame:
     # Class level constants
     _ROW_COUNT = 10
     _COL_COUNT = 9
+
+    @staticmethod
+    def get_ROW_COUNT():
+        return XiangqiGame._ROW_COUNT
+
+    @staticmethod
+    def get_COL_COUNT():
+        return XiangqiGame._COL_COUNT
+
+
+class AlgebraicNotation:
+    """Class to handle the board's Algebraic notation positional reference."""
     _ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
     _ALPHABET_DCT = {letter: i for i, letter in
-                     enumerate(_ALPHABET[:_ROW_COUNT])}
+                     enumerate(_ALPHABET[:XiangqiGame._ROW_COUNT])}
+
+    @staticmethod
+    def get_ALPHABET():
+        """Getter. Returns a string of the alphabet."""
+        return AlgebraicNotation._ALPHABET
 
     @staticmethod
     def alg_to_row_col(alg_str):
@@ -48,7 +65,7 @@ class XiangqiGame:
         alg_letter = alg_str[0]  # Grab the column letter.
 
         # Validate the algebraic string's column letter.
-        if alg_letter not in XiangqiGame._ALPHABET_DCT:
+        if alg_letter not in AlgebraicNotation._ALPHABET_DCT:
             raise AlgLetterError
 
         # Try to convert all characters after the column letter into
@@ -63,23 +80,7 @@ class XiangqiGame:
             raise AlgNumOutOfBoundsError
 
         # Return the row and column indices.
-        return (alg_num - 1, XiangqiGame._ALPHABET_DCT[alg_letter])
-
-    @staticmethod
-    def get_ALPHABET():
-        return XiangqiGame._ALPHABET
-
-    @staticmethod
-    def get_ROW_COUNT():
-        return XiangqiGame._ROW_COUNT
-
-    @staticmethod
-    def get_COL_COUNT():
-        return XiangqiGame._COL_COUNT
-
-    @staticmethod
-    def get_ALPHABET_DCT():
-        return XiangqiGame._ALPHABET_DCT
+        return (alg_num - 1, AlgebraicNotation._ALPHABET_DCT[alg_letter])
 
 
 class Error(Exception):
@@ -108,7 +109,7 @@ class AlgLetterError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string's column letter is
     invalid."""
     def __init__(self):
-        letters = XiangqiGame.get_ALPHABET()[:XiangqiGame.get_COL_COUNT()]
+        letters = AlgebraicNotation.get_ALPHABET()[:XiangqiGame.get_COL_COUNT()]
         super().__init__(f'Algebraic column letter must be in "{letters}".')
 
 

@@ -1,5 +1,5 @@
 import unittest
-from XiangqiGame import XiangqiGame
+import XiangqiGame as xg
 
 
 class XiangQiGameTest(unittest.TestCase):
@@ -106,7 +106,7 @@ class XiangQiGameTest(unittest.TestCase):
             "i10": (9, 8),
         }
         for param, expected in test_cases.items():
-            actual = XiangqiGame.alg_to_row_col(param)
+            actual = xg.XiangqiGame.alg_to_row_col(param)
             self.assertEqual(expected, actual)
 
     def test_alg_to_row_col_invalid_alg_str(self):

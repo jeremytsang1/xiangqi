@@ -109,6 +109,17 @@ class XiangQiGameTest(unittest.TestCase):
             actual = xg.XiangqiGame.alg_to_row_col(param)
             self.assertEqual(expected, actual)
 
-    def test_alg_to_row_col_invalid_alg_str(self):
-        # TODO: define exception class
-        pass
+    def test_alg_to_row_col_invalid_len(self):
+        test_cases = (
+            "",
+            "f",
+            "1",
+            "!",
+            "abb2",
+            "12049",
+            "sdlfksalkdj0p21940129!"
+        )
+
+        for case in test_cases:
+            with self.assertRaises(xg.AlgStrLengthError):
+                xg.XiangqiGame.alg_to_row_col(case)

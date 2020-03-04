@@ -20,6 +20,7 @@ class Board:
     def get_COL_COUNT():
         return Board._COL_COUNT
 
+
 class AlgNot:
     """Class to handle the board's Algebraic notation positional reference."""
     _ALPHABET = 'abcdefghijklmnopqrstuvwxyz'

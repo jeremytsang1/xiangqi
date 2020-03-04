@@ -5,23 +5,26 @@
 
 class XiangqiGame:
     # Class level constants
+    pass
+
+
+class Board:
     _ROW_COUNT = 10
     _COL_COUNT = 9
 
     @staticmethod
     def get_ROW_COUNT():
-        return XiangqiGame._ROW_COUNT
+        return Board._ROW_COUNT
 
     @staticmethod
     def get_COL_COUNT():
-        return XiangqiGame._COL_COUNT
-
+        return Board._COL_COUNT
 
 class AlgNot:
     """Class to handle the board's Algebraic notation positional reference."""
     _ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
     _ALPHABET_DCT = {letter: i for i, letter in
-                     enumerate(_ALPHABET[:XiangqiGame._ROW_COUNT])}
+                     enumerate(_ALPHABET[:Board.get_ROW_COUNT()])}
 
     @staticmethod
     def get_ALPHABET():
@@ -59,7 +62,7 @@ class AlgNot:
         # Validate algebraic string's length.
         if not (2  # Min 2 chars (1 for col 1 for row).
                 <= len(alg_str)
-                <= 1 + len(str(XiangqiGame._ROW_COUNT))):  # Max row num digits
+                <= 1 + len(str(Board._ROW_COUNT))):  # Max row num digits
             raise AlgStrLengthError
 
         alg_letter = alg_str[0]  # Grab the column letter.
@@ -76,7 +79,7 @@ class AlgNot:
             raise AlgNumFormatError
 
         # Validate the row number to make sure falls within permissible range.
-        if not (1 <= alg_num <= XiangqiGame._ROW_COUNT):
+        if not (1 <= alg_num <= Board._ROW_COUNT):
             raise AlgNumOutOfBoundsError
 
         # Return the row and column indices.
@@ -99,7 +102,7 @@ class AlgStrLengthError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string has invalid
     length."""
     def __init__(self):
-        max_row_digits = len(str(XiangqiGame._ROW_COUNT))
+        max_row_digits = len(str(Board._ROW_COUNT))
         super().__init__('Algebraic string must be between 2 to '
                          + f'{1 + max_row_digits} '
                          + 'characters long (inclusive).')
@@ -109,7 +112,7 @@ class AlgLetterError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string's column letter is
     invalid."""
     def __init__(self):
-        letters = AlgNot.get_ALPHABET()[:XiangqiGame.get_COL_COUNT()]
+        letters = AlgNot.get_ALPHABET()[:Board.get_COL_COUNT()]
         super().__init__(f'Algebraic column letter must be in "{letters}".')
 
 
@@ -125,5 +128,5 @@ class AlgNumOutOfBoundsError(AlgStrFormattingError):
     within bounds."""
     def __init__(self):
         super().__init__('Algebraic row number must fall between 1 and '
-                         + f'{XiangqiGame.get_ROW_COUNT()} '
+                         + f'{Board.get_ROW_COUNT()} '
                          + 'inclusive.')

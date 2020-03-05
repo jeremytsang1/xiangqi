@@ -116,6 +116,25 @@ class Player:
                         [dct['class'](self._color) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
 
+    def get_color(self):
+        """Getter. Return the color of the player."""
+        return self._color()
+
+    def get_pieces(self):
+        """Getter. Get the piece dictionary for the player. Dictionary keys are
+        given by the constants:
+            _GENERAL
+            _ADVISOR
+            _ELEPHANT
+            _HORSE
+            _CHARIOT
+            _CANNON
+            _SOLDIER
+        Each value is a list of the Player's remaining pieces of each key's
+        specified type.
+        """
+        return self._pieces
+
     @staticmethod
     def get_RED():
         """Getter. Get the constant for red color string."""

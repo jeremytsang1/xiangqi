@@ -81,6 +81,57 @@ class Cannon(Piece):
 class Soldier(Piece):
     pass
 
+
+class Player:
+    _RED = 'red'
+    _BLACK = 'black'
+    _GENERAL = 'general'
+    _ADVISOR = 'advisor'
+    _ELEPHANT = 'elephant'
+    _HORSE = 'horse'
+    _CHARIOT = 'chariot'
+    _CANNON = 'cannon'
+    _SOLDIER = 'soldier'
+    _PIECE_DCTS = [
+        {'key': _GENERAL, 'class': General, 'count': 1},
+        {'key': _ADVISOR, 'class': Advisor, 'count': 2},
+        {'kenny': _ELEPHANT, 'class': Elephant, 'count': 2},
+        {'key': _HORSE, 'class': Horse, 'count': 2},
+        {'key': _CHARIOT, 'class': Chariot, 'count': 2},
+        {'key': _CANNON, 'class': Cannon, 'count': 2},
+        {'key': _SOLDIER, 'class': Soldier, 'count': 5},
+    ]
+
+    def __init__(self, color):
+        """Create a player based on one of two colors 'red' or 'black'. Create
+        all pieces belonging to the player for a new game.
+
+        Parameters
+        ----------
+        color: str
+            color may take the value of either PLAYER._RED or PLAYER._BLACK
+
+        """
+        self._color = color
+        self._pieces = {dct['key']:
+                        [dct['class']() for i in range(dct['count'])]
+                        for dct in Player._PIECE_DCTS}
+
+    @staticmethod
+    def get_RED():
+        """Getter. Get the constant for red color string."""
+        return Player._RED
+
+    @staticmethod
+    def get_BLACK():
+        """Getter. Get the constant for black color string."""
+        return Player._BLACK
+
+    def __repr__(self):
+        """Return the color string of the player."""
+        return self._color
+
+
 class AlgNot:
     """Class to handle the board's Algebraic notation positional reference."""
     _ALPHABET = 'abcdefghijklmnopqrstuvwxyz'

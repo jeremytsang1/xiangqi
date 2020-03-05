@@ -55,7 +55,14 @@ class Piece:
 
 
 class General(Piece):
-    pass
+    _ABBREV = 'g'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{General._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Advisor(Piece):

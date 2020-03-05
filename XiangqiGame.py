@@ -66,9 +66,7 @@ class General(Piece):
     _INIT_COL = 4
 
     def __init__(self, player, id_num):
-        super().__init__(player,
-                         id_num,
-                         abbrev=self._ABBREV,
+        super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
                               self._INIT_COL))
 
@@ -78,9 +76,12 @@ class General(Piece):
 
 class Advisor(Piece):
     _ABBREV = 'a'
+    _INIT_COLS = (3, 5)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
+        super().__init__(player, id_num, abbrev=self._ABBREV,
+                         pos=(player.get_HOME_ROW()[player.get_color()],
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         return super().__repr__()
@@ -88,9 +89,12 @@ class Advisor(Piece):
 
 class Elephant(Piece):
     _ABBREV = 'e'
+    _INIT_COLS = (2, 6)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
+        super().__init__(player, id_num, abbrev=self._ABBREV,
+                         pos=(player.get_HOME_ROW()[player.get_color()],
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         return super().__repr__()
@@ -98,9 +102,12 @@ class Elephant(Piece):
 
 class Horse(Piece):
     _ABBREV = 'h'
+    _INIT_COLS = (1, 7)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
+        super().__init__(player, id_num, abbrev=self._ABBREV,
+                         pos=(player.get_HOME_ROW()[player.get_color()],
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         return super().__repr__()
@@ -108,9 +115,12 @@ class Horse(Piece):
 
 class Chariot(Piece):
     _ABBREV = 'ch'
+    _INIT_COLS = (0, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
+        super().__init__(player, id_num, abbrev=self._ABBREV,
+                         pos=(player.get_HOME_ROW()[player.get_color()],
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         return super().__repr__()
@@ -118,9 +128,13 @@ class Chariot(Piece):
 
 class Cannon(Piece):
     _ABBREV = 'c'
+    _INIT_ROWS = {"black": 2, "red": 7}  # TODO: remove hard coded keys?
+    _INIT_COLS = (1, 7)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
+        super().__init__(player, id_num, abbrev=self._ABBREV,
+                         pos=(self._INIT_ROWS[player.get_color()],
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         return super().__repr__()
@@ -128,9 +142,13 @@ class Cannon(Piece):
 
 class Soldier(Piece):
     _ABBREV = 's'
+    _INIT_ROWS = {"black": 3, "red": 6}  # TODO: remove hard coded keys?
+    _INIT_COLS = (0, 2, 4, 6, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
+        super().__init__(player, id_num, abbrev=self._ABBREV,
+                         pos=(self._INIT_ROWS[player.get_color()],
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         return super().__repr__()

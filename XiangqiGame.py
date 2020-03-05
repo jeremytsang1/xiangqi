@@ -33,13 +33,13 @@ class Board:
         dashes = "--------"  # TODO: remove hard coded length?
         divider = "|" + dashes + "".join([f"+{dashes}" for col in range(Board._COL_COUNT)]) + "|"
         row_template = "|" + "|".join(["{{: ^{}}}".format(len(dashes))
-                             for i in range(Board._COL_COUNT + 1)]) + "|"
+                                       for i in range(Board._COL_COUNT + 1)]) + "|"
         header_row = row_template.format(*([""] + [i for i in range(Board._COL_COUNT)]))
         res = divider + "\n" + header_row
         for i, row in enumerate(self._board):
             res += ("\n" + divider + "\n"
                     + row_template.format(*([i] + ["" if elt is None
-                                                   else elt for elt in row])))
+                                                   else str(elt) for elt in row])))
         res += "\n" + divider
         return res
 

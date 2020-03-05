@@ -155,6 +155,8 @@ class Player:
 
         """
         self._color = color
+
+        # CREATE ALL THE PLAYER'S PIECES
         self._pieces = {dct['key']:
                         [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}

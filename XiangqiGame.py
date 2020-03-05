@@ -441,6 +441,19 @@ class AlgNot:
           | 10        | row index 0 |
           |-----------+-------------|
 
+        Raises
+        ------
+        AlgStrLengthError:
+            When algebraic notation string is not length 2 or 3.
+        AlgLetterError:
+            When algebraic notation string has invalid character in its
+            first position (it should be a letter from a-i).
+        AlgNumFormatError:
+            When the character(s) after the first do not represent a
+            valid integer.
+        AlgNumOutOfBoundsError:
+            When the integer is not within the valid 1-10 range.
+
         Parameters
         ----------
         alg_str: str

@@ -118,7 +118,7 @@ class Player:
 
     def get_color(self):
         """Getter. Return the color of the player."""
-        return self._color()
+        return self._color
 
     def get_pieces(self):
         """Getter. Get the piece dictionary for the player. Dictionary keys are

@@ -165,3 +165,9 @@ class XiangQiGameTest(unittest.TestCase):
         for case in test_cases:
             with self.assertRaises(xg.AlgNumOutOfBoundsError):
                 xg.AlgNot.alg_to_row_col(case)
+
+
+class BoardTest(unittest.TestCase):
+    def test_repr(self):
+        board = xg.Board()
+        print(board)

@@ -45,10 +45,10 @@ class Board:
 
 
 class Piece:
-    def __init__(self, player, id_num):
+    def __init__(self, player, id_num, abbrev=""):
         self.num = id_num
         self._player = player
-        self._name = f"{self._player.get_color()[0].upper()} {id_num}"
+        self._name = f"{abbrev}-{self._player.get_color()[0].upper()}-{id_num}"
 
     def __repr__(self):
         return self._name
@@ -58,8 +58,7 @@ class General(Piece):
     _ABBREV = 'g'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()
@@ -69,8 +68,7 @@ class Advisor(Piece):
     _ABBREV = 'a'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()
@@ -80,8 +78,7 @@ class Elephant(Piece):
     _ABBREV = 'e'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()
@@ -91,8 +88,7 @@ class Horse(Piece):
     _ABBREV = 'h'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()
@@ -102,8 +98,7 @@ class Chariot(Piece):
     _ABBREV = 'ch'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()
@@ -113,8 +108,7 @@ class Cannon(Piece):
     _ABBREV = 'c'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()
@@ -124,8 +118,7 @@ class Soldier(Piece):
     _ABBREV = 's'
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num)
-        self._name = f'{self._ABBREV} {self._name}'
+        super().__init__(player, id_num, abbrev=self._ABBREV)
 
     def __repr__(self):
         return super().__repr__()

@@ -45,9 +45,10 @@ class Board:
 
 
 class Piece:
-    def __init__(self, player):
-        self._name = ""
+    def __init__(self, player, num):
+        self.num = num
         self._player = player
+        self._name = f"{self._player.get_color()[0].upper()} {num}"
 
     def __repr__(self):
         return self._name
@@ -113,7 +114,7 @@ class Player:
         """
         self._color = color
         self._pieces = {dct['key']:
-                        [dct['class'](self._color) for i in range(dct['count'])]
+                        [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
 
     def get_color(self):

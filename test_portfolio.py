@@ -169,15 +169,16 @@ class XiangQiGameTest(unittest.TestCase):
 
 class BoardTest(unittest.TestCase):
     def test_repr(self):
-        board = xg.Board()
+        players = (xg.Player('red'), xg.Player('black'))
+        board = xg.Board(players)
         print(board)
 
 
 class PlayerTest(unittest.TestCase):
     def test_player_identity(self):
         test_cases = {
-            "red": xg.Player(xg.Player.get_RED),
-            "black": xg.Player(xg.Player.get_BLACK),
+            "red": xg.Player(xg.Player.get_RED()),
+            "black": xg.Player(xg.Player.get_BLACK()),
         }
         for key, val in test_cases.items():
             expected = key
@@ -186,8 +187,8 @@ class PlayerTest(unittest.TestCase):
 
     def test_piece_counts(self):
         players = {
-            "red": xg.Player(xg.Player.get_RED),
-            "black": xg.Player(xg.Player.get_BLACK),
+            "red": xg.Player(xg.Player.get_RED()),
+            "black": xg.Player(xg.Player.get_BLACK()),
         }
         piece_counts = {
             'general': 1,

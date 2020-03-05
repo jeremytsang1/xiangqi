@@ -263,6 +263,14 @@ class Player:
 
         return pieces
 
+    def __repr__(self):
+        """Return the color string of the player."""
+        return self._color
+
+    def __str__(self):
+        """Return the color string of the player."""
+        return self._color
+
     @staticmethod
     def get_RED():
         """Getter. Get the constant for red color string."""
@@ -313,9 +321,6 @@ class Player:
         """Getter. Get _HOME_ROW dictionary."""
         return Player._HOME_ROW
 
-    def __repr__(self):
-        """Return the color string of the player."""
-        return self._color
 
 
 class AlgNot:

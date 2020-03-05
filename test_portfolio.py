@@ -171,3 +171,36 @@ class BoardTest(unittest.TestCase):
     def test_repr(self):
         board = xg.Board()
         print(board)
+
+
+class PlayerTest(unittest.TestCase):
+    def test_player_identity(self):
+        test_cases = {
+            "red": xg.Player(xg.Player.get_RED),
+            "black": xg.Player(xg.Player.get_BLACK),
+        }
+        for key, val in test_cases.items():
+            expected = key
+            actual = val.get_color()
+            self.assertEqual(expected, actual)
+
+    def test_piece_counts(self):
+        players = {
+            "red": xg.Player(xg.Player.get_RED),
+            "black": xg.Player(xg.Player.get_BLACK),
+        }
+        piece_counts = {
+            'general': 1,
+            'advisor': 2,
+            'elephant': 2,
+            'horse': 2,
+            'chariot': 2,
+            'cannon': 2,
+            'soldier': 5
+        }
+        for color, player in players.items():
+            pieces = player.get_pieces()
+            for key, count in piece_counts.items():
+                expected = count
+                actual = len(pieces[key])
+                self.assertEqual(expected, actual)

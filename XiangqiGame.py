@@ -45,10 +45,10 @@ class Board:
 
 
 class Piece:
-    def __init__(self, player, num):
-        self.num = num
+    def __init__(self, player, id_num):
+        self.num = id_num
         self._player = player
-        self._name = f"{self._player.get_color()[0].upper()} {num}"
+        self._name = f"{self._player.get_color()[0].upper()} {id_num}"
 
     def __repr__(self):
         return self._name

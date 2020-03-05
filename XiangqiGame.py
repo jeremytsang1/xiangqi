@@ -45,9 +45,8 @@ class Board:
 
 
 class Piece:
-    def __init__(self, pos, player):
+    def __init__(self, player):
         self._name = ""
-        self._pos = pos
         self._player = player
 
     def __repr__(self):
@@ -114,7 +113,7 @@ class Player:
         """
         self._color = color
         self._pieces = {dct['key']:
-                        [dct['class']() for i in range(dct['count'])]
+                        [dct['class'](self._color) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
 
     @staticmethod

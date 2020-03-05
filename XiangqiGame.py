@@ -30,7 +30,7 @@ class Board:
         each piece has __repr__ implemented such that its string
         representation is 5 characters or less.
         """
-        dashes = "-----"  # TODO: remove hard coded length?
+        dashes = "--------"  # TODO: remove hard coded length?
         divider = "|" + dashes + "".join([f"+{dashes}" for col in range(Board._COL_COUNT)]) + "|"
         row_template = "|" + "|".join(["{{: ^{}}}".format(len(dashes))
                              for i in range(Board._COL_COUNT + 1)]) + "|"

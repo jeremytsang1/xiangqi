@@ -12,10 +12,13 @@ class Board:
     _ROW_COUNT = 10
     _COL_COUNT = 9
 
-    def __init__(self):
+    def __init__(self, players):
         """Create a board with all pieces at starting positions."""
         self._board = [[None for j in range(Board._COL_COUNT)]
                        for i in range(Board._ROW_COUNT)]
+        for piece in Player.get_all_pieces(*players):
+            row, col = piece.get_pos()
+            self._board[row][col] = piece
 
     @staticmethod
     def get_ROW_COUNT():

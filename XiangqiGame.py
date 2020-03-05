@@ -212,6 +212,31 @@ class Player:
         return self._pieces
 
     @staticmethod
+    def get_all_pieces(*args):
+        """Get pieces from specified players.
+
+        Parameters
+        ----------
+        args: Player
+            Players to get Pieces from.
+
+        Returns
+        -------
+        list of Piece
+            List of all the pieces of the specified players.
+
+        """
+        pieces = []
+
+        for player in args:
+            piece_dct = player.get_pieces()
+
+            for class_key, piece_sublist in piece_dct.items():
+                pieces += piece_sublist
+
+        return pieces
+
+    @staticmethod
     def get_RED():
         """Getter. Get the constant for red color string."""
         return Player._RED

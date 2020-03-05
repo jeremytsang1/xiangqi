@@ -59,34 +59,76 @@ class General(Piece):
 
     def __init__(self, player, id_num):
         super().__init__(player, id_num)
-        self._name = f'{General._ABBREV} {self._name}'
+        self._name = f'{self._ABBREV} {self._name}'
 
     def __repr__(self):
         return super().__repr__()
 
 
 class Advisor(Piece):
-    pass
+    _ABBREV = 'a'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{self._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Elephant(Piece):
-    pass
+    _ABBREV = 'e'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{self._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Horse(Piece):
-    pass
+    _ABBREV = 'h'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{self._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Chariot(Piece):
-    pass
+    _ABBREV = 'ch'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{self._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Cannon(Piece):
-    pass
+    _ABBREV = 'c'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{self._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Soldier(Piece):
-    pass
+    _ABBREV = 's'
+
+    def __init__(self, player, id_num):
+        super().__init__(player, id_num)
+        self._name = f'{self._ABBREV} {self._name}'
+
+    def __repr__(self):
+        return super().__repr__()
 
 
 class Player:

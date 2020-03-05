@@ -1,19 +1,38 @@
 # Author: Jeremy Tsang
 # Date: 03/01/2020
-# Description: TODO
+# Description: Defines classes to implement a game of Xiangqi
+#              ("Chinese Chess"). The game will follow the rules for
+#              the 7 types of pieces: General, Advisor, Elephant,
+#              Horse, Chariot, Cannon, and Soldier. In particular the
+#              game begins with player "red" and uses algebraic
+#              notation to specify locations on the board (a1 being
+#              the lower left location and i10 being the upper
+#              right). The game ends when either player has been mated
+#              or a stalemate has been forced. In this implementation
+#              perpetual check or chasing has not been enforced.
 
 
 class XiangqiGame:
+    """Class to start and control the Xiangqi by the user."""
     # Class level constants
     pass
 
 
 class Board:
+    """Class defining the physical game board. Has 5 rows on each side of
+    the river (10 rows total) and 9 columns total. Algebraic notation
+    is not used in this class (only in XiangqiGame). This class uses a
+    row/column index notation where (0, 0) represents the upper left
+    corner and and (10, 9) the lower right corner.
+    """
     _ROW_COUNT = 10
     _COL_COUNT = 9
 
     def __init__(self, players):
-        """Create a board with all pieces at starting positions."""
+        """Create a board represenation (nested list) with all pieces at their
+        starting positions. Players should be the size 2 list of
+        players, though they need not be in any particular order.
+        """
         self._board = [[None for j in range(Board._COL_COUNT)]
                        for i in range(Board._ROW_COUNT)]
         for piece in Player.get_all_pieces(*players):
@@ -22,10 +41,12 @@ class Board:
 
     @staticmethod
     def get_ROW_COUNT():
+        """Getter. Gets the total number of rows on the board."""
         return Board._ROW_COUNT
 
     @staticmethod
     def get_COL_COUNT():
+        """Getter. Gets the total number of columns on the board."""
         return Board._COL_COUNT
 
     def __repr__(self):
@@ -48,40 +69,72 @@ class Board:
 
 
 class Piece:
+    """Class to represent an abstract Piece. Provides a base class to
+    specific pieces. Should not be instantiated!"""
+
     def __init__(self, player, id_num, abbrev="", pos=None):
+        """Creates a fully specified piece.
+
+        Parameters
+        ----------
+        player: Player
+            Player to whom the piece belongs to.
+        id_num: int
+            Unique identifier (among pieces of the same Player and
+            type) for the piece. Must be non-negative and less than
+            the total number of pieces of the same type that belong to
+            a given player.
+        abbrev: str
+            Short string description of the piece. For printing only.
+        pos: Tuple of int
+            Size two tuple where pos[0] represents the row and pos[1]
+            the column.
+        """
         self._id_num = id_num
         self._player = player
         self._pos = pos
 
-        # For printing use only.
+        # For printing use only. Names will have the form
+        # <abbrev>-<player-first-letter>-<id_num>
         self._name = f"{abbrev}-{self._player.get_color()[0].upper()}-{id_num}"
 
     def get_pos(self):
+        """Getter. Get the position of the piece."""
         return self._pos
 
     def set_pos(self, row, col):
+        """Setter. Update the position of the piece."""
         self._pos = (row, col)
 
     def __repr__(self):
+        """Use the name as representation."""
         return self._name
 
     def __str__(self):
+        """Use the name as informal represenation."""
         return self._name
 
 
 class General(Piece):
+    """
+    Class to represent the general piece. Can detect line of sight of enemy
+    general.
+    """
     _ABBREV = 'g'
     _INIT_COL = 4
 
     def __init__(self, player, id_num):
+        """Create an object of type General with location based on player."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
                               self._INIT_COL))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
@@ -90,14 +143,18 @@ class Advisor(Piece):
     _INIT_COLS = (3, 5)  # Index with _id_num.
 
     def __init__(self, player, id_num):
+        """Create an object of type Adivsor with location based on player and
+        id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
                               self._INIT_COLS[id_num]))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
@@ -106,14 +163,18 @@ class Elephant(Piece):
     _INIT_COLS = (2, 6)  # Index with _id_num.
 
     def __init__(self, player, id_num):
+        """Create an object of type Adivsor with location based on player and
+        id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
                               self._INIT_COLS[id_num]))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
@@ -122,14 +183,18 @@ class Horse(Piece):
     _INIT_COLS = (1, 7)  # Index with _id_num.
 
     def __init__(self, player, id_num):
+        """Create an object of type Adivsor with location based on player and
+        id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
                               self._INIT_COLS[id_num]))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
@@ -138,14 +203,18 @@ class Chariot(Piece):
     _INIT_COLS = (0, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):
+        """Create an object of type Adivsor with location based on player and
+        id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
                               self._INIT_COLS[id_num]))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
@@ -155,14 +224,18 @@ class Cannon(Piece):
     _INIT_COLS = (1, 7)  # Index with _id_num.
 
     def __init__(self, player, id_num):
+        """Create an object of type Adivsor with location based on player and
+        id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(self._INIT_ROWS[player.get_color()],
                               self._INIT_COLS[id_num]))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
@@ -172,20 +245,30 @@ class Soldier(Piece):
     _INIT_COLS = (0, 2, 4, 6, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):
+        """Create an object of type Adivsor with location based on player and
+        id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(self._INIT_ROWS[player.get_color()],
                               self._INIT_COLS[id_num]))
 
     def __repr__(self):
+        """Inherit __repr__ of base class."""
         return super().__repr__()
 
     def __str__(self):
+        """Inherit __str__ of base class."""
         return super().__str__()
 
 
 class Player:
+    """Class representing a player with their own set of pieces. Responsible
+    for piece creation."""
+
+    # CONSTANTS
     _RED = 'red'
     _BLACK = 'black'
+
+    # Piece specific dictionary keys
     _GENERAL = 'general'
     _ADVISOR = 'advisor'
     _ELEPHANT = 'elephant'
@@ -193,6 +276,10 @@ class Player:
     _CHARIOT = 'chariot'
     _CANNON = 'cannon'
     _SOLDIER = 'soldier'
+
+    # Dictionary for helping creating pieces. For 'class' value iterate
+    # across different derived classes __init__ methods to create the
+    # specific pieces for the player.
     _PIECE_DCTS = [
         {'key': _GENERAL, 'class': General, 'count': 1},
         {'key': _ADVISOR, 'class': Advisor, 'count': 2},
@@ -202,6 +289,8 @@ class Player:
         {'key': _CANNON, 'class': Cannon, 'count': 2},
         {'key': _SOLDIER, 'class': Soldier, 'count': 5},
     ]
+
+    # Player specific locations.
     _HOME_ROW = {_BLACK: 0, _RED: 9}
 
     def __init__(self, color):
@@ -212,11 +301,12 @@ class Player:
         ----------
         color: str
             color may take the value of either PLAYER._RED or PLAYER._BLACK
-
         """
         self._color = color
 
-        # CREATE ALL THE PLAYER'S PIECES
+        # CREATE ALL THE PLAYER'S PIECES.
+        # Create as a dictionary of lists indexed by the above class
+        # level constant keys.
         self._pieces = {dct['key']:
                         [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
@@ -255,8 +345,9 @@ class Player:
             List of all the pieces of the specified players.
 
         """
-        pieces = []
+        pieces = []  # List to add player pieces to.
 
+        # For each player, add their remaining pieces to the list.
         for player in args:
             piece_dct = player.get_pieces()
 
@@ -322,7 +413,6 @@ class Player:
     def get_HOME_ROW():
         """Getter. Get _HOME_ROW dictionary."""
         return Player._HOME_ROW
-
 
 
 class AlgNot:

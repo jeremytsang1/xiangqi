@@ -66,8 +66,8 @@ class AlgNot:
           |-----------+-------------|
           | a         | col index 0 |
           | i         | col index 8 |
-          | 1         | row index 0 |
-          | 10        | row index 9 |
+          | 1         | row index 9 |
+          | 10        | row index 0 |
           |-----------+-------------|
 
         Parameters
@@ -107,7 +107,7 @@ class AlgNot:
             raise AlgNumOutOfBoundsError
 
         # Return the row and column indices.
-        return (alg_num - 1, AlgNot._ALPHABET_DCT[alg_letter])
+        return (Board._ROW_COUNT - alg_num, AlgNot._ALPHABET_DCT[alg_letter])
 
 
 class Error(Exception):

@@ -95,7 +95,7 @@ class Player:
     _PIECE_DCTS = [
         {'key': _GENERAL, 'class': General, 'count': 1},
         {'key': _ADVISOR, 'class': Advisor, 'count': 2},
-        {'kenny': _ELEPHANT, 'class': Elephant, 'count': 2},
+        {'key': _ELEPHANT, 'class': Elephant, 'count': 2},
         {'key': _HORSE, 'class': Horse, 'count': 2},
         {'key': _CHARIOT, 'class': Chariot, 'count': 2},
         {'key': _CANNON, 'class': Cannon, 'count': 2},

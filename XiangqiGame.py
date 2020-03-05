@@ -126,6 +126,41 @@ class Player:
         """Getter. Get the constant for black color string."""
         return Player._BLACK
 
+    @staticmethod
+    def get_GENERAL():
+        """Getter. Get dictionary key for General."""
+        return Player._GENERAL
+
+    @staticmethod
+    def get_ADVISOR():
+        """Getter. Get dictionary key for Advisor."""
+        return Player._ADVISOR
+
+    @staticmethod
+    def get_ELEPHANT():
+        """Getter. Get dictionary key for Elephant."""
+        return Player._ELEPHANT
+
+    @staticmethod
+    def get_HORSE():
+        """Getter. Get dictionary key for Horse."""
+        return Player._HORSE
+
+    @staticmethod
+    def get_CHARIOT():
+        """Getter. Get dictionary key for Chariot."""
+        return Player._CHARIOT
+
+    @staticmethod
+    def get_CANNON():
+        """Getter. Get dictionary key for Cannon."""
+        return Player._CANNON
+
+    @staticmethod
+    def get_SOLDIER():
+        """Getter. Get dictionary key for Soldier."""
+        return Player._SOLDIER
+
     def __repr__(self):
         """Return the color string of the player."""
         return self._color

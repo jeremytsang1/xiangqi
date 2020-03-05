@@ -44,6 +44,16 @@ class Board:
         return res
 
 
+class Piece:
+    def __init__(self, pos, player):
+        self._name = ""
+        self._pos = pos
+        self._player = player
+
+    def __repr__(self):
+        return self._name
+
+
 class AlgNot:
     """Class to handle the board's Algebraic notation positional reference."""
     _ALPHABET = 'abcdefghijklmnopqrstuvwxyz'

@@ -60,6 +60,9 @@ class Piece:
     def __repr__(self):
         return self._name
 
+    def __str__(self):
+        return self._name
+
 
 class General(Piece):
     _ABBREV = 'g'
@@ -72,6 +75,9 @@ class General(Piece):
 
     def __repr__(self):
         return super().__repr__()
+
+    def __str__(self):
+        return super().__str__()
 
 
 class Advisor(Piece):
@@ -86,6 +92,9 @@ class Advisor(Piece):
     def __repr__(self):
         return super().__repr__()
 
+    def __str__(self):
+        return super().__str__()
+
 
 class Elephant(Piece):
     _ABBREV = 'e'
@@ -98,6 +107,9 @@ class Elephant(Piece):
 
     def __repr__(self):
         return super().__repr__()
+
+    def __str__(self):
+        return super().__str__()
 
 
 class Horse(Piece):
@@ -112,6 +124,9 @@ class Horse(Piece):
     def __repr__(self):
         return super().__repr__()
 
+    def __str__(self):
+        return super().__str__()
+
 
 class Chariot(Piece):
     _ABBREV = 'ch'
@@ -124,6 +139,9 @@ class Chariot(Piece):
 
     def __repr__(self):
         return super().__repr__()
+
+    def __str__(self):
+        return super().__str__()
 
 
 class Cannon(Piece):
@@ -139,6 +157,9 @@ class Cannon(Piece):
     def __repr__(self):
         return super().__repr__()
 
+    def __str__(self):
+        return super().__str__()
+
 
 class Soldier(Piece):
     _ABBREV = 's'
@@ -152,6 +173,9 @@ class Soldier(Piece):
 
     def __repr__(self):
         return super().__repr__()
+
+    def __str__(self):
+        return super().__str__()
 
 
 class Player:

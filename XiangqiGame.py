@@ -56,9 +56,12 @@ class Piece:
 
 class General(Piece):
     _ABBREV = 'g'
+    _INIT_COL = 4
 
     def __init__(self, player, id_num):
         super().__init__(player, id_num, abbrev=self._ABBREV)
+        self._pos = [self.player.get_HOME_ROW[self.player.get_color()],
+                     self._INIT_COL]
 
     def __repr__(self):
         return super().__repr__()
@@ -143,6 +146,7 @@ class Player:
         {'key': _CANNON, 'class': Cannon, 'count': 2},
         {'key': _SOLDIER, 'class': Soldier, 'count': 5},
     ]
+    _HOME_ROW = {_BLACK: 0, _RED: 9}
 
     def __init__(self, color):
         """Create a player based on one of two colors 'red' or 'black'. Create
@@ -224,6 +228,11 @@ class Player:
     def get_SOLDIER():
         """Getter. Get dictionary key for Soldier."""
         return Player._SOLDIER
+
+    @staticmethod
+    def get_HOME_ROW():
+        """Getter. Get _HOME_ROW dictionary."""
+        return Player._HOME_ROW
 
     def __repr__(self):
         """Return the color string of the player."""

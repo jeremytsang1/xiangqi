@@ -66,9 +66,11 @@ class General(Piece):
     _INIT_COL = 4
 
     def __init__(self, player, id_num):
-        super().__init__(player, id_num, abbrev=self._ABBREV)
-        self._pos = [self.player.get_HOME_ROW[self.player.get_color()],
-                     self._INIT_COL]
+        super().__init__(player,
+                         id_num,
+                         abbrev=self._ABBREV,
+                         pos=(player.get_HOME_ROW()[player.get_color()],
+                              self._INIT_COL))
 
     def __repr__(self):
         return super().__repr__()

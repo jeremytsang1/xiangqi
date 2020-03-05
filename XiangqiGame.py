@@ -12,6 +12,11 @@ class Board:
     _ROW_COUNT = 10
     _COL_COUNT = 9
 
+    def __init__(self):
+        """Create a board with all pieces at starting positions."""
+        self._board = [[None for j in range(Board._COL_COUNT)]
+                       for i in range(Board._ROW_COUNT)]
+
     @staticmethod
     def get_ROW_COUNT():
         return Board._ROW_COUNT

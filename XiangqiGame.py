@@ -45,10 +45,17 @@ class Board:
 
 
 class Piece:
-    def __init__(self, player, id_num, abbrev=""):
-        self.num = id_num
+    def __init__(self, player, id_num, abbrev="", pos=None):
+        self._id_num = id_num
         self._player = player
         self._name = f"{abbrev}-{self._player.get_color()[0].upper()}-{id_num}"
+        self._pos = pos
+
+    def get_pos(self):
+        return self._pos
+
+    def set_pos(self, row, col):
+        self._pos = (row, col)
 
     def __repr__(self):
         return self._name

@@ -121,13 +121,13 @@ class General(Piece):
     general.
     """
     _ABBREV = 'g'
-    _INIT_COL = 4
+    _INIT_COLS = (4,)
 
     def __init__(self, player, id_num):
         """Create an object of type General with location based on player."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          pos=(player.get_HOME_ROW()[player.get_color()],
-                              self._INIT_COL))
+                              self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""

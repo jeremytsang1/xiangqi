@@ -54,6 +54,33 @@ class Piece:
         return self._name
 
 
+class General(Piece):
+    pass
+
+
+class Advisor(Piece):
+    pass
+
+
+class Elephant(Piece):
+    pass
+
+
+class Horse(Piece):
+    pass
+
+
+class Chariot(Piece):
+    pass
+
+
+class Cannon(Piece):
+    pass
+
+
+class Soldier(Piece):
+    pass
+
 class AlgNot:
     """Class to handle the board's Algebraic notation positional reference."""
     _ALPHABET = 'abcdefghijklmnopqrstuvwxyz'

@@ -2,7 +2,7 @@ import unittest
 import XiangqiGame as xg
 
 
-class XiangQiGameTest(unittest.TestCase):
+class AlgNotTest(unittest.TestCase):
     def test_alg_to_row_col_within_range(self):
         test_cases = {
             "a1": (9, 0),

@@ -15,7 +15,12 @@
 class XiangqiGame:
     """Class to start and control the Xiangqi by the user."""
     # Class level constants
-    pass
+    def __init__(self):
+        self._players = {
+            Player.get_RED(): Player(Player.get_RED()),
+            Player.get_BLACK(): Player(Player.get_BLACK()),
+        }
+        self._board = Board(self._players.values())
 
 
 class Board:

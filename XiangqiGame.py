@@ -38,13 +38,13 @@ class XiangqiGame:
         """
         return self._game_state
 
-    def update_game_state(self):
+    def is_in_check(self, player):
         pass
 
     def make_move(self, alg_start, alg_end):
         pass
 
-    def is_in_check(self, player):
+    def update_game_state(self):
         pass
 
 

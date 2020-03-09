@@ -15,12 +15,29 @@
 class XiangqiGame:
     """Class to start and control the Xiangqi by the user."""
     # Class level constants
+    _UNFINISHED = 'UNFINISHED'
+    _RED_WON = 'RED_WON'
+    _BLACK_WON = 'BLACK_WON'
+
     def __init__(self):
         self._players = {
             Player.get_RED(): Player(Player.get_RED()),
             Player.get_BLACK(): Player(Player.get_BLACK()),
         }
         self._board = Board(self._players.values())
+        self._game_state = XiangqiGame._UNFINISHED
+
+    def get_game_state(self):
+        """Getter. Return the game state.
+
+        Returns a string with one of three values depending current
+        state of board:
+        1) 'UNFINISHED'
+        2) 'RED_WON'
+        3) 'BLACK_WON'
+        """
+        return self._game_state
+
 
 
 class Board:

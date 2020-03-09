@@ -171,6 +171,7 @@ class BoardTest(unittest.TestCase):
     def test_repr(self):
         players = (xg.Player('red'), xg.Player('black'))
         board = xg.Board(players)
+        print()
         print(board)
 
 

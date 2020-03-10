@@ -47,6 +47,18 @@ class XiangqiGame:
     def update_game_state(self):
         pass
 
+    def get_players(self):
+        """Getter. Return dictionary of the two players.
+
+        Dictionary has string keys Player.get_RED() and
+        Player.get_BlACK() with respective players as values.
+        """
+        return self._players
+
+    def get_board(self):
+        """Getter. Return the object of type Board."""
+        return self._board
+
 
 class Board:
     """Class defining the physical game board. Has 5 rows on each side of

@@ -631,3 +631,12 @@ class NoPieceAtStartPosError(IllegalMoveError):
         self._pos
         super().__init__('Attempting to move non-existent piece at '
                          + f'{self._pos}')
+
+
+if __name__ == '__main__':
+    game = XiangqiGame()
+    players = game.get_players()
+    red, black = players[Player.get_RED()], players[Player.get_BLACK()]
+    rp = red.get_pieces()
+    bp = black.get_pieces()
+    board = game.get_board()

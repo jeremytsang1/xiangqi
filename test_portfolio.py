@@ -8,6 +8,10 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual(2, len(game.get_players()))
         self.assertEqual("UNFINISHED", game.get_game_state())
 
+    def test_make_move(self):
+        game = xg.XiangqiGame()
+        pass
+
 
 class AlgNotTest(unittest.TestCase):
     def test_alg_to_row_col_within_range(self):

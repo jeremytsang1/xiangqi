@@ -72,6 +72,9 @@ class Board:
     def get_piece(self, pos):
         """Get the piece at the given position.
 
+        Assumes whenever a piece is moved, the element where it used to
+        be is now occupied by None.
+
         Parameters
         ----------
         pos: tuple of int

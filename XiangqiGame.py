@@ -622,3 +622,11 @@ class AlgNumOutOfBoundsError(AlgStrFormattingError):
 class IllegalMoveError(Error):
     """Base class for performing invalid moves."""
     pass
+
+
+class NoPieceAtStartPosError(IllegalMoveError):
+    """Exception class for when attempting to move a piece at a position
+    where no piece currently resides."""
+    def __init__(self, pos):
+        self._pos = pos
+        super().__init__(f'Attempting to move non-existent piece at {pos}')

@@ -633,6 +633,17 @@ class NoPieceAtStartPosError(IllegalMoveError):
                          + f'{self._pos}')
 
 
+class WrongPieceOwner(IllegalMoveError):
+    """Exception class for when attempting to move a piece that does not
+    belong go the player making the move."""
+    def __init__(self, moving_player, pos):
+        self._moving_player = moving_player
+        self._pos = pos
+        super().__init__('Attempting to move piece at '
+                         + f'{self._pos} but does not belong to '
+                         + f'{moving_player}.')
+
+
 if __name__ == '__main__':
     game = XiangqiGame()
     players = game.get_players()

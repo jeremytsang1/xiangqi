@@ -54,6 +54,12 @@ class XiangqiGame:
         except AlgStrFormattingError:
             return False
 
+        # Prevent illegal moves.
+        try:
+            self._board.make_move(pos_start, pos_end, self._current_player)
+        except IllegalMoveError:
+            return False
+
         return True
 
     def update_game_state(self):

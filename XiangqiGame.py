@@ -69,6 +69,22 @@ class Board:
             row, col = piece.get_pos()
             self._board[row][col] = piece
 
+    def get_piece(self, pos):
+        """Get the piece at the given position.
+
+        Parameters
+        ----------
+        pos: tuple of int
+            Size 2 tuple with pos[0] being row and pos[1] being column.
+
+        Returns
+        -------
+        Piece
+            The piece at the specified position. If position is empty,
+            returns None.
+        """
+        return self._board[pos[0]][pos[1]]
+
     @staticmethod
     def get_ROW_COUNT():
         """Getter. Gets the total number of rows on the board."""

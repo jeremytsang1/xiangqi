@@ -80,6 +80,11 @@ class XiangqiGame:
         return self._board
 
     def set_opponents(self):
+        """Helper method to call during init. Allows Players to keep track of
+        the other Player. This is not done in Player.__init__() due to
+        possibility the opponent has not been yet created when the
+        tracking player is being created.
+        """
         player_list = [player for player in self._players.values()]
 
         for i, player in enumerate(player_list):
@@ -400,9 +405,12 @@ class Player:
         self._opponent = None
 
     def set_opponent(self, opponent):
+        """Setter. `opponent` must be object of type Player."""
         self._opponent = opponent
 
     def get_opponent(self):
+        """Getter. Return the calling player's opponent. Returns object of
+        type Player"""
         return self._opponent
 
     def get_color(self):

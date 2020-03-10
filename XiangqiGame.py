@@ -605,3 +605,8 @@ class AlgNumOutOfBoundsError(AlgStrFormattingError):
         super().__init__('Algebraic row number must fall between 1 and '
                          + f'{Board.get_ROW_COUNT()} '
                          + 'inclusive.')
+
+
+class InvalidMoveError(Error):
+    """Base class for performing invalid moves."""
+    pass

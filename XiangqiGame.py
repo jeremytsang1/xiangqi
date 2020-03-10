@@ -42,7 +42,13 @@ class XiangqiGame:
         pass
 
     def make_move(self, alg_start, alg_end):
-        pass
+        try:
+            pos_start = AlgNot.alg_to_row_col(alg_start)
+            pos_end = AlgNot.alg_to_row_col(alg_end)
+        except AlgStrFormattingError:
+            return False
+
+        return True
 
     def update_game_state(self):
         pass

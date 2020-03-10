@@ -20,12 +20,8 @@ class XiangqiGame:
     _BLACK_WON = 'BLACK_WON'
 
     def __init__(self):
-        self._players = {
-            Player.get_RED(): Player(Player.get_RED()),
-            Player.get_BLACK(): Player(Player.get_BLACK()),
-        }
+        self._players = {color: Player(color) for color in Player.get_COLORS()}
         self.set_opponents()  # Make players track each other.
-
         self._board = Board(self._players.values())
         self._game_state = XiangqiGame._UNFINISHED
         self._current_player = self._players[Player.get_RED()]
@@ -359,6 +355,7 @@ class Player:
     # CONSTANTS
     _RED = 'red'
     _BLACK = 'black'
+    _COLORS = (_RED, _BLACK)
 
     # Piece specific dictionary keys
     _GENERAL = 'general'
@@ -475,6 +472,11 @@ class Player:
     def get_BLACK():
         """Getter. Get the constant for black color string."""
         return Player._BLACK
+
+    @staticmethod
+    def get_COLORS():
+        """Getter. Return tuple of all color strings."""
+        return Player._COLORS
 
     @staticmethod
     def get_GENERAL():

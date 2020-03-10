@@ -12,6 +12,19 @@ class XiangqiGameTest(unittest.TestCase):
         game = xg.XiangqiGame()
         pass
 
+    def test_make_move_invalid_alg_not(self):
+        game = xg.XiangqiGame()
+        test_cases = (
+            ('21', 'a4'),
+            ('a12', 'h1'),
+            ('hello', 'world'),
+            ('x2', 'd9'),
+            ('g22', 'd-9'),
+        )
+
+        for pos in test_cases:
+            self.assertFalse(game.make_move(*pos))
+
 
 class AlgNotTest(unittest.TestCase):
     def test_alg_to_row_col_within_range(self):

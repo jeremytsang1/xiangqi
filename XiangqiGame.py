@@ -43,6 +43,10 @@ class XiangqiGame:
         pass
 
     def make_move(self, alg_start, alg_end):
+        # Prevent moves if game is already over.
+        if self._game_state != XiangqiGame._UNFINISHED:
+            return False
+
         try:
             pos_start = AlgNot.alg_to_row_col(alg_start)
             pos_end = AlgNot.alg_to_row_col(alg_end)

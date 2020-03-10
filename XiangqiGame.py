@@ -26,6 +26,7 @@ class XiangqiGame:
         }
         self._board = Board(self._players.values())
         self._game_state = XiangqiGame._UNFINISHED
+        self._current_player = self._players[Player.get_RED()]
 
     def get_game_state(self):
         """Getter. Return the game state.

@@ -175,6 +175,61 @@ class AlgNotTest(unittest.TestCase):
 
 
 class BoardTest(unittest.TestCase):
+    def test_init(self):
+        red = xg.Player(xg.Player.get_RED())
+        black = xg.Player(xg.Player.get_BLACK())
+        board = xg.Board((red, black))
+
+        rp = red.get_pieces()
+        bp = black.get_pieces()
+
+        gen = xg.Player.get_GENERAL()
+        adv = xg.Player.get_ADVISOR()
+        ele = xg.Player.get_ELEPHANT()
+        hor = xg.Player.get_HORSE()
+        cha = xg.Player.get_CHARIOT()
+        can = xg.Player.get_CANNON()
+        sol = xg.Player.get_SOLDIER()
+
+        expected = {
+            (0, 0): bp[cha][0],
+            (0, 1): bp[hor][0],
+            (0, 2): bp[ele][0],
+            (0, 3): bp[adv][0],
+            (0, 4): bp[gen][0],
+            (0, 5): bp[adv][1],
+            (0, 6): bp[ele][1],
+            (0, 7): bp[hor][1],
+            (0, 8): bp[cha][1],
+            (2, 1): bp[can][0],
+            (2, 7): bp[can][1],
+            (3, 0): bp[sol][0],
+            (3, 2): bp[sol][1],
+            (3, 4): bp[sol][2],
+            (3, 6): bp[sol][3],
+            (3, 8): bp[sol][4],
+            # -----------------------------------------------------------------
+            (9, 0): rp[cha][0],
+            (9, 1): rp[hor][0],
+            (9, 2): rp[ele][0],
+            (9, 3): rp[adv][0],
+            (9, 4): rp[gen][0],
+            (9, 5): rp[adv][1],
+            (9, 6): rp[ele][1],
+            (9, 7): rp[hor][1],
+            (9, 8): rp[cha][1],
+            (7, 1): rp[can][0],
+            (7, 7): rp[can][1],
+            (6, 0): rp[sol][0],
+            (6, 2): rp[sol][1],
+            (6, 4): rp[sol][2],
+            (6, 6): rp[sol][3],
+            (6, 8): rp[sol][4],
+        }
+
+        for pos, piece in expected.items():
+            self.assertEqual(piece, board.get_piece(pos))
+
     def test_repr(self):
         players = (xg.Player('red'), xg.Player('black'))
         board = xg.Board(players)

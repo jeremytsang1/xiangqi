@@ -613,6 +613,6 @@ class AlgNumOutOfBoundsError(AlgStrFormattingError):
                          + 'inclusive.')
 
 
-class InvalidMoveError(Error):
+class IllegalMoveError(Error):
     """Base class for performing invalid moves."""
     pass

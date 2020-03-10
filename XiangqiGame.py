@@ -47,6 +47,7 @@ class XiangqiGame:
         if self._game_state != XiangqiGame._UNFINISHED:
             return False
 
+        # Validate algebraic notation.
         try:
             pos_start = AlgNot.alg_to_row_col(alg_start)
             pos_end = AlgNot.alg_to_row_col(alg_end)

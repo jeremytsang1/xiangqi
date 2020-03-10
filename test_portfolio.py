@@ -2,6 +2,13 @@ import unittest
 import XiangqiGame as xg
 
 
+class XiangqiGameTest(unittest.TestCase):
+    def test_init(self):
+        game = xg.XiangqiGame()
+        self.assertEqual(2, len(game.get_players()))
+        self.assertEqual("UNFINISHED", game.get_game_state())
+
+
 class AlgNotTest(unittest.TestCase):
     def test_alg_to_row_col_within_range(self):
         test_cases = {

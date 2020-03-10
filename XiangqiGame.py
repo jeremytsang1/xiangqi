@@ -37,8 +37,20 @@ class XiangqiGame:
         """
         return self._game_state
 
-    def is_in_check(self, player):
-        pass
+    def is_in_check(self, color):
+        """Checks if specified player is in check.
+
+        Parameters
+        ----------
+        color: str
+            Color of player inquire about.
+
+        Returns
+        -------
+        bool
+            True if the player is in check. Otherwise False.
+        """
+        return self._players[color].is_in_check()
 
     def make_move(self, alg_start, alg_end):
         # Prevent moves if game is already over.
@@ -400,6 +412,16 @@ class Player:
                         [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
         self._opponent = None
+
+    def is_in_check(self):
+        """Determine if the calling Player is in check.
+
+        Returns
+        -------
+        bool
+            True if calling Player is in check. Otherwise False.
+        """
+        pass
 
     def set_opponent(self, opponent):
         """Setter. `opponent` must be object of type Player."""

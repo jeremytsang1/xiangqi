@@ -7,6 +7,10 @@ class XiangqiGameTest(unittest.TestCase):
         game = xg.XiangqiGame()
         self.assertEqual(2, len(game.get_players()))
         self.assertEqual("UNFINISHED", game.get_game_state())
+        red = game.get_players()[xg.Player.get_RED()]
+        black = game.get_players()[xg.Player.get_BLACK()]
+        self.assertEqual(black, red.get_opponent())
+        self.assertEqual(red, black.get_opponent())
 
     def test_make_move(self):
         game = xg.XiangqiGame()

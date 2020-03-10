@@ -24,6 +24,8 @@ class XiangqiGame:
             Player.get_RED(): Player(Player.get_RED()),
             Player.get_BLACK(): Player(Player.get_BLACK()),
         }
+        self.set_opponents()  # Make players track each other.
+
         self._board = Board(self._players.values())
         self._game_state = XiangqiGame._UNFINISHED
         self._current_player = self._players[Player.get_RED()]
@@ -76,6 +78,12 @@ class XiangqiGame:
     def get_board(self):
         """Getter. Return the object of type Board."""
         return self._board
+
+    def set_opponents(self):
+        player_list = [player for player in self._players.values()]
+
+        for i, player in enumerate(player_list):
+            player.set_opponent(player_list[i - 1])
 
 
 class Board:
@@ -389,6 +397,13 @@ class Player:
         self._pieces = {dct['key']:
                         [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
+        self._opponent = None
+
+    def set_opponent(self, opponent):
+        self._opponent = opponent
+
+    def get_opponent(self):
+        return self._opponent
 
     def get_color(self):
         """Getter. Return the color of the player."""

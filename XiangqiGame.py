@@ -115,6 +115,16 @@ class Board:
     _ROW = 0
     _COL = 1
 
+    # Directions
+    _FWD = 1
+    _REV = -1
+    _DIRECTIONS_DIAG = ((_REV, _REV), (_REV, _FWD), (_FWD, _REV), (_FWD, _FWD))
+    _DIRECTIONS_ORTHO = ((0, _REV), (0, _FWD), (_REV, 0), (_FWD, 0))
+    _DIRECTIONS_HORSE = {(0, _REV): ((_FWD, _REV), (_REV, _REV)),
+                         (0, _FWD): ((_FWD, _FWD), (_REV, _FWD)),
+                         (_REV, 0): ((_REV, _FWD), (_REV, _REV)),
+                         (_FWD, 0): ((_FWD, _FWD), (_FWD, _REV))}
+
     def __init__(self, players):
         """Create a board represenation (nested list) with all pieces at their
         starting positions. Players should be the size 2 list of

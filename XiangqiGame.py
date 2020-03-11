@@ -616,9 +616,7 @@ class Piece:
         return self._positions.pop()
 
     def is_friendly(self, piece):
-        if piece is None or piece.get_player() is not self._player:
-            return False
-        return True
+        return piece is not None and piece.get_player() is self._player
 
     def remove_friendly(self, path, board):
         """Given a path, removes any friendly piece at the end of the path.

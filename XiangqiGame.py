@@ -251,7 +251,7 @@ class General(Piece):
     def __init__(self, player, id_num):
         """Create an object of type General with location based on player."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                         start_pos=(player.get_HOME_ROWS()[player.get_color()],
                                     self._INIT_COLS[id_num]))
 
     def __repr__(self):
@@ -271,7 +271,7 @@ class Advisor(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                         start_pos=(player.get_HOME_ROWS()[player.get_color()],
                                     self._INIT_COLS[id_num]))
 
     def __repr__(self):
@@ -291,7 +291,7 @@ class Elephant(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                         start_pos=(player.get_HOME_ROWS()[player.get_color()],
                                     self._INIT_COLS[id_num]))
 
     def __repr__(self):
@@ -311,7 +311,7 @@ class Horse(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                         start_pos=(player.get_HOME_ROWS()[player.get_color()],
                                     self._INIT_COLS[id_num]))
 
     def __repr__(self):
@@ -331,7 +331,7 @@ class Chariot(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                         start_pos=(player.get_HOME_ROWS()[player.get_color()],
                                     self._INIT_COLS[id_num]))
 
     def __repr__(self):
@@ -574,9 +574,9 @@ class Player:
         return Player._SOLDIER
 
     @staticmethod
-    def get_HOME_ROW():
+    def get_HOME_ROWS():
         """Getter. Get _HOME_ROW dictionary."""
-        return Player._HOME_ROW
+        return Player._HOME_ROWS
 
 
 class Stack:

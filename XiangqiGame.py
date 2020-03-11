@@ -570,7 +570,7 @@ class Piece:
     def pop(self):
         return self._positions.pop()
 
-    def remove_friendly(self, path):
+    def remove_friendly(self, path, board):
         """Given a path, removes any friendly piece at the end of the path.
 
         If no friendly piece found, path is not mutated.
@@ -584,9 +584,9 @@ class Piece:
         -------
         None
         """
-        if len(path) > 0:
+        if len(path) < 1:
             return
-        piece = path[-1]
+        piece = board.get_piece(path[-1])
         if (piece is not None and piece.get_player() == self._player):
             path.pop()
 
@@ -700,10 +700,10 @@ class Chariot(Piece):
         moves = list()
         for path_dir in board.get_ortho_dirs():
             path = board.find_ortho_path(pos, path_dir)
-            super().remove_friendly(path)
+            super().remove_friendly(path, board)
             moves += path
 
-        return moves()
+        return moves
 
 
 class Cannon(Piece):
@@ -764,7 +764,7 @@ class Soldier(Piece):
         moves = list()
         for path_dir in path_dirs:
             path = board.find_ortho_path(pos, path_dir, 1)
-            super().remove_friendly(path)
+            super().remove_friendly(path, board)
             moves += path
 
         return moves

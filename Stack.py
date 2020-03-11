@@ -28,3 +28,12 @@ class Stack:
     def __init__(self):
         self._head = None
         self._size = 0
+
+    def get_size(self):
+        return self._size
+
+    def peek(self):
+        if self._size == 0:
+            return None
+        # Assumes non-empty stack has at least one Node.
+        return self._head.get_data()

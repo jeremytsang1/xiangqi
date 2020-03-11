@@ -178,6 +178,15 @@ class Board:
         """
         return self._board[pos[Board._ROW]][pos[Board._COL]]
 
+    def place_piece(self, new_pos, piece):
+        old_pos = piece.get_pos()
+        self.set_board(new_pos, piece)
+        self.set_board(old_pos, None)
+        piece.push(new_pos)
+
+    def set_board(self, pos, elt):
+        self._board[pos[self._ROW]][pos[self._COL]] = elt
+
     def make_move(self, beg_pos, end_pos, moving_player):
         beg_piece = self.get_piece(beg_pos)
         end_piece = self.get_piece(end_pos)
@@ -187,13 +196,19 @@ class Board:
         if beg_piece.get_player() != moving_player:
             raise WrongPieceOwner(moving_player, beg_pos)
 
-        # TODO: get piece move set
+        # Get piece move set.
+        moves = beg_piece.get_moves(self)
+
+        # Check if in moveset.
+        if end_pos not in moves:
+            raise NotInMovesetError(beg_piece, moves, end_pos)
+
+        # TODO: Check if allowed to take piece would lift mate (if currently in mate)
 
         # TODO: "make" the move
+        self.place_piece(end_pos, beg_piece)
+        return end_piece
 
-        # TODO: check if result in check
-
-        # TODO: "make" the move for real
 
     def make_castle(self, player):
         """Helper method to create record of each player's castle positions.

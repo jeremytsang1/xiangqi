@@ -687,6 +687,7 @@ class General(Piece):
 class Advisor(Piece):
     _ABBREV = 'a'
     _INIT_COLS = (3, 5)  # Index with _id_num.
+    _DIAG_DIST = 1
 
     def __init__(self, player, id_num):
         """Create an object of type Adivsor with location based on player and
@@ -709,7 +710,7 @@ class Advisor(Piece):
         moves = list()
 
         for diag_dir in board.get_diag_dirs():
-            pos = board.find_diag(current_pos, diag_dir)
+            pos = board.find_diag(current_pos, diag_dir, self._DIAG_DIST)
             in_bounds = pos is not None
             if in_bounds and board.is_in_castle(pos, self._player):
                 piece = board.get_piece(pos)

@@ -486,6 +486,18 @@ class Board:
         """Getter. Gets the total number of columns on the board."""
         return Board._COL_COUNT
 
+    @staticmethod
+    def get_ortho_dirs():
+        return Board._DIRECTIONS_ORTHO
+
+    @staticmethod
+    def get_ROW():
+        return Board._ROW
+
+    @staticmethod
+    def get_COL():
+        return Board._COL
+
 
 class Piece:
     """Class to represent an abstract Piece. Provides a base class to

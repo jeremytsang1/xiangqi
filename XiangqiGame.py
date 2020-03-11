@@ -110,7 +110,6 @@ class Board:
     """
     _ROW_COUNT = 10
     _COL_COUNT = 9
-    _CASTLE_CENTER_COL = 3
 
     def __init__(self, players):
         """Create a board represenation (nested list) with all pieces at their
@@ -178,8 +177,17 @@ class Board:
             Tuple of size two tuples of ints. Each inner tupple
             represents a row and col position.
         """
+        # Center row of the castle is one row twoards river from
+        # player's home row.
         center_row = player.get_home_row() + player.get_fwd_dir()
-        center_col = Board._CASTLE_CENTER_COL
+
+        # Center column of the castle is the same column as the
+        # player's general.
+        general = player.get_pieces()[Player.get_GENERAL()][0]
+        center_col = general.get_pos()[1]
+
+        # Add the displacements (-1, 0, 1) go the castle's center
+        # location to get all 9 positions in the castle.
         displacements = [i for i in range(-1, 2)]
         castle_positions = tuple([(center_row + i, center_col + j)
                                   for i in displacements

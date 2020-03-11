@@ -261,33 +261,28 @@ class BoardTest(unittest.TestCase):
         board = xg.Board(players)
         expected = {
             xg.Player.get_BLACK():
-            ((0, 2),
-             (0, 3),
+            ((0, 3),
              (0, 4),
-             (1, 2),
+             (0, 5),
              (1, 3),
              (1, 4),
-             (2, 2),
+             (1, 5),
              (2, 3),
-             (2, 4),),
+             (2, 4),
+             (2, 5),),
             xg.Player.get_RED():
-            ((7, 2),
-             (7, 3),
+            ((7, 3),
              (7, 4),
-             (8, 2),
+             (7, 5),
              (8, 3),
              (8, 4),
-             (9, 2),
+             (8, 5),
              (9, 3),
-             (9, 4),),
+             (9, 4),
+             (9, 5),),
         }
         for color, castle in expected.items():
             self.assertEqual(castle, board.get_castle(color))
-
-
-
-
-
 
     def test_repr(self):
         players = (xg.Player('red'), xg.Player('black'))

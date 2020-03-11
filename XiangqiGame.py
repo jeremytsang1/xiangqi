@@ -590,6 +590,26 @@ class Piece:
         if (piece is not None and piece.get_player() == self._player):
             path.pop()
 
+    def remove_last_piece(self, path, board):
+        """Given a path, removes any piece at the end of the path.
+
+        If no piece found, path is not mutated.
+
+        Parameters
+        ----------
+        path: list of tuple
+            List of size 2 tuples (positions).
+
+        Returns
+        -------
+        None
+        """
+        if len(path) < 1:
+            return
+        piece = board.get_piece(path[-1])
+        if (piece is not None):
+            path.pop()
+
 
 class General(Piece):
     """
@@ -726,6 +746,33 @@ class Cannon(Piece):
         """Inherit __str__ of base class."""
         return super().__str__()
 
+    def get_moves(self, board):
+        pos = self._positions.peek()
+
+        # Find paths in each of the 4 ortho directions.
+        moves = list()
+        targets = list()
+        for path_dir in board.get_ortho_dirs():
+            path = board.find_ortho_path(pos, path_dir)
+
+            # Look for cannon's firing platform if path nonempty.
+            if len(path) > 0:
+                platform = board.get_piece(path[-1])
+                if platform is not None:
+                    # Look for the target in the path in the same
+                    # direction behind the platform.
+                    attack_path = board.find_ortho_path(platform.get_pos(),
+                                                        path_dir)
+                    if len(attack_path) > 0:
+                        # Target will be first enemy item behind the platform.
+                        target = board.get_piece(attack_path[-1])
+                        if target is not None and target.get_player() != self._player:
+                            targets.append(target.get_pos())
+
+            super().remove_last_piece(path, board)
+            moves += path + targets
+
+        return moves
 
 class Soldier(Piece):
     _ABBREV = 's'

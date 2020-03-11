@@ -111,6 +111,9 @@ class Board:
     _ROW_COUNT = 10
     _COL_COUNT = 9
     _RIVER_DIST = 5
+    # Axes constants.
+    _ROW = 0
+    _COL = 1
 
     def __init__(self, players):
         """Create a board represenation (nested list) with all pieces at their

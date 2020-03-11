@@ -546,9 +546,12 @@ class Piece:
         """Getter. Get the position of the piece."""
         return self._positions.peek()
 
-    def set_pos(self, pos):
+    def push(self, pos):
         """Setter. Update the position of the piece."""
-        self._positions.append(pos)
+        self._positions.push(pos)
+
+    def pop(self):
+        return self._positions.pop()
 
     def remove_friendly(self, path):
         """Given a path, removes any friendly piece at the end of the path.

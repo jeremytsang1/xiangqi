@@ -172,7 +172,7 @@ class Piece:
     """Class to represent an abstract Piece. Provides a base class to
     specific pieces. Should not be instantiated!"""
 
-    def __init__(self, player, id_num, abbrev="", pos=None):
+    def __init__(self, player, id_num, abbrev="", start_pos=None):
         """Creates a fully specified piece.
 
         Parameters
@@ -192,7 +192,7 @@ class Piece:
         """
         self._id_num = id_num
         self._player = player
-        self._pos = pos
+        self._pos = start_pos
 
         # For printing use only. Names will have the form
         # <abbrev>-<player-first-letter>-<id_num>
@@ -230,8 +230,8 @@ class General(Piece):
     def __init__(self, player, id_num):
         """Create an object of type General with location based on player."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(player.get_HOME_ROW()[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""
@@ -250,8 +250,8 @@ class Advisor(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(player.get_HOME_ROW()[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""
@@ -270,8 +270,8 @@ class Elephant(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(player.get_HOME_ROW()[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""
@@ -290,8 +290,8 @@ class Horse(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(player.get_HOME_ROW()[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""
@@ -310,8 +310,8 @@ class Chariot(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(player.get_HOME_ROW()[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(player.get_HOME_ROW()[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""
@@ -331,8 +331,8 @@ class Cannon(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(self._INIT_ROWS[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(self._INIT_ROWS[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""
@@ -352,8 +352,8 @@ class Soldier(Piece):
         """Create an object of type Adivsor with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
-                         pos=(self._INIT_ROWS[player.get_color()],
-                              self._INIT_COLS[id_num]))
+                         start_pos=(self._INIT_ROWS[player.get_color()],
+                                    self._INIT_COLS[id_num]))
 
     def __repr__(self):
         """Inherit __repr__ of base class."""

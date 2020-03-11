@@ -125,6 +125,24 @@ class Board:
         self._castles = {player.get_color(): self.make_castle(player)
                          for player in players}
 
+    def __repr__(self):
+        """Debugging method. Print a text visualization of the board. Assumes
+        each piece has __repr__ implemented such that its string
+        representation is 5 characters or less.
+        """
+        dashes = "--------"  # TODO: remove hard coded length?
+        divider = "|" + dashes + "".join([f"+{dashes}" for col in range(Board._COL_COUNT)]) + "|"
+        row_template = "|" + "|".join(["{{: ^{}}}".format(len(dashes))
+                                       for i in range(Board._COL_COUNT + 1)]) + "|"
+        header_row = row_template.format(*([""] + [i for i in range(Board._COL_COUNT)]))
+        res = divider + "\n" + header_row
+        for i, row in enumerate(self._board):
+            res += ("\n" + divider + "\n"
+                    + row_template.format(*([i] + ["" if elt is None
+                                                   else str(elt) for elt in row])))
+        res += "\n" + divider
+        return res
+
     def get_piece(self, pos):
         """Get the piece at the given position.
 
@@ -233,24 +251,6 @@ class Board:
     def get_COL_COUNT():
         """Getter. Gets the total number of columns on the board."""
         return Board._COL_COUNT
-
-    def __repr__(self):
-        """Debugging method. Print a text visualization of the board. Assumes
-        each piece has __repr__ implemented such that its string
-        representation is 5 characters or less.
-        """
-        dashes = "--------"  # TODO: remove hard coded length?
-        divider = "|" + dashes + "".join([f"+{dashes}" for col in range(Board._COL_COUNT)]) + "|"
-        row_template = "|" + "|".join(["{{: ^{}}}".format(len(dashes))
-                                       for i in range(Board._COL_COUNT + 1)]) + "|"
-        header_row = row_template.format(*([""] + [i for i in range(Board._COL_COUNT)]))
-        res = divider + "\n" + header_row
-        for i, row in enumerate(self._board):
-            res += ("\n" + divider + "\n"
-                    + row_template.format(*([i] + ["" if elt is None
-                                                   else str(elt) for elt in row])))
-        res += "\n" + divider
-        return res
 
 
 class Piece:

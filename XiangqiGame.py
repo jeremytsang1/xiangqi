@@ -1114,6 +1114,19 @@ class WrongPieceOwner(IllegalMoveError):
                          + f'{moving_player}.')
 
 
+class WrongPieceOwnerError(IllegalMoveError):
+    """Exception class for trying to move a piece to a position not in its
+    moveset."""
+    def __init__(self, piece, moves, end_pos):
+        self._piece = piece
+        self._moves = moves
+        self._end_pos = end_pos
+        self._msg = (f'Tried to move {self._piece} at {self._piece.get_pos()} '
+                     + f'to {self._end_pos}.\n'
+                     + f'moveset: {self._moves}')
+        super().__init__(msg)
+
+
 class BoardError(Error):
     """Base exception class for miscellaneous Board errors"""
     pass
@@ -1123,8 +1136,9 @@ class SamePositionError(BoardError):
     """Exception class for when expecting two peices on different spaces."""
     def __init__(self, pos):
         self._pos = pos
-        msg = f'Pieces expected to have different position but both at {pos}'
-        super().__init__(msg)
+        self._msg = ('Pieces expected to have different'
+                     + f' position but both at {pos}')
+        super().__init__(self._msg)
 
 
 class OutOfBoundsError(BoardError):
@@ -1133,9 +1147,9 @@ class OutOfBoundsError(BoardError):
         self._pos = pos
         self._axis = axis
         self._max_val = axis_count - 1
-        msg = (f'Axis {self._axis} must be in [0..{self._max_val}]'
-               + f'but pos was: {self._pos}.')
-        super().__init__(msg)
+        self._msg = (f'Axis {self._axis} must be in [0..{self._max_val}]'
+                     + f'but pos was: {self._pos}.')
+        super().__init__(self._msg)
 
 
 if __name__ == '__main__':

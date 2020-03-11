@@ -284,6 +284,21 @@ class BoardTest(unittest.TestCase):
         for color, castle in expected.items():
             self.assertEqual(castle, board.get_castle(color))
 
+    def test_is_in_castle(self):
+        players = (xg.Player(xg.Player.get_RED()),
+                   xg.Player(xg.Player.get_BLACK()))
+        board = xg.Board(players)
+        for player in players:
+            piece_dct = xg.Player.get_pieces(player)
+            for key, piece_lst in piece_dct.items():
+                for piece in piece_lst:
+                    actual = board.is_in_castle(piece.get_pos(), player)
+                    expected = (True if (isinstance(piece, xg.General)
+                                         or isinstance(piece, xg.Advisor))
+                                else False)
+                    # print(f'{piece}: {expected}')
+                    self.assertEqual(expected, actual)
+
     def test_repr(self):
         players = (xg.Player('red'), xg.Player('black'))
         board = xg.Board(players)

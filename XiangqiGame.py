@@ -197,6 +197,9 @@ class Board:
     def get_castle(self, color):
         return self._castles[color]
 
+    def is_in_castle(self, pos, player):
+        return pos in self._castles[player.get_color()]
+
 
     @staticmethod
     def get_ROW_COUNT():

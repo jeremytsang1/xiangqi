@@ -618,6 +618,10 @@ class Piece:
     def is_friendly(self, piece):
         return piece is not None and piece.get_player() is self._player
 
+    def is_hostile(self, piece):
+        return piece is not None and piece.get_player() is not self._player
+
+
     def remove_friendly(self, path, board):
         """Given a path, removes any friendly piece at the end of the path.
 
@@ -876,7 +880,7 @@ class Cannon(Piece):
                     if len(attack_path) > 0:
                         # Target will be first enemy item behind the platform.
                         target = board.get_piece(attack_path[-1])
-                        if target is not None and target.get_player() != self._player:
+                        if self.is_hostile(target):
                             targets.append(target.get_pos())
 
             super().remove_last_piece(path, board)

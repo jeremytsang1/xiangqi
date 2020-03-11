@@ -198,6 +198,10 @@ class Piece:
         # <abbrev>-<player-first-letter>-<id_num>
         self._name = f"{abbrev}-{self._player.get_color()[0].upper()}-{id_num}"
 
+    def get_player(self):
+        """Getter. Return the Player who own's the piece."""
+        return self._player
+
     def get_pos(self):
         """Getter. Get the position of the piece."""
         return self._pos

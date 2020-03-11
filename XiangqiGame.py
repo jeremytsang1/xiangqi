@@ -209,7 +209,6 @@ class Board:
         self.place_piece(end_pos, beg_piece)
         return end_piece
 
-
     def make_castle(self, player):
         """Helper method to create record of each player's castle positions.
 
@@ -621,7 +620,6 @@ class Piece:
     def is_hostile(self, piece):
         return piece is not None and piece.get_player() is not self._player
 
-
     def remove_friendly(self, path, board):
         """Given a path, removes any friendly piece at the end of the path.
 
@@ -758,6 +756,8 @@ class Elephant(Piece):
 class Horse(Piece):
     _ABBREV = 'h'
     _INIT_COLS = (1, 7)  # Index with _id_num.
+    _ORTHO_DIST = 1
+    _DIAG_DIST = 1
 
     def __init__(self, player, id_num):
         """Create an object of type Adivsor with location based on player and
@@ -781,7 +781,7 @@ class Horse(Piece):
         moves = list()
         for ortho_dir in board.get_ortho_dirs():
             # First move orthogonally one position.
-            ortho_path = board.find_ortho_path(pos, ortho_dir, 1)
+            ortho_path = board.find_ortho_path(pos, ortho_dir, self._ORTHO_DIST)
 
             # Validate the ortho move.
             empty = len(ortho_path) == 0
@@ -810,7 +810,7 @@ class Horse(Piece):
         diag_positions = list()  # at most size 2
         diag_dirs = horse_dirs[ortho_dir]
         for diag_dir in diag_dirs:
-            diag_pos = board.find_diag(ortho_pos, diag_dir)
+            diag_pos = board.find_diag(ortho_pos, diag_dir, self._DIAG_DIST)
             in_bounds = diag_pos is not None
 
             if in_bounds:
@@ -900,6 +900,7 @@ class Cannon(Piece):
             moves += path + targets
 
         return moves
+
 
 class Soldier(Piece):
     _ABBREV = 's'

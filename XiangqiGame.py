@@ -139,6 +139,15 @@ class Board:
         """
         return self._board[pos[0]][pos[1]]
 
+    def make_move(self, src_pos, dst_pos, moving_player):
+        src_piece = self.get_piece(src_pos)
+        dst_piece = self.get_piece(dst_pos)
+
+        if src_piece is None:
+            raise NoPieceAtStartPosError(src_pos)
+        if src_piece.get_player() != moving_player:
+            raise WrongPieceOwner(moving_player, src_pos)
+
     @staticmethod
     def get_ROW_COUNT():
         """Getter. Gets the total number of rows on the board."""

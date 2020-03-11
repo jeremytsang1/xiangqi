@@ -668,6 +668,7 @@ class General(Piece):
     """
     _ABBREV = 'g'
     _INIT_COLS = (4,)
+    _ORTHO_DIST = 1
 
     def __init__(self, player, id_num):
         """Create an object of type General with location based on player."""
@@ -682,6 +683,13 @@ class General(Piece):
     def __str__(self):
         """Inherit __str__ of base class."""
         return super().__str__()
+
+    def get_moves(self, board):
+        current_pos = self._positions.peek()
+
+        moves = list()
+
+        return moves
 
 
 class Advisor(Piece):

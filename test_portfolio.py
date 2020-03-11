@@ -254,6 +254,12 @@ class BoardTest(unittest.TestCase):
         for pos, piece in expected.items():
             self.assertEqual(piece, board.get_piece(pos))
 
+    def test_repr(self):
+        players = (xg.Player('red'), xg.Player('black'))
+        board = xg.Board(players)
+        print()
+        print(board)
+
     def test_castle_creation(self):
         players = (xg.Player(xg.Player.get_RED()),
                    xg.Player(xg.Player.get_BLACK()))
@@ -298,12 +304,6 @@ class BoardTest(unittest.TestCase):
                                 else False)
                     # print(f'{piece}: {expected}')
                     self.assertEqual(expected, actual)
-
-    def test_repr(self):
-        players = (xg.Player('red'), xg.Player('black'))
-        board = xg.Board(players)
-        print()
-        print(board)
 
 
 class PlayerTest(unittest.TestCase):

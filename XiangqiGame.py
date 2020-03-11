@@ -1191,3 +1191,24 @@ if __name__ == '__main__':
     rp = red.get_pieces()
     bp = black.get_pieces()
     board = game.get_board()
+    # -------------------------------------------------------------------------
+    sb0, sb1, sb2, sb3, sb4 = black.get_pieces()['soldier']
+    sr0, sr1, sr2, sr3, sr4 = red.get_pieces()['soldier']
+    # -------------------------------------------------------------------------
+    cb0, cb1 = black.get_pieces()['cannon']
+    cr0, cr1 = red.get_pieces()['cannon']
+    # -------------------------------------------------------------------------
+    chb0, chb1 = black.get_pieces()['chariot']
+    chr0, chr1 = red.get_pieces()['chariot']
+    # -------------------------------------------------------------------------
+    hb0, hb1 = black.get_pieces()['horse']
+    hr0, hr1 = red.get_pieces()['horse']
+    # -------------------------------------------------------------------------
+    eb0, eb1 = black.get_pieces()['elephant']
+    er0, er1 = red.get_pieces()['elephant']
+    # -------------------------------------------------------------------------
+    ab0, ab1 = black.get_pieces()['advisor']
+    ar0, ar1 = red.get_pieces()['advisor']
+    # -------------------------------------------------------------------------
+    gb0 = black.get_pieces()['general']
+    gr0 = red.get_pieces()['general']

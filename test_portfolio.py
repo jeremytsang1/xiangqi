@@ -321,6 +321,39 @@ class BoardTest(unittest.TestCase):
                 self.assertEqual(expected_black, actual_black)
                 self.assertEqual(expected_red, actual_red)
 
+    def test_find_ortho_path(self):
+        players = (xg.Player(xg.Player.get_RED()),
+                   xg.Player(xg.Player.get_BLACK()))
+        red, black = players
+        board = xg.Board(players)
+        test_cases = {
+            ((3, 2), (-1, 0)): [(2, 2), (1, 2), (0, 2)],
+            ((3, 2),  (1, 0)): [(4, 2), (5, 2), (6, 2)],
+            ((3, 2),  (0, 1)): [(3, 3), (3, 4)],
+            ((3, 2), (0, -1)): [(3, 1), (3, 0)],
+            # -----------------------------------------------------------------
+            ((8, 0), (-1, 0)): [(7, 0), (6, 0)],
+            ((8, 0),  (1, 0)): [(9, 0)],
+            ((8, 0),  (0, 1)): [(8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 6),
+                                (8, 7), (8, 8)],
+            ((8, 0), (0, -1)): [],
+            # -----------------------------------------------------------------
+            ((9, 4), (-1, 0)): [(8, 4), (7, 4), (6, 4)],
+            ((9, 4),  (1, 0)): [],
+            ((9, 4),  (0, 1)): [(9, 5)],
+            ((9, 4), (0, -1)): [(9, 3)],
+            # -----------------------------------------------------------------
+            # ((3, 2), (-1, 0)): [],  # UP
+            # ((3, 2),  (1, 0)): [],  # DOWN
+            # ((3, 2),  (0, 1)): [],  # RIGHT
+            # ((3, 2), (0, -1)): [],  # LEFT
+            # -----------------------------------------------------------------
+        }
+
+        for params, expected in test_cases.items():
+            actual = board.find_ortho_path(*params)
+            self.assertEqual(expected, actual)
+
 
 class PlayerTest(unittest.TestCase):
     def test_player_identity(self):

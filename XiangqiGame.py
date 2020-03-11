@@ -163,7 +163,7 @@ class Board:
             The piece at the specified position. If position is empty,
             returns None.
         """
-        return self._board[pos[0]][pos[1]]
+        return self._board[pos[Board._ROW]][pos[Board._COL]]
 
     def make_move(self, src_pos, dst_pos, moving_player):
         src_piece = self.get_piece(src_pos)
@@ -205,7 +205,7 @@ class Board:
 
         # Center column of the castle is the same column as the
         # player's general.
-        general = player.get_pieces()[Player.get_GENERAL()][0]
+        general = player.get_pieces()[Player.get_GENERAL()][Board._ROW]
         center_col = general.get_pos()[1]
 
         # Add the displacements (-1, 0, 1) go the castle's center
@@ -241,7 +241,7 @@ class Board:
             the Player's home row. False if on the same side.
 
         """
-        row = pos[0]
+        row = pos[Board._ROW]
         home_row = player.get_home_row()
         return abs(row - home_row) >= Board._RIVER_DIST
 

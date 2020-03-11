@@ -1114,7 +1114,7 @@ class WrongPieceOwner(IllegalMoveError):
                          + f'{moving_player}.')
 
 
-class WrongPieceOwnerError(IllegalMoveError):
+class NotInMovesetError(IllegalMoveError):
     """Exception class for trying to move a piece to a position not in its
     moveset."""
     def __init__(self, piece, moves, end_pos):

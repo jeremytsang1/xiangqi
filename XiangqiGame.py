@@ -70,6 +70,8 @@ class XiangqiGame:
         except IllegalMoveError:
             return False
 
+        # TODO: self.update_game_state()
+
         return True
 
     def update_game_state(self):
@@ -147,6 +149,15 @@ class Board:
             raise NoPieceAtStartPosError(src_pos)
         if src_piece.get_player() != moving_player:
             raise WrongPieceOwner(moving_player, src_pos)
+
+        # TODO: get piece move set
+
+        # TODO: "make" the move
+
+        # TODO: check if result in check
+
+        # TODO: "make" the move for real
+
 
     @staticmethod
     def get_ROW_COUNT():

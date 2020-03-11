@@ -723,6 +723,20 @@ class Elephant(Piece):
         """Inherit __str__ of base class."""
         return super().__str__()
 
+    def get_moves(self, board):
+        current_pos = self._positions.peek()
+
+        moves = list()
+
+        for diag_dir in board.get_diag_dirs():
+            pos = board.find_diag(current_pos, diag_dir, dist=2)
+            in_bounds = pos is not None
+            if in_bounds and not board.is_across_river(pos, self._player):
+                piece = board.get_piece(pos)
+                if not self.is_friendly(piece):
+                    moves.append(pos)
+        return moves
+
 
 class Horse(Piece):
     _ABBREV = 'h'

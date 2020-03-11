@@ -223,6 +223,29 @@ class Board:
         return pos in self._castles[player.get_color()]
 
     @staticmethod
+    def validate_bounds(pos):
+        """Validate position to make sure lies on Board.
+
+        Raises
+        ------
+        OutOfBoundsError if position lays outside of boards bounds.
+
+        Parameters
+        ----------
+        pos: tuple of int
+            Size 2 tuple representing position to check.
+
+        Returns
+        -------
+        None
+        """
+
+        if pos[Board._ROW] not in range(Board._ROW_COUNT):
+            raise OutOfBoundsError(pos, Board._ROW, Board._ROW_COUNT)
+        if pos[Board._COL] not in range(Board._COL_COUNT):
+            raise OutOfBoundsError(pos, Board._COL, Board._COL_COUNT)
+
+    @staticmethod
     def get_dir_one_dim(beg, end):
         """Find the direction between two pieces.
 

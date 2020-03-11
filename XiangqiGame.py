@@ -693,6 +693,18 @@ class Chariot(Piece):
         """Inherit __str__ of base class."""
         return super().__str__()
 
+    def get_moves(self, board):
+        pos = self._positions.peek()
+
+        # Find paths in each of the 4 ortho directions.
+        moves = list()
+        for path_dir in board.get_ortho_dirs():
+            moves += board.find_ortho_path(pos, path_dir)
+
+        super().remove_friendly(moves)
+
+        return moves()
+
 
 class Cannon(Piece):
     _ABBREV = 'c'

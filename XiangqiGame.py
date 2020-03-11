@@ -196,12 +196,12 @@ class Board:
         if beg_piece.get_player() != moving_player:
             raise WrongPieceOwner(moving_player, beg_pos)
 
-        # Get piece move set.
+        # Get piece move list.
         moves = beg_piece.get_moves(self)
 
-        # Check if in moveset.
+        # Check if in move list.
         if end_pos not in moves:
-            raise NotInMovesetError(beg_piece, moves, end_pos)
+            raise NotInMoveListError(beg_piece, moves, end_pos)
 
         # TODO: Check if allowed to take piece would lift mate (if currently in mate)
 
@@ -1146,17 +1146,17 @@ class WrongPieceOwner(IllegalMoveError):
                          + f'{moving_player}.')
 
 
-class NotInMovesetError(IllegalMoveError):
+class NotInMoveListError(IllegalMoveError):
     """Exception class for trying to move a piece to a position not in its
-    moveset."""
+    move list."""
     def __init__(self, piece, moves, end_pos):
         self._piece = piece
         self._moves = moves
         self._end_pos = end_pos
         self._msg = (f'Tried to move {self._piece} at {self._piece.get_pos()} '
                      + f'to {self._end_pos}.\n'
-                     + f'moveset: {self._moves}')
-        super().__init__(msg)
+                     + f'move list: {self._moves}')
+        super().__init__(self._msg)
 
 
 class BoardError(Error):

@@ -719,9 +719,11 @@ class Advisor(Piece):
                     moves.append(pos)
         return moves
 
+
 class Elephant(Piece):
     _ABBREV = 'e'
     _INIT_COLS = (2, 6)  # Index with _id_num.
+    _DIAG_DIST = 2
 
     def __init__(self, player, id_num):
         """Create an object of type Adivsor with location based on player and
@@ -744,7 +746,7 @@ class Elephant(Piece):
         moves = list()
 
         for diag_dir in board.get_diag_dirs():
-            pos = board.find_diag(current_pos, diag_dir, dist=2)
+            pos = board.find_diag(current_pos, diag_dir, dist=self._DIAG_DIST)
             in_bounds = pos is not None
             if in_bounds and not board.is_across_river(pos, self._player):
                 piece = board.get_piece(pos)

@@ -417,7 +417,7 @@ class Player:
     ]
 
     # Player specific locations.
-    _HOME_ROW = {_BLACK: 0, _RED: 9}
+    _HOME_ROWS = {_BLACK: 0, _RED: 9}
     _FWD_DIRS = {_BLACK: 1, _RED: -1}
 
     def __init__(self, color):
@@ -438,8 +438,8 @@ class Player:
                         [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
         self._opponent = None
+        self._home_row = Player._HOME_ROWS[self._color]
         self._fwd_dir = Player._FWD_DIRS[self._color]
-
 
     def is_in_check(self):
         """Determine if the calling Player is in check.
@@ -478,6 +478,11 @@ class Player:
         specified type.
         """
         return self._pieces
+
+    def get_home_row(self):
+        """Getter. Get the home row (initial row where general starts) of the
+        player."""
+        return self._home_row
 
     def get_fwd_dir(self):
         """Getter. Get the direction pieces move away from the player's home

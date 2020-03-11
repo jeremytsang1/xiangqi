@@ -759,6 +759,21 @@ class Horse(Piece):
 
         return moves
 
+    def get_diag_positions(self, ortho_pos, ortho_dir, board):
+        horse_dirs = board.get_horse_dirs()
+        diag_positions = list()  # at most size 2
+        diag_dirs = horse_dirs[ortho_dir]
+        for diag_dir in diag_dirs:
+            diag_pos = board.find_diag(ortho_pos, diag_dir)
+
+            if diag_pos is not None:
+                piece = board.get_piece(diag_pos)
+                # If position is empty or occupied by enemy piece then
+                # it is valid.
+                if piece is None or piece.get_player() != self._player:
+                    diag_positions.append(diag_pos)
+
+        return diag_positions
 
 
 class Chariot(Piece):

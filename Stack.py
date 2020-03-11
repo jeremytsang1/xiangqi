@@ -20,3 +20,11 @@ class Node:
 
     def get_next(self):
         return self._next
+
+
+class Stack:
+    """An implementation of the stack ADT using recursion."""
+
+    def __init__(self):
+        self._head = None
+        self._size = 0

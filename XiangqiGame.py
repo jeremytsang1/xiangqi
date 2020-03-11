@@ -699,9 +699,9 @@ class Chariot(Piece):
         # Find paths in each of the 4 ortho directions.
         moves = list()
         for path_dir in board.get_ortho_dirs():
-            moves += board.find_ortho_path(pos, path_dir)
-
-        super().remove_friendly(moves)
+            path = board.find_ortho_path(pos, path_dir)
+            super().remove_friendly(path)
+            moves += path
 
         return moves()
 
@@ -763,9 +763,9 @@ class Soldier(Piece):
 
         moves = list()
         for path_dir in path_dirs:
-            moves += board.find_ortho_path(pos, path_dir, 1)
-
-        super().remove_friendly(moves)
+            path = board.find_ortho_path(pos, path_dir, 1)
+            super().remove_friendly(path)
+            moves += path
 
         return moves
 

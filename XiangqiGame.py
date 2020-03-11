@@ -284,6 +284,14 @@ class Piece:
         # <abbrev>-<player-first-letter>-<id_num>
         self._name = f"{abbrev}-{self._player.get_color()[0].upper()}-{id_num}"
 
+    def __repr__(self):
+        """Use the name as representation."""
+        return self._name
+
+    def __str__(self):
+        """Use the name as informal represenation."""
+        return self._name
+
     def get_player(self):
         """Getter. Return the Player who own's the piece."""
         return self._player
@@ -295,14 +303,6 @@ class Piece:
     def set_pos(self, pos):
         """Setter. Update the position of the piece."""
         self._positions.append(pos)
-
-    def __repr__(self):
-        """Use the name as representation."""
-        return self._name
-
-    def __str__(self):
-        """Use the name as informal represenation."""
-        return self._name
 
 
 class General(Piece):

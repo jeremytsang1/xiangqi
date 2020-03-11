@@ -541,6 +541,10 @@ class Board:
         return Board._COL_COUNT
 
     @staticmethod
+    def get_diag_dirs():
+        return Board._DIRECTIONS_DIAG
+
+    @staticmethod
     def get_ortho_dirs():
         return Board._DIRECTIONS_ORTHO
 
@@ -610,6 +614,11 @@ class Piece:
 
     def pop(self):
         return self._positions.pop()
+
+    def is_friendly(self, piece):
+        if piece is None or piece.get_player() is not self._player:
+            return False
+        return True
 
     def remove_friendly(self, path, board):
         """Given a path, removes any friendly piece at the end of the path.

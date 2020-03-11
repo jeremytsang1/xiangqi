@@ -508,6 +508,10 @@ class Board:
         return Board._DIRECTIONS_ORTHO
 
     @staticmethod
+    def get_horse_dirs():
+        return Board._DIRECTIONS_HORSE
+
+    @staticmethod
     def get_ROW():
         return Board._ROW
 
@@ -692,6 +696,32 @@ class Horse(Piece):
     def __str__(self):
         """Inherit __str__ of base class."""
         return super().__str__()
+
+    def get_moves(self, board):
+        pos = self._positions.peek()
+        horse_dirs = board.get_horse_dirs()
+
+        # Find paths in each of the 4 ortho directions.
+        moves = list()
+        for ortho_dir in board.get_ortho_dirs():
+            # First move orthogonally one position.
+            ortho_path = board.find_ortho_path(pos, ortho_dir, 1)
+
+            if len(ortho_path) == 0 or ortho_path[0] is not None:
+                continue
+
+            # Get the first (and only position) from orthogonal path.
+            ortho_pos = ortho_path[0]
+
+            for diag_dirs in horse_dirs[ortho_dir]:
+                # TODO: Get diags
+                pass
+
+            super().remove_friendly(path, board)
+            moves += path
+
+        return moves
+
 
 
 class Chariot(Piece):

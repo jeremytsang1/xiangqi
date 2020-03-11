@@ -733,6 +733,8 @@ class Soldier(Piece):
         for path_dir in path_dirs:
             moves += board.find_ortho_path(pos, path_dir, 1)
 
+        super.remove_friendly(moves)
+
         return moves
 
 

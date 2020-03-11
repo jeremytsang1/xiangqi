@@ -26,5 +26,5 @@ class Stack:
             return None
 
         val = self._list[-1]
-        del self._ls[-1]
+        del self._list[-1]
         return val

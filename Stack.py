@@ -1,42 +1,30 @@
-class Node:
-    """Defines a simple Node class with public data and link to other objects of
-       type Node.
-    """
-    def __init__(self, data):
-        """Creates an object of type Node with given data and link.
-
-        Parameters
-        ----------
-        data: int
-            Value of data for Node to hold.
-        next_node: Node
-            Link to access another object of type Node.
-        """
-        self._data = data
-        self._next = None
-
-    def get_data(self):
-        return self._data
-
-    def get_next(self):
-        return self._next
-
-
 class Stack:
-    """An implementation of the stack ADT using recursion."""
+    """
+    An implementation of the Stack ADT that uses Python's built-in lists.
 
+    Taken from CS 162, "Exploration: Linked lists, stacks, queues".
+    """
     def __init__(self):
-        self._head = None
-        self._size = 0
+        self._list = []
 
     def get_size(self):
-        return self._size
+        return len(self._list)
 
     def peek(self):
-        if self._size == 0:
+        if self.get_size() == 0:
             return None
-        # Assumes non-empty stack has at least one Node.
-        return self._head.get_data()
+        return self._list[-1]
 
     def is_empty(self):
-        return self._head is None
+        return len(self._list) == 0
+
+    def push(self, data):
+        self._list.append(data)
+
+    def pop(self):
+        if self.is_empty():
+            return None
+
+        val = self._list[-1]
+        del self._ls[-1]
+        return val

@@ -800,9 +800,7 @@ class Horse(Piece):
 
             if in_bounds:
                 piece = board.get_piece(diag_pos)
-                # If position is empty or occupied by enemy piece then
-                # it is valid.
-                if piece is None or piece.get_player() != self._player:
+                if not self.is_friendly(piece):
                     diag_positions.append(diag_pos)
 
         return diag_positions

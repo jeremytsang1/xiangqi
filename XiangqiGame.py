@@ -223,6 +223,31 @@ class Board:
         return pos in self._castles[player.get_color()]
 
     @staticmethod
+    def get_dir_one_dim(beg, end):
+        """Find the direction between two pieces.
+
+        Raises
+        ------
+        SamePositionError if beg and end are equal.
+
+        Parameters
+        ----------
+        beg: int
+            Starting element.
+        end: int
+            Ending element.
+
+        Returns
+        -------
+        int
+            Direction is either 1 or -1. 1 if end is more than beg and
+            -1 if less.
+        """
+        if beg == end:
+            raise SamePositionError(f'ELEMENT {beg}')
+        return 1 if beg < end else -1
+
+    @staticmethod
     def is_across_river(pos, player):
         """Predicate. Checks if a position is across the river from Player's
         home row side of the board.

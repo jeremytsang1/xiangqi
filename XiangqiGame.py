@@ -110,6 +110,7 @@ class Board:
     """
     _ROW_COUNT = 10
     _COL_COUNT = 9
+    _AXES_COUNTS = (_ROW_COUNT, _COL_COUNT)
     _RIVER_DIST = 5
     # Axes constants.
     _ROW = 0
@@ -231,6 +232,55 @@ class Board:
 
     def is_in_castle(self, pos, player):
         return pos in self._castles[player.get_color()]
+
+    def find_ortho_path(self, beg_pos, dir_ortho, length=None):
+        # Assumes not on the border?
+        # TODO: validate length to be positive
+        # Assume either Board._FWD or Board._REV in dir_ortho
+        if Board._FWD in dir_ortho:
+            delta_axis = dir_ortho.index(Board._FWD)
+        else:
+            delta_axis = dir_ortho.index(Board._REV)
+
+        direction = dir_ortho[delta_axis]  # Either _FWD or _REV.
+        constant_axis = delta_axis - 1     # Axis being traveled along.
+
+        delta_axis_min = 0
+        delta_axis_max = Board._AXES_COUNTS[delta_axis]
+
+        # Create two element list. Can't explicitly initialize due to
+        # end points depending on direction.
+        end_pos = [0, 0]
+
+        # Set the edge of Board to the first guess for the ending
+        # position.
+        end_pos[constant_axis] = beg_pos[constant_axis]
+        end_pos[delta_axis] = (delta_axis_min if direction == Board._REV
+                               else delta_axis_max - 1)
+
+        # Bring guess for ending position closer to beginning position
+        # if length is specified and shorter than the distance from
+        # the beginning position to the edge of the board.
+        if length is not None:
+            length_within_bounds = (length < abs(end_pos[delta_axis]
+                                                 - beg_pos[delta_axis]))
+            if length_within_bounds:
+                end_pos[delta_axis] = (beg_pos[delta_axis]
+                                       + (length * direction))
+
+        pos = list(beg_pos)
+        path = list()
+
+        for delta_elt in range(beg_pos[delta_axis] + direction,  # Exclude beg.
+                               end_pos[delta_axis] + direction,  # Include end.
+                               direction):
+            # Travel one position in specified direction.
+            pos[delta_axis] = delta_elt
+            # Add said position to the path
+            path.append(tuple(pos))
+            if self.get_piece(pos) is not None:
+                return path
+        return path
 
     def find_intervening_ortho(self, beg_pos, end_pos):
         """Check if there is at least one piece between two positions.

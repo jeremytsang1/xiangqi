@@ -223,6 +223,30 @@ class Board:
         return pos in self._castles[player.get_color()]
 
     def find_intervening_ortho(self, beg_pos, end_pos):
+        """Check if there is at least one piece between two positions.
+
+        Raises: TODO
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Size 2 tuple representing position to check.
+            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        end_pos: tuple of int
+            Size 2 tuple representing position to check.
+            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        Returns
+        -------
+        Piece
+            None if there are no pieces on a orthogonal axis between
+            the two positions. Otherwise returns the first piece that
+            is encountered from traversing from beginining position to
+            end position.
+        """
         for pos in (beg_pos, end_pos):
             Board.validate_bounds(pos)
 

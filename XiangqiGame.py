@@ -780,8 +780,9 @@ class Horse(Piece):
         diag_dirs = horse_dirs[ortho_dir]
         for diag_dir in diag_dirs:
             diag_pos = board.find_diag(ortho_pos, diag_dir)
+            in_bounds = diag_pos is not None
 
-            if diag_pos is not None:
+            if in_bounds:
                 piece = board.get_piece(diag_pos)
                 # If position is empty or occupied by enemy piece then
                 # it is valid.

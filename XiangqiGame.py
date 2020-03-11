@@ -250,6 +250,43 @@ class Board:
     def is_in_castle(self, pos, player):
         return pos in self._castles[player.get_color()]
 
+    def find_diag(self, beg_pos, dir_diag, dist=1):
+        """Compute positions in a diagonal direction from the beginning position.
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Size 2 tuple representing position to check.
+            beg_pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            beg_pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        dir_diag: tuple of int
+            Size 2 tuple that contains only 1 or -1.
+
+        dist: int
+            Number of diagonals away to inspect.
+
+        Returns
+        -------
+        tuple of int
+            Size 2 tuple representing position of diagnal. If diagonal
+        would be off board, then returns None
+        """
+        end_pos = list(beg_pos)
+
+        # Assumes dir_diag and end_pos have same dimensions
+
+        # Compute the diagonal position in the specified direction.
+        for i, dir_component in enumerate(dir_diag):
+            end_pos[i] += dist * dir_component
+
+        try:
+            self.validate_bounds(end_pos)
+        except OutOfBoundsError:
+            return None
+
+        return tuple(end_pos)
+
     def find_ortho_path(self, beg_pos, dir_ortho, dist_capped=None):
         """Finds an orthogonal path in the speicifed orthogonal direction from
         the position to first encountered piece or the edge of the board.

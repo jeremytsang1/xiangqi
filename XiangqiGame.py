@@ -222,6 +222,40 @@ class Board:
     def is_in_castle(self, pos, player):
         return pos in self._castles[player.get_color()]
 
+    def find_intervening_ortho(self, beg_pos, end_pos):
+        for pos in (beg_pos, end_pos):
+            Board.validate_bounds(pos)
+
+        # Find which if the two positions are on the same row or same col.
+        common_axis = Board.find_common_axis(beg_pos, end_pos)
+
+        # No intervening Piece if two positions share neither a row or col.
+        # TODO: maybe move this outside.
+        if common_axis == -1:
+            return None
+
+        # The axis that the two positions do not share.
+        delta_axis = common_axis - 1
+        # Find the direction from the beginning element to the end element.
+        direction = Board.get_dir_one_dim(beg_pos[delta_axis],
+                                          end_pos[delta_axis])
+
+        pos = list(beg_pos)  # Make copy of beginning position.
+
+        # Traverse from beginning position to end position and if any
+        # piece is found in between return it.
+        for delta_elt in range(beg_pos[delta_axis] + direction,  # Exclude beg.
+                               end_pos[delta_axis],              # Exclude end.
+                               direction):  # Travel from beg to end.
+            pos[delta_axis] = delta_elt
+            intervening_piece = self.get_piece(pos)  # Check current position.
+            if intervening_piece is not None:
+                # Return intervening piece if there is indeed one.
+                return intervening_piece
+
+        # No intervening pieces found.
+        return None
+
     @staticmethod
     def find_common_axis(beg_pos, end_pos):
         """Check if two positions share a row or column.

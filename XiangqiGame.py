@@ -72,6 +72,8 @@ class XiangqiGame:
 
         # TODO: self.update_game_state()
 
+        # TODO: alternate current player
+
         return True
 
     def update_game_state(self):

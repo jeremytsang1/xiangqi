@@ -110,6 +110,7 @@ class Board:
     """
     _ROW_COUNT = 10
     _COL_COUNT = 9
+    _RIVER_DIST = 5
 
     def __init__(self, players):
         """Create a board represenation (nested list) with all pieces at their
@@ -200,6 +201,28 @@ class Board:
     def is_in_castle(self, pos, player):
         return pos in self._castles[player.get_color()]
 
+    @staticmethod
+    def is_across_river(pos, player):
+        """Predicate. Checks if a position is across the river from Player's
+        home row side of the board.
+
+        Parameters
+        ----------
+        pos: tuple of int
+            Size 2 tuple representing position to check.
+            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        Returns
+        -------
+        bool
+            True if the position is across the river from the side of
+            the Player's home row. False if on the same side.
+
+        """
+        row = pos[0]
+        home_row = player.get_home_row()
+        return abs(row - home_row) >= Board._RIVER_DIST
 
     @staticmethod
     def get_ROW_COUNT():

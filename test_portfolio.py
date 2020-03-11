@@ -305,6 +305,22 @@ class BoardTest(unittest.TestCase):
                     # print(f'{piece}: {expected}')
                     self.assertEqual(expected, actual)
 
+    def test_is_across_river(self):
+        players = (xg.Player(xg.Player.get_RED()),
+                   xg.Player(xg.Player.get_BLACK()))
+        red, black = players
+        # elt 0: black, (note negation will be Red)
+        board = xg.Board(players)
+        for i, row in enumerate(board._board):
+            for j, piece in enumerate(row):
+                pos = (i, j)
+                expected_black = True if pos[0] >= 5 else False
+                expected_red = not expected_black
+                actual_black = xg.Board.is_across_river(pos, black)
+                actual_red = xg.Board.is_across_river(pos, red)
+                self.assertEqual(expected_black, actual_black)
+                self.assertEqual(expected_red, actual_red)
+
 
 class PlayerTest(unittest.TestCase):
     def test_player_identity(self):

@@ -736,7 +736,6 @@ class Horse(Piece):
 
     def get_moves(self, board):
         pos = self._positions.peek()
-        horse_dirs = board.get_horse_dirs()
 
         # Find paths in each of the 4 ortho directions.
         moves = list()
@@ -744,18 +743,17 @@ class Horse(Piece):
             # First move orthogonally one position.
             ortho_path = board.find_ortho_path(pos, ortho_dir, 1)
 
+            # Check if at edge or if blocked
             if len(ortho_path) == 0 or ortho_path[0] is not None:
                 continue
 
             # Get the first (and only position) from orthogonal path.
             ortho_pos = ortho_path[0]
 
-            for diag_dirs in horse_dirs[ortho_dir]:
-                # TODO: Get diags
-                pass
+            diag_positions = self.get_diag_positions(ortho_pos, ortho_dir,
+                                                     board)
 
-            super().remove_friendly(path, board)
-            moves += path
+            moves += diag_positions
 
         return moves
 

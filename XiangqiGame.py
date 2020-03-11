@@ -223,6 +223,43 @@ class Board:
         return pos in self._castles[player.get_color()]
 
     @staticmethod
+    def find_common_axis(beg_pos, end_pos):
+        """Check if two positions share a row or column.
+
+        Raises
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Size 2 tuple representing position to check.
+            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        end_pos: tuple of int
+            Size 2 tuple representing position to check.
+            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        Returns
+        -------
+        int
+            Board._ROW if both positions share the same row.
+            Board._COL if both positions share the same col.
+            -1 if the two positions do not have a common axis.
+        """
+        beg_row, beg_col = beg_pos
+        end_row, end_col = end_pos
+
+        if (beg_row, beg_col) == (end_row, end_col):
+            raise SamePositionError((beg_row, beg_col))
+        elif beg_row != end_row and beg_col != end_col:
+            return -1
+        elif beg_row == end_row:
+            return Board._ROW  # Check along row.
+        else:
+            return Board._COL  # Check along col.
+
+    @staticmethod
     def validate_bounds(pos):
         """Validate position to make sure lies on Board.
 

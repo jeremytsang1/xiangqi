@@ -842,6 +842,15 @@ class SamePositionError(BoardError):
         super().__init__(msg)
 
 
+class OutOfBoundsError(BoardError):
+    """Exception class for when expecting two peices on different spaces."""
+    def __init__(self, pos, axis, axis_count):
+        self._pos = pos
+        self._axis = axis
+        self._max_val = axis_count - 1
+        msg = (f'Axis {self._axis} must be in [0..{self._max_val}]'
+               + f'but pos was: {self._pos}.')
+        super().__init__(msg)
 
 
 if __name__ == '__main__':

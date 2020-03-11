@@ -233,10 +233,11 @@ class Board:
     def is_in_castle(self, pos, player):
         return pos in self._castles[player.get_color()]
 
-    def find_ortho_path(self, beg_pos, dir_ortho, length=None):
+    def find_ortho_path(self, beg_pos, dir_ortho, dist_capped=None):
         # Assumes not on the border?
         # TODO: validate length to be positive
         # Assume either Board._FWD or Board._REV in dir_ortho
+
         if Board._FWD in dir_ortho:
             delta_axis = dir_ortho.index(Board._FWD)
         else:
@@ -245,6 +246,7 @@ class Board:
         direction = dir_ortho[delta_axis]  # Either _FWD or _REV.
         constant_axis = delta_axis - 1     # Axis being traveled along.
 
+        # Edge locations along the delta axis.
         delta_axis_min = 0
         delta_axis_max = Board._AXES_COUNTS[delta_axis]
 
@@ -261,14 +263,13 @@ class Board:
         # Bring guess for ending position closer to beginning position
         # if length is specified and shorter than the distance from
         # the beginning position to the edge of the board.
-        if length is not None:
-            length_within_bounds = (length < abs(end_pos[delta_axis]
-                                                 - beg_pos[delta_axis]))
-            if length_within_bounds:
+        if dist_capped is not None:
+            dist_to_edge = abs(end_pos[delta_axis] - beg_pos[delta_axis])
+            if dist_capped < dist_to_edge:
                 end_pos[delta_axis] = (beg_pos[delta_axis]
-                                       + (length * direction))
+                                       + (dist_capped * direction))
 
-        current_pos = list(beg_pos)
+        current_pos = list(beg_pos)  # Starting position.
         path = list()  # List of positions to return.
 
         for delta_elt in range(beg_pos[delta_axis] + direction,  # Exclude beg.

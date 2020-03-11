@@ -715,6 +715,26 @@ class Soldier(Piece):
         """Inherit __str__ of base class."""
         return super().__str__()
 
+    def get_moves(self, board):
+        pos = self._positions.peek()
+
+        # Allow column direction away from home row.
+        row_directions = [self._player.get_fwd_dir()]  # [_fwd_dir]
+
+        # Allow left and right movement if across river.
+        if board.is_across_river(pos, self._player):
+            row_directions.append(0)  # [_fwd_dir, 0]
+
+        # List of size two tuple directions. [(_fwd_dir, 0), (0, -1), (0, 1)]
+        path_dirs = [direc for direc in board.get_ortho_dirs()
+                     if direc[board.get_ROW()] in row_directions]
+
+        moves = list()
+        for path_dir in path_dirs:
+            moves += board.find_ortho_path(pos, path_dir, 1)
+
+        return moves
+
 
 class Player:
     """Class representing a player with their own set of pieces. Responsible

@@ -355,6 +355,40 @@ class BoardTest(unittest.TestCase):
             self.assertEqual(expected, actual)
 
 
+class SoldierTest(unittest.TestCase):
+    def test_get_moves_initial(self):
+        players = (xg.Player(xg.Player.get_RED()),
+                   xg.Player(xg.Player.get_BLACK()))
+        red, black = players
+        b0, b1, b2, b3, b4 = black.get_pieces()['soldier']
+        r0, r1, r2, r3, r4 = red.get_pieces()['soldier']
+        board = xg.Board(players)
+        test_cases = (
+            (b0, [(4, 0)]),
+            (b1, [(4, 2)]),
+            (b2, [(4, 4)]),
+            (b3, [(4, 6)]),
+            (b4, [(4, 8)]),
+            (r0, [(5, 0)]),
+            (r1, [(5, 2)]),
+            (r2, [(5, 4)]),
+            (r3, [(5, 6)]),
+            (r4, [(5, 8)]),
+        )
+        for case in test_cases:
+            soldier, expected = case
+            actual = soldier.get_moves(board)
+            self.assertEqual(expected, actual)
+
+    def test_get_moves_manually_moved(self):
+        players = (xg.Player(xg.Player.get_RED()),
+                   xg.Player(xg.Player.get_BLACK()))
+        red, black = players
+        b0, b1, b2, b3, b4 = black.get_pieces()['soldier']
+        r0, r1, r2, r3, r4 = red.get_pieces()['soldier']
+        board = xg.Board(players)
+
+
 class PlayerTest(unittest.TestCase):
     def test_player_identity(self):
         test_cases = {

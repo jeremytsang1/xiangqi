@@ -834,7 +834,7 @@ class BoardError(Error):
     pass
 
 
-class SamePositionError(Error):
+class SamePositionError(BoardError):
     """Exception class for when expecting two peices on different spaces."""
     def __init__(self, pos):
         self._pos = pos

@@ -514,6 +514,26 @@ class Piece:
         """Setter. Update the position of the piece."""
         self._positions.append(pos)
 
+    def remove_friendly(self, path):
+        """Given a path, removes any friendly piece at the end of the path.
+
+        If no friendly piece found, path is not mutated.
+
+        Parameters
+        ----------
+        path: list of tuple
+            List of size 2 tuples (positions).
+
+        Returns
+        -------
+        None
+        """
+        if len(path) > 0:
+            return
+        piece = path[-1]
+        if (piece is not None and piece.get_player() == self._player):
+            path.pop()
+
 
 class General(Piece):
     """

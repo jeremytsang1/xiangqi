@@ -743,16 +743,24 @@ class Horse(Piece):
             # First move orthogonally one position.
             ortho_path = board.find_ortho_path(pos, ortho_dir, 1)
 
-            # Check if at edge or if blocked
-            if len(ortho_path) == 0 or ortho_path[0] is not None:
+            # Validate the ortho move.
+            empty = len(ortho_path) == 0
+            ortho_blocked = (board.get_piece(ortho_path[0])
+                             is not None if not empty else False)
+
+            # Choose next ortho direction if invalid.
+            if empty or ortho_blocked:
                 continue
 
             # Get the first (and only position) from orthogonal path.
             ortho_pos = ortho_path[0]
 
+            # Compute the diagonals (up to two valid ones) for the
+            # ortho position.
             diag_positions = self.get_diag_positions(ortho_pos, ortho_dir,
                                                      board)
 
+            # Add the valid diagonals to the move list.
             moves += diag_positions
 
         return moves

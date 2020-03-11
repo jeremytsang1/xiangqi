@@ -212,7 +212,8 @@ class Piece:
         """
         self._id_num = id_num
         self._player = player
-        self._pos = start_pos
+        self._positions = Stack()
+        self._positions.push(start_pos)
 
         # For printing use only. Names will have the form
         # <abbrev>-<player-first-letter>-<id_num>
@@ -224,11 +225,11 @@ class Piece:
 
     def get_pos(self):
         """Getter. Get the position of the piece."""
-        return self._pos
+        return self._positions.peek()
 
-    def set_pos(self, row, col):
+    def set_pos(self, pos):
         """Setter. Update the position of the piece."""
-        self._pos = (row, col)
+        self._positions.append(pos)
 
     def __repr__(self):
         """Use the name as representation."""

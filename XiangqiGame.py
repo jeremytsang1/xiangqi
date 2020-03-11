@@ -176,14 +176,14 @@ class Board:
         """
         return self._board[pos[Board._ROW]][pos[Board._COL]]
 
-    def make_move(self, src_pos, dst_pos, moving_player):
-        src_piece = self.get_piece(src_pos)
-        dst_piece = self.get_piece(dst_pos)
+    def make_move(self, beg_pos, end_pos, moving_player):
+        beg_piece = self.get_piece(beg_pos)
+        end_piece = self.get_piece(end_pos)
 
-        if src_piece is None:
-            raise NoPieceAtStartPosError(src_pos)
-        if src_piece.get_player() != moving_player:
-            raise WrongPieceOwner(moving_player, src_pos)
+        if beg_piece is None:
+            raise NoPieceAtStartPosError(beg_pos)
+        if beg_piece.get_player() != moving_player:
+            raise WrongPieceOwner(moving_player, beg_pos)
 
         # TODO: get piece move set
 

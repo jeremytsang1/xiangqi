@@ -110,6 +110,7 @@ class Board:
     """
     _ROW_COUNT = 10
     _COL_COUNT = 9
+    _CASTLE_CENTER_COL = 3
 
     def __init__(self, players):
         """Create a board represenation (nested list) with all pieces at their
@@ -121,6 +122,8 @@ class Board:
         for piece in Player.get_all_pieces(*players):
             row, col = piece.get_pos()
             self._board[row][col] = piece
+        self._castles = {player.get_color(): self.make_castle(player)
+                         for player in players}
 
     def get_piece(self, pos):
         """Get the piece at the given position.
@@ -157,6 +160,34 @@ class Board:
         # TODO: check if result in check
 
         # TODO: "make" the move for real
+
+    def make_castle(self, player):
+        """Helper method to create record of each player's castle positions.
+
+        Should only be run upon board creation.
+
+        Parameters
+        ----------
+        player: str
+            Color string for given player. Can either be
+            Player.get_RED() or Player.get_BLACK().
+
+        Returns
+        -------
+        Tuple of tuple of int.
+            Tuple of size two tuples of ints. Each inner tupple
+            represents a row and col position.
+        """
+        center_row = player.get_home_row() + player.get_fwd_dir()
+        center_col = Board._CASTLE_CENTER_COL
+        displacements = [i for i in range(-1, 2)]
+        castle_positions = tuple([(center_row + i, center_col + j)
+                                  for i in displacements
+                                  for j in displacements])
+        return castle_positions
+
+    def get_castle(self, color):
+        return self._castles[color]
 
 
     @staticmethod

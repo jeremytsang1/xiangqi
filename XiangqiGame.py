@@ -829,6 +829,21 @@ class WrongPieceOwner(IllegalMoveError):
                          + f'{moving_player}.')
 
 
+class BoardError(Error):
+    """Base exception class for miscellaneous Board errors"""
+    pass
+
+
+class SamePositionError(Error):
+    """Exception class for when expecting two peices on different spaces."""
+    def __init__(self, pos):
+        self._pos = pos
+        msg = f'Pieces expected to have different position but both at {pos}'
+        super().__init__(msg)
+
+
+
+
 if __name__ == '__main__':
     game = XiangqiGame()
     players = game.get_players()

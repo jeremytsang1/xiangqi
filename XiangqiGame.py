@@ -234,10 +234,34 @@ class Board:
         return pos in self._castles[player.get_color()]
 
     def find_ortho_path(self, beg_pos, dir_ortho, dist_capped=None):
-        # Assumes not on the border?
-        # TODO: validate length to be positive
-        # Assume either Board._FWD or Board._REV in dir_ortho
+        """Finds an orthogonal path in the speicifed orthogonal direction from
+        the position to first encountered piece or the edge of the board.
 
+        Post Conditions
+        ---------------
+        If a piece is encountered, it will be located in the last
+        element of the list.
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Size 2 tuple representing position to check.
+            beg_pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
+            beg_pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+
+        dir_ortho: tuple of int
+            Size 2 tuple who must contain exactly one 0 while the
+            other element must be either -1 or 1.
+
+        dist_capped: int
+            Maxmimum number of positions to traverse in the path.
+
+        Returns
+        -------
+        list of tuple
+            List of positions from beginning position to next piece or edge.
+
+        """
         if Board._FWD in dir_ortho:
             delta_axis = dir_ortho.index(Board._FWD)
         else:

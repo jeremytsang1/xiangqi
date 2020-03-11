@@ -733,7 +733,7 @@ class Soldier(Piece):
         for path_dir in path_dirs:
             moves += board.find_ortho_path(pos, path_dir, 1)
 
-        super.remove_friendly(moves)
+        super().remove_friendly(moves)
 
         return moves
 
@@ -1098,7 +1098,7 @@ class NoPieceAtStartPosError(IllegalMoveError):
     """Exception class for when attempting to move a piece at a position
     where no piece currently resides."""
     def __init__(self, pos):
-        self._pos
+        self._pos = pos
         super().__init__('Attempting to move non-existent piece at '
                          + f'{self._pos}')
 

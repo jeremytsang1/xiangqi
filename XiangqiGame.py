@@ -268,20 +268,20 @@ class Board:
                 end_pos[delta_axis] = (beg_pos[delta_axis]
                                        + (length * direction))
 
-        pos = list(beg_pos)
+        current_pos = list(beg_pos)
         path = list()  # List of positions to return.
 
         for delta_elt in range(beg_pos[delta_axis] + direction,  # Exclude beg.
                                end_pos[delta_axis] + direction,  # Include end.
                                direction):
             # Travel one position in specified direction.
-            pos[delta_axis] = delta_elt
+            current_pos[delta_axis] = delta_elt
             # Add said position to the path. Make sure not to use
             # mutable type due or else the all path positions will
             # contain the same value.
-            path.append(tuple(pos))
+            path.append(tuple(current_pos))
             # If find encounter a piece along the path, stop traversing.
-            if self.get_piece(pos) is not None:
+            if self.get_piece(current_pos) is not None:
                 return path
         return path
 

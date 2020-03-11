@@ -37,3 +37,6 @@ class Stack:
             return None
         # Assumes non-empty stack has at least one Node.
         return self._head.get_data()
+
+    def is_empty(self):
+        return self._head is None

@@ -7,3 +7,4 @@ class StackTest(unittest.TestCase):
         stack = xg.Stack()
         self.assertEqual(0, stack.get_size())
         self.assertEqual(None, stack.peek())
+        self.assertTrue(stack.is_empty())

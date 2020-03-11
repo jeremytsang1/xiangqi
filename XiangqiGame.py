@@ -685,11 +685,53 @@ class General(Piece):
         return super().__str__()
 
     def get_moves(self, board):
-        current_pos = self._positions.peek()
+        pos = self._positions.peek()
 
         moves = list()
 
-        return moves
+        # Grab all non-friendly orthogonal positions _ORTHO_DIST
+        # positions away.
+        for path_dir in board.get_ortho_dirs():
+            path = board.find_ortho_path(pos, path_dir, self._ORTHO_DIST)
+            super().remove_friendly(path, board)
+            moves += path
+
+        # Get enemy line of sight.
+        opponent = self._player.get_opponent()
+        enemy_gen = opponent.get_pieces()[Player.get_GENERAL()][0]
+        line_of_sight = enemy_gen.get_enemy_castle_sight(board, )
+
+        # Remove enemy general line of sight
+        return list(set(moves) - set(line_of_sight))
+
+    def get_enemy_castle_sight(self, board):
+        opponent = self._player.get_opponent()
+        enemy_gen = opponent.get_pieces()[Player.get_GENERAL()][0]
+        castle = board.get_castle(self._player.get_opponent().get_color())
+        castle_sight = []
+        current_pos = self._positions.peek()
+        col = current_pos[board.get_COL()]
+
+        # Traverse enemy castle column from outter most row to enemy home rome.
+        for pos in [castle_pos
+                    for castle_pos in castle[::self._player.get_fwd_dir()]
+                    if castle_pos[board.get_COL()] == col]:
+
+            piece = board.get_piece(pos)
+            intervening = None
+
+            if piece is None or piece is enemy_gen:
+                intervening = board.find_intervening_ortho(current_pos, pos)
+                if intervening is None or intervening is enemy_gen:
+                    castle.append(pos)
+                else:
+                    break
+            else:
+                break
+
+            if intervening is None:
+                castle_sight.append(pos)
+        return castle_sight
 
 
 class Advisor(Piece):
@@ -1394,5 +1436,5 @@ if __name__ == '__main__':
     ab0, ab1 = black.get_pieces()['advisor']
     ar0, ar1 = red.get_pieces()['advisor']
     # -------------------------------------------------------------------------
-    gb0 = black.get_pieces()['general']
-    gr0 = red.get_pieces()['general']
+    gb0 = black.get_pieces()['general'][0]
+    gr0 = red.get_pieces()['general'][0]

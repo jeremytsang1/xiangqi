@@ -354,6 +354,46 @@ class BoardTest(unittest.TestCase):
             actual = board.find_ortho_path(*params)
             self.assertEqual(expected, actual)
 
+    def test_make_move_undo_black_chariot(self):
+        players = (xg.Player(xg.Player.get_RED()),
+                   xg.Player(xg.Player.get_BLACK()))
+        red, black = players
+        board = xg.Board(players)
+        chb0, chb1 = black.get_pieces()['chariot']
+        sr0, sr1, sr2, sr3, sr4 = red.get_pieces()['soldier']
+
+        taken = board.make_move((0, 0), (1, 0), black)
+        self.assertEqual(None, taken)
+        self.assertEqual(None, board.get_piece((0, 0)))
+        self.assertEqual((1, 0), chb0.get_pos())
+
+        old_pos = chb0.get_pos()
+        new_pos = (1, 3)
+        taken = board.make_move(old_pos, new_pos, black)
+        self.assertEqual(None, taken)
+        self.assertEqual(None, board.get_piece(old_pos))
+        self.assertEqual(new_pos, chb0.get_pos())
+
+        old_pos = chb0.get_pos()
+        new_pos = (6, 3)
+        taken = board.make_move(old_pos, new_pos, black)
+        self.assertEqual(None, taken)
+        self.assertEqual(None, board.get_piece(old_pos))
+        self.assertEqual(new_pos, chb0.get_pos())
+
+        old_pos = chb0.get_pos()
+        new_pos = (6, 2)
+        taken = board.make_move(old_pos, new_pos, black)
+        self.assertEqual(sr1, taken)
+        self.assertEqual(None, board.get_piece(old_pos))
+        self.assertEqual(new_pos, chb0.get_pos())
+
+        board.undo_move(taken)
+        self.assertEqual(taken, board.get_piece(new_pos))
+        self.assertEqual(new_pos, taken.get_pos())
+        self.assertEqual(chb0, board.get_piece(old_pos))
+        self.assertEqual(old_pos, chb0.get_pos())
+
 
 class SoldierTest(unittest.TestCase):
     def test_get_moves_initial(self):

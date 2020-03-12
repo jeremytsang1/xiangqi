@@ -54,7 +54,10 @@ class XiangqiGame:
 
         return player.get_in_check()
 
-    def make_move(self, alg_start, alg_end):
+    def make_move(self, alg_start, alg_end, mover=None):
+        # TODO: get rid of mover
+        if mover is not None:
+            self._current_player = mover
         # Prevent moves if game is already over.
         if self._game_state != XiangqiGame._UNFINISHED:
             return False

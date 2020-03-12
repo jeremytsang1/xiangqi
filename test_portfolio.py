@@ -15,9 +15,19 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual(black, red.get_opponent())
         self.assertEqual(red, black.get_opponent())
 
-    def test_make_move(self):
+    def test_make_move_01(self):
         game = xg.XiangqiGame()
-        pass
+        players = game.get_players()
+        red, black = players[xg.Player.get_RED()], players[xg.Player.get_BLACK()]
+        board = game.get_board()
+        game.make_move('a1', 'a2', red)
+        self.assertFalse(black.is_in_check(board))
+        game.make_move('a2', 'd2', red)
+        self.assertFalse(black.is_in_check(board))
+        game.make_move('d2', 'd10', red)
+        self.assertTrue(black.is_in_check(board))
+        game.make_move('e10', 'd10', black)
+        self.assertFalse(black.is_in_check(board))
 
     def test_make_move_invalid_alg_not(self):
         game = xg.XiangqiGame()

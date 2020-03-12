@@ -81,7 +81,7 @@ class XiangqiGame:
         # Update check status of inactive player
         self._inactive.set_in_check(self._inactive.is_in_check(self._board))
 
-        # TODO: Check if the game is over
+        # Check if the game is over
         self.update_game_state()
 
         # alternate mover
@@ -174,6 +174,23 @@ class XiangqiGame:
 
         if valid_move_count == 0:
             self._game_state = self._LOSS[self._inactive.get_color()]
+
+    def validate_virual_move(self, beg_pos, end_pos,
+                             vir_mover, vir_inactive):
+        vir_mover_now_exposed = False
+
+        taken = self._board.make_move(beg_pos, end_pos, vir_mover)
+
+        if taken is not None:
+            vir_inactive.remove_piece(taken)
+
+        if vir_mover.is_in_check(self._board):
+            vir_mover_now_exposed = True
+
+        moved = self.undo_move(taken, vir_inactive)
+
+        if vir_mover_now_exposed:
+            raise MoverMoveResultedInOwnCheckError(end_pos, moved, vir_mover)
 
     def undo_move(self, taken, inactive):
         # Assumes taken was originally owned by inactive.

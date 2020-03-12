@@ -73,7 +73,7 @@ class XiangqiGame:
 
         # Attempt the mover's move.
         try:
-            self.move_piece(pos_start, pos_end, self._mover, self._inactive)
+            self.move_mover(pos_start, pos_end, self._mover, self._inactive)
         except IllegalMoveError:
             return False
 
@@ -87,7 +87,7 @@ class XiangqiGame:
 
         return True
 
-    def move_piece(self, beg_pos, end_pos, mover, inactive):
+    def move_mover(self, beg_pos, end_pos, mover, inactive):
         # Make the move. Board is updated and taken is currently no longer at
         # `end_pos`
         taken = self._board.make_move(beg_pos, end_pos, mover)

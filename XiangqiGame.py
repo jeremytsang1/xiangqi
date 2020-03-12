@@ -140,6 +140,7 @@ class Board:
             self._board[row][col] = piece
         self._castles = {player.get_color(): self.make_castle(player)
                          for player in players}
+        self._last_pos = Stack()
 
     def __repr__(self):
         """Debugging method. Print a text visualization of the board. Assumes
@@ -211,7 +212,7 @@ class Board:
         self._board[pos[self._ROW]][pos[self._COL]] = elt
 
     def make_move(self, beg_pos, end_pos, moving_player):
-        """Moves pieces on the board.
+        """Moves pieces on the board. Updates the moved piece location.
 
         Raises
         ------
@@ -255,7 +256,31 @@ class Board:
 
         # TODO: "make" the move
         self.place_piece(end_pos, beg_piece)
+        self._last_pos.push(end_pos)
         return end_piece
+
+    def undo_move(self, taken_piece):
+        """Reverses changes to the Board in the previous move. If taken_piece
+        was captured in the previous move it is placed back on the board
+        to where it was.
+
+        Parameters
+        ----------
+        taken_piece: Piece
+            The Piece captured in the last move. Can be None.
+
+        Returns
+        -------
+        None
+
+        """
+        # Assumes not undoing the first move.
+        action_pos = self._last_pos.pop()
+        moved_piece = self.get_piece(action_pos)
+        moved_piece.pop()
+        self.place_piece(moved_piece.get_pos(), moved_piece)
+        if taken_piece is not None:
+            self.place_piece(taken_piece.get_pos(), taken_piece)
 
     def make_castle(self, player):
         """Helper method to create record of each player's castle positions.

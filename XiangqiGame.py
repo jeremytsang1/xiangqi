@@ -141,12 +141,8 @@ class XiangqiGame:
         # pawn to the left resulting in inactive general seeing mover general.
 
         if mover.is_in_check(self._board):
-            # abort the move
-            moved = self._board.undo_move(taken)
-            # Readd the taken piece
-            if taken is not None:
-                inactive.add_piece(taken)
-            # Make sure calling method knows of illegal move.
+            # If move exposes general, abort the move.
+            moved = self.undo_move(taken, inactive)
             raise MoverMoveResultedInOwnCheckError(end_pos, moved, mover)
 
         # Guarantees that after every successful move, the mover is now out of
@@ -179,6 +175,21 @@ class XiangqiGame:
 
         if valid_move_count == 0:
             self._game_state = self._LOSS[self._inactive.get_color()]
+
+    def undo_move(self, taken, inactive):
+        # Assumes taken was originally owned by inactive.
+
+        # Restore board position to what it was before move was made.
+        moved = self._board.undo_move(taken)
+
+        # If taken is a piece, send it back to its original owner's piece
+        # dictionary.
+        if taken is not None:
+            # TODO: remove assertion
+            assert taken.get_player() is inactive
+            inactive.add_piece(taken)
+
+        return moved
 
     def get_players(self):
         """Getter. Return dictionary of the two players.

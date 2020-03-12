@@ -337,6 +337,16 @@ class XiangqiGameTest(unittest.TestCase):
                     (1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), (8, 3),
                 ),
             },
+            {  # Capture chariot with general to evade check
+                'piece': gb0,
+                'alg': ('e10', 'd10'),
+                'taken': chr1,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (0, 4), (1, 3),  # Can't move back to (0, 4) b/c cannon threat
+                ),
+            },
             # {
             #     'piece': sb0,
             #     'alg': ('a5', 'a4'),

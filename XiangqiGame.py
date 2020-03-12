@@ -1154,6 +1154,35 @@ class Cannon(Piece):
 
         return moves
 
+    def get_targets(self, board):
+        # TODO: make helper method so DRY
+        pos = self._positions.peek()
+
+        # Find paths in each of the 4 ortho directions.
+        moves = list()
+        targets = list()
+        for path_dir in board.get_ortho_dirs():
+            path = board.find_ortho_path(pos, path_dir)
+
+            # Look for cannon's firing platform if path nonempty.
+            if len(path) > 0:
+                platform = board.get_piece(path[-1])
+                if platform is not None:
+                    # Look for the target in the path in the same
+                    # direction behind the platform.
+                    attack_path = board.find_ortho_path(platform.get_pos(),
+                                                        path_dir)
+                    if len(attack_path) > 0:
+                        # Target will be first enemy item behind the platform.
+                        target = board.get_piece(attack_path[-1])
+                        if self.is_hostile(target):
+                            targets.append(target.get_pos())
+
+            super().remove_last_piece(path, board)
+            moves += targets
+
+        return moves
+
 
 class Soldier(Piece):
     _ABBREV = 's'
@@ -1307,20 +1336,23 @@ class Player:
         """
         threat = {}
         Player.get_all_pieces(self)
+
         for piece in Player.get_all_pieces(self):
-            # add General castle sight to threat as well.
+            # Determine method of gathering threat positions based on subtype
+            # of Piece.
             if isinstance(piece, General):
-                general = piece
-                for pos in (general.get_enemy_castle_sight(board)):
-                    if pos not in threat:
-                        threat[pos] = set()
-                    threat[pos].add(general)
+                threat_method = piece.get_enemy_castle_sight
+            elif isinstance(piece, Cannon):
+                threat_method = piece.get_targets
             else:
-                # Add standard moves to threat.
-                for move in piece.get_moves(board):
-                    if move not in threat:
-                        threat[move] = set()
-                    threat[move].add(piece)
+                threat_method = piece.get_moves
+
+            # Get all the positions threatened by the current piece.
+            for move in threat_method(board):
+                if move not in threat:
+                    threat[move] = set()
+                threat[move].add(piece)
+
         return threat
 
     def find_key(self, piece):

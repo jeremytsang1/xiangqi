@@ -77,7 +77,8 @@ class XiangqiGame:
         except IllegalMoveError:
             return False
 
-        # TODO: Check if inactive is now in check
+        # TODO: Update check status of inactive player
+        self._inactive.set_in_check(self._inactive.is_in_check(self._board))
 
         # TODO: Check if the game is over
 

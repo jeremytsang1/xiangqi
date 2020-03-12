@@ -1190,10 +1190,18 @@ class Player:
         threat = {}
         Player.get_all_pieces(self)
         for piece in Player.get_all_pieces(self):
+            # Add standard moves to threat.
             for move in piece.get_moves(board):
                 if move not in threat:
                     threat[move] = set()
                 threat[move].add(piece)
+            # add General castle sight to threat as well.
+            if isinstance(piece, General):
+                general = piece
+                for pos in (general.get_enemy_castle_sight(board)):
+                    if move not in threat:
+                        threat[move] = set()
+                    threat[move].add(general)
         return threat
 
     def find_key(self, piece):

@@ -1122,6 +1122,23 @@ class Player:
                 threat[move].add(piece)
         return threat
 
+    def find_key(self, piece):
+        """Lookup the string key for the given Piece.
+
+        Parameters
+        ----------
+        piece: Piece
+            Piece to check. Assumed not None.
+
+        Returns
+        -------
+        str
+            Dictionary key for the piece.
+        """
+        for dct in self._PIECE_DCTS:
+            if isinstance(piece, dct['class']):
+                return dct['key']
+
     def set_opponent(self, opponent):
         """Setter. `opponent` must be object of type Player."""
         self._opponent = opponent

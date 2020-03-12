@@ -1128,60 +1128,45 @@ class Cannon(Piece):
 
     def get_moves(self, board):
         pos = self._positions.peek()
-
-        # Find paths in each of the 4 ortho directions.
         moves = list()
-        targets = list()
+
+        # Find paths and targets in each of the 4 ortho directions.
         for path_dir in board.get_ortho_dirs():
             path = board.find_ortho_path(pos, path_dir)
-
-            # Look for cannon's firing platform if path nonempty.
-            if len(path) > 0:
-                platform = board.get_piece(path[-1])
-                if platform is not None:
-                    # Look for the target in the path in the same
-                    # direction behind the platform.
-                    attack_path = board.find_ortho_path(platform.get_pos(),
-                                                        path_dir)
-                    if len(attack_path) > 0:
-                        # Target will be first enemy item behind the platform.
-                        target = board.get_piece(attack_path[-1])
-                        if self.is_hostile(target):
-                            targets.append(target.get_pos())
-
-            super().remove_last_piece(path, board)
+            targets = self.get_targets_from_path(path, path_dir, board)
+            super().remove_last_piece(path, board)  # Can't attack directly.
             moves += path + targets
 
         return moves
 
     def get_targets(self, board):
-        # TODO: make helper method so DRY
         pos = self._positions.peek()
 
-        # Find paths in each of the 4 ortho directions.
+        # Look for targets in each of the 4 ortho directions.
         moves = list()
-        targets = list()
         for path_dir in board.get_ortho_dirs():
             path = board.find_ortho_path(pos, path_dir)
-
-            # Look for cannon's firing platform if path nonempty.
-            if len(path) > 0:
-                platform = board.get_piece(path[-1])
-                if platform is not None:
-                    # Look for the target in the path in the same
-                    # direction behind the platform.
-                    attack_path = board.find_ortho_path(platform.get_pos(),
-                                                        path_dir)
-                    if len(attack_path) > 0:
-                        # Target will be first enemy item behind the platform.
-                        target = board.get_piece(attack_path[-1])
-                        if self.is_hostile(target):
-                            targets.append(target.get_pos())
-
-            super().remove_last_piece(path, board)
+            targets = self.get_targets_from_path(path, path_dir, board)
             moves += targets
 
         return moves
+
+    def get_targets_from_path(self, path, path_dir, board):
+        targets = []
+        # Look for cannon's firing platform if path nonempty.
+        if len(path) > 0:
+            platform = board.get_piece(path[-1])
+            if platform is not None:
+                # Look for the target in the path in the same
+                # direction behind the platform.
+                attack_path = board.find_ortho_path(platform.get_pos(),
+                                                    path_dir)
+                if len(attack_path) > 0:
+                    # Target will be first enemy item behind the platform.
+                    target = board.get_piece(attack_path[-1])
+                    if self.is_hostile(target):
+                        targets.append(target.get_pos())
+        return targets
 
 
 class Soldier(Piece):

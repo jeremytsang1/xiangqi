@@ -323,11 +323,11 @@ class Board:
         None
 
         """
-        old_pos = piece.get_pos()
-        self.set_board(new_pos, piece)
+        old_pos = piece.get_pos()  # Piece still resides at old spot.
+        self.set_board(new_pos, piece)  # Place the piece at its new spot.
         if old_pos != new_pos:
-            self.set_board(old_pos, None)
-            piece.push(new_pos)
+            self.set_board(old_pos, None)  # clear the spot moved from.
+            piece.push(new_pos)  # Save the new position
 
     def set_board(self, pos, elt):
         self._board[pos[self._ROW]][pos[self._COL]] = elt

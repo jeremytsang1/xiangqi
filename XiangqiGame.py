@@ -1479,6 +1479,21 @@ class OutOfBoundsError(BoardError):
         super().__init__(self._msg)
 
 
+class PlayerError(Error):
+    """Base exception class for Player errors"""
+    pass
+
+
+class AlreadyInPieceList(PlayerError):
+    """Exception class for when attempting to add a Piece to a player that
+    already owns it."""
+    def __init__(self, piece, player):
+        self._piece = piece
+        self._player = player
+        self._msg = f'{self._piece} already belongs to {self._player}'
+        super().__init__(self._msg)
+
+
 if __name__ == '__main__':
     game = XiangqiGame()
     players = game.get_players()

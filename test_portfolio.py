@@ -74,6 +74,68 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual((1, 4), gb0.get_pos())
         self.assertTrue(not game.is_in_check('black'))
 
+    def test_make_move_manual_02(self):
+        """Test the revenging exposure."""
+        game = xg.XiangqiGame()
+        players = game.get_players()
+        red = players[xg.Player.get_RED()]
+        black = players[xg.Player.get_BLACK()]
+        board = game.get_board()
+        # ----------------------------------------
+        sb0, sb1, sb2, sb3, sb4 = black.get_pieces()['soldier']
+        sr0, sr1, sr2, sr3, sr4 = red.get_pieces()['soldier']
+        # ----------------------------------------
+        cb0, cb1 = black.get_pieces()['cannon']
+        cr0, cr1 = red.get_pieces()['cannon']
+        # ----------------------------------------
+        chb0, chb1 = black.get_pieces()['chariot']
+        chr0, chr1 = red.get_pieces()['chariot']
+        # ----------------------------------------
+        hb0, hb1 = black.get_pieces()['horse']
+        hr0, hr1 = red.get_pieces()['horse']
+        # ----------------------------------------
+        eb0, eb1 = black.get_pieces()['elephant']
+        er0, er1 = red.get_pieces()['elephant']
+        # ----------------------------------------
+        ab0, ab1 = black.get_pieces()['advisor']
+        ar0, ar1 = red.get_pieces()['advisor']
+        # ----------------------------------------
+        gb0 = black.get_pieces()['general'][0]
+        gr0 = red.get_pieces()['general'][0]
+        # -----------------------------------------------------------------------------
+
+        # sr2 moves fwd
+        result = game.make_move('e4', 'e5', red)
+        self.assertTrue(result)
+        self.assertEqual((5, 4), sr2.get_pos())
+        check_conditions = (game.is_in_check('red'), game.is_in_check('black'))
+        self.assertTrue((False, False), check_conditions)
+
+        # sr2 moves fwd
+        result = game.make_move('e5', 'e6', red)
+        self.assertTrue(result)
+        self.assertEqual((4, 4), sr2.get_pos())
+        self.assertEqual(set([(4, 3), (3, 4), (4, 5)]),
+                         set(sr2.get_moves(board)))
+        check_conditions = (game.is_in_check('red'), game.is_in_check('black'))
+        self.assertTrue((False, False), check_conditions)
+
+        # sr2 takes sb2
+        result = game.make_move('e6', 'e7', red)
+        self.assertTrue(result)
+        self.assertEqual((3, 4), sr2.get_pos())
+        self.assertTrue(not black.belongs_to(sb2))
+        self.assertEqual(set([(3, 3), (2, 4), (3, 5)]),
+                         set(sr2.get_moves(board)))
+        check_conditions = (game.is_in_check('red'), game.is_in_check('black'))
+        self.assertTrue((False, False), check_conditions)
+
+        # sr2 tries to move left but can't because leaves gr0 exposed
+        result = game.make_move('e7', 'd7', red)
+        self.assertTrue(not result)
+        check_conditions = (game.is_in_check('red'), game.is_in_check('black'))
+        self.assertTrue((False, False), check_conditions)
+
 
     def test_make_move_invalid_alg_not(self):
         game = xg.XiangqiGame()

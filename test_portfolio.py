@@ -69,7 +69,7 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual(set([(2, 4)]), set(eb1.get_moves(board)))
         game.make_move('h9', 'f8', red)  # hr0 checks black king
         self.assertEqual((2, 5), hr0.get_pos())
-        # TODO: black should be in check now
+        self.assertTrue(game.is_in_check('black'))  # black should be in check
         game.make_move('e10', 'e9', black)  # gb0 moves out of check
         self.assertEqual((1, 4), gb0.get_pos())
         self.assertTrue(not game.is_in_check('black'))

@@ -15,10 +15,11 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual(black, red.get_opponent())
         self.assertEqual(red, black.get_opponent())
 
-    def test_make_move_manual_01(self):
+    def test_make_move_manual_00(self):
         game = xg.XiangqiGame()
         players = game.get_players()
-        red, black = players[xg.Player.get_RED()], players[xg.Player.get_BLACK()]
+        red = players[xg.Player.get_RED()]
+        black = players[xg.Player.get_BLACK()]
         board = game.get_board()
         game.make_move('a1', 'a2', red)
         self.assertFalse(black.is_in_check(board))
@@ -28,6 +29,35 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertTrue(black.is_in_check(board))
         game.make_move('e10', 'd10', black)
         self.assertFalse(black.is_in_check(board))
+
+    def test_make_move_manual_01(self):
+        game = xg.XiangqiGame()
+        players = game.get_players()
+        red = players[xg.Player.get_RED()],
+        black = players[xg.Player.get_BLACK()]
+        board = game.get_board()
+        sb0, sb1, sb2, sb3, sb4 = black.get_pieces()['soldier']
+        eb0, eb1 = black.get_pieces()['elephant']
+        game.make_move('b1', 'c3', red)  # hr0
+        game.make_move('c4', 'c5', red)  # sr1
+        game.make_move('c3', 'd5', red)  # hr0
+        game.make_move('d5', 'e7', red)  # hr0 takes sb2
+        self.assertTrue(not black.belongs_to(sb2))
+        check_conditions = [
+            not game.is_in_check('red'),
+            not game.is_in_check('black'),
+            not red.is_in_check(board),
+            not black.is_in_check(board),
+        ]
+        self.assertTrue(all(check_conditions))
+        game.make_move('e7', 'f9', red)  # hr0 blocks eb1 from left
+        self.assertEqual(set([(2, 8)]), set(eb1.get_moves(board)))
+        game.make_move('f9', 'g7', red)  # hr0 takes sb3
+        self.assertTrue(not red.belongs_to(sb3))
+        game.make_move('g7', 'h9', red)  # hr0 blocks eb1 from right
+        self.assertEqual(set([(2, 4)]), set(eb1.get_moves(board)))
+        game.make_move('h9', 'f8', red)  # hr0 checks black king
+        # black should be in check now
 
     def test_make_move_invalid_alg_not(self):
         game = xg.XiangqiGame()

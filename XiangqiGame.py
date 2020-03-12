@@ -179,10 +179,33 @@ class Board:
         return self._board[pos[Board._ROW]][pos[Board._COL]]
 
     def place_piece(self, new_pos, piece):
+        """Places the piece at the new position and updates position
+        accordingly. Marks the piece's original position as
+        unoccupied.
+
+        If the new_pos is the same as the piece's current
+        position (e.g. it was not on the board as it had been
+        captured) then just sets the location at the board to the
+        piece without updating the piece's position data or the old
+        position (due to the lack thereof).
+
+        Parameters
+        ----------
+        new_pos: tuple of int
+            Size 2 tuple indicating position of where to move the piece.
+        piece: Piece
+            Piece to move. Should be not None.
+
+        Returns
+        -------
+        None
+
+        """
         old_pos = piece.get_pos()
         self.set_board(new_pos, piece)
-        self.set_board(old_pos, None)
-        piece.push(new_pos)
+        if old_pos != new_pos:
+            self.set_board(old_pos, None)
+            piece.push(new_pos)
 
     def set_board(self, pos, elt):
         self._board[pos[self._ROW]][pos[self._COL]] = elt

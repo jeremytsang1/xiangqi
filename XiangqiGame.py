@@ -18,6 +18,7 @@ class XiangqiGame:
     _UNFINISHED = 'UNFINISHED'
     _RED_WON = 'RED_WON'
     _BLACK_WON = 'BLACK_WON'
+    _LOSS = {'red': _BLACK_WON, 'black': _RED_WON}
 
     def __init__(self):
         self._players = {color: Player(color) for color in Player.get_COLORS()}
@@ -154,7 +155,30 @@ class XiangqiGame:
             mover.set_in_check(False)
 
     def update_game_state(self):
-        pass
+        pieces = self._inactive.get_all_pieces()
+        valid_move_count = 0  # if no valid moves, then game is over.
+
+        # Check each each of the inactives pieces to see if it has any valid
+        # moves.
+        for piece in pieces:
+            # Piece's current position.
+            beg_pos = piece.get_pos()
+
+            # Get all possible moves for the given piece.
+            end_positions = piece.get_moves()
+
+            for end_pos in end_positions:
+                try:
+                    # If the move succeeds, add count it towards the total.
+                    self.validate_virual_move(beg_pos, end_pos,
+                                              self._inactive, self._mover)
+                    valid_move_count += 1
+                except IllegalMoveError:
+                    # Do not count failed moves towards the total.
+                    pass
+
+        if valid_move_count == 0:
+            self._game_state = self._LOSS[self._inactive.get_color()]
 
     def get_players(self):
         """Getter. Return dictionary of the two players.

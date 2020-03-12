@@ -1559,6 +1559,18 @@ class NotInMoveListError(IllegalMoveError):
         super().__init__(self._msg)
 
 
+class MoverMoveResultedInOwnCheckError(IllegalMoveError):
+    """Exception class for when a player attempts to make an illegal move where
+    they leave their general exposed to direct threat.
+    """
+    def __init__(self, pos, piece, player):
+        self._pos = pos
+        self._player = player
+        self._msg = (f'Player ({player}) tried moving piece ({piece}) '
+                     + f'to pos ({pos}) but is now in check')
+        super().__init__(self._msg)
+
+
 class BoardError(Error):
     """Base exception class for miscellaneous Board errors"""
     pass

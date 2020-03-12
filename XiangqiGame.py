@@ -71,24 +71,56 @@ class XiangqiGame:
         except AlgStrFormattingError:
             return False
 
-        in_check_at_start = self.is_in_check(self._mover.get_color())
-
-        # TODO: If in check, mover to use restricted move list.
-
-        # Prevent illegal moves.
+        # Attempt the mover's move.
         try:
-            taken = self._board.make_move(pos_start, pos_end, self._mover)
+            self.move_piece(pos_start, pos_end, self._mover, self._inactive)
         except IllegalMoveError:
             return False
 
-        if taken is not None:
-            self._inactive.remove_piece(taken)
+        # TODO: Check if inactive is now in check
+
+        # TODO: Check if the game is over
 
         # TODO: self.update_game_state()
 
         # TODO: alternate mover
 
         return True
+
+    def move_piece(self, beg_pos, end_pos, mover, inactive):
+        # Make the move. Board is updated and taken is currently no longer at
+        # `end_pos`
+        taken = self._board.make_move(beg_pos, end_pos, mover)
+
+        # Temporarily remove taken from its player.
+        if taken is not None:
+            # --------------------------------------
+            # TODO: remove assertion
+            msg = f'Tried taking already dead piece {taken}'
+            assert inactive.belongs_to(taken), msg
+            # Assumed taken belongs to inactive
+            # TODO: remove assertion
+            msg = f'TRIED TO TAKE FRIENDLY PIECE: {taken}'
+            assert taken.get_player() is inactive, msg
+            # --------------------------------------
+            inactive.remove_piece(taken)
+
+        # Check if mover is now in check as a result of the move (e.g. moving a
+        # pawn to the left resulting in inactive general seeing mover general.
+
+        if mover.is_in_check(self._board):
+            # abort the move
+            moved = self._board.undo_move(taken)
+            # Readd the taken piece
+            if taken is not None:
+                inactive.add_piece(taken)
+            # Make sure calling method knows of illegal move.
+            raise MoverMoveResultedInOwnCheckError(end_pos, moved, mover)
+
+        # Guarantees that after every successful move, the mover is now out of
+        # check.
+        if mover.get_in_check():
+            mover.set_in_check(False)
 
     def update_game_state(self):
         pass
@@ -294,8 +326,8 @@ class Board:
 
         Returns
         -------
-        None
-
+        Piece
+            The piece that was moved.
         """
         # Assumes not undoing the first move.
         action_pos = self._last_pos.pop()
@@ -304,6 +336,7 @@ class Board:
         self.place_piece(moved_piece.get_pos(), moved_piece)
         if taken_piece is not None:
             self.place_piece(taken_piece.get_pos(), taken_piece)
+        return moved_piece
 
     def make_castle(self, player):
         """Helper method to create record of each player's castle positions.
@@ -890,12 +923,17 @@ class Elephant(Piece):
         moves = list()
 
         for diag_dir in board.get_diag_dirs():
+            adj_pos = board.find_diag(current_pos, diag_dir, dist=1)
             pos = board.find_diag(current_pos, diag_dir, dist=self._DIAG_DIST)
             in_bounds = pos is not None
-            if in_bounds and not board.is_across_river(pos, self._player):
-                piece = board.get_piece(pos)
-                if not self.is_friendly(piece):
-                    moves.append(pos)
+            # if far is in bounds, then adj is definitely in bounds as well so
+            # don't need to check adj OOB
+            if in_bounds:
+                is_unblocked = board.get_piece(adj_pos) is None
+                if is_unblocked and not board.is_across_river(pos, self._player):
+                    piece = board.get_piece(pos)
+                    if not self.is_friendly(piece):
+                        moves.append(pos)
         return moves
 
 
@@ -1159,6 +1197,9 @@ class Player:
     def get_in_check(self):
         return self._in_check
 
+    def set_in_check(self, in_check):
+        self._in_check = in_check
+
     def is_in_check(self, board):
         """Determine if the calling Player is in check.
 
@@ -1229,6 +1270,10 @@ class Player:
         for dct in self._PIECE_DCTS:
             if isinstance(piece, dct['class']):
                 return dct['key']
+
+    def belongs_to(self, piece):
+        key = self.find_key(piece)
+        return piece in self._pieces[key]
 
     def remove_piece(self, piece):
         key = self.find_key(piece)

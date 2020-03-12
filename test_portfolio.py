@@ -347,28 +347,70 @@ class XiangqiGameTest(unittest.TestCase):
                     (0, 4), (1, 3),  # Can't move back to (0, 4) b/c cannon threat
                 ),
             },
-            # {
-            #     'piece': sb0,
-            #     'alg': ('a5', 'a4'),
-            #     'taken': sr0,
-            #     'result': True,
-            #     'info': (False, False, 'UNFINISHED'),
-            #     'moves': ((0, 7), (1, 6),)
-            # },
-            # {
-            #     'piece': ,
-            #     'alg': ('', ''),
-            #     'taken': None,
-            #     'result': True,
-            #     'info': (False, False, 'UNFINISHED'),
-            #     'moves': (,),
-            # },
+            {  # Reposition cannon
+                'piece': cr0,
+                'alg': ('e3', 'e2'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (8, 1), (8, 2), (8, 3), (8, 5), (8, 6), (8, 7), (8, 8),
+                    (7, 4), (6, 4), (5, 4), (4, 4), (3, 4), (2, 4), (1, 4), (0, 4),
+                ),
+            },
+            {  # Reposition soldier
+                'piece': sb0,
+                'alg': ('a5', 'b5'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (5, 0), (6, 1), (5, 2),
+                ),
+            },
+            {  # Reposition cannon
+                'piece': cr1,
+                'alg': ('h3', 'e3'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (7, 0), (7, 1), (7, 2), (7, 3), (7, 5), (7, 6), (7, 7), (7, 6), (7, 8),
+                    (6, 4), (5, 4), (4, 4), (3, 4), (2, 4), (1, 4), (0, 4),
+                ),
+            },
+            {  # Reposition soldier
+                'piece': sb0,
+                'alg': ('b5', 'a5'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (6, 0), (5, 1)
+                ),
+            },
+            {  # Mate black by red chariot
+                'piece': chr0,
+                'alg': ('a2', 'd2'),
+                'taken': None,
+                'result': True,
+                'info': (False, True, 'RED_WON'),
+                'moves': (
+                    (8, 0), (8, 1), (8, 2),
+                    (7, 3), (6, 3), (5, 3), (4, 3), (3, 3), (2, 3), (1, 3), (0, 3),
+                ),
+            },
+            {  # Any move after mate should be false
+                'piece': gb0,
+                'alg': ('d10', 'e10'),
+                'taken': None,
+                'result': False,
+                'info': (False, True, 'UNFINISHED'),
+                'moves': tuple(),
+            },
         )
         for i, dct in enumerate(test_cases):
-            print(79 * "-")
             self.run_move_test(dct, game)
-            print(board)
-
         self.see(game)
 
     def run_move_test(self, dct, game):

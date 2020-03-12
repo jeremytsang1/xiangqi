@@ -15,7 +15,7 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual(black, red.get_opponent())
         self.assertEqual(red, black.get_opponent())
 
-    def test_make_move_01(self):
+    def test_make_move_manual_01(self):
         game = xg.XiangqiGame()
         players = game.get_players()
         red, black = players[xg.Player.get_RED()], players[xg.Player.get_BLACK()]

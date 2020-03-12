@@ -399,9 +399,11 @@ class Board:
         action_pos = self._last_pos.pop()
         moved_piece = self.get_piece(action_pos)
         moved_piece.pop()
-        self.place_piece(moved_piece.get_pos(), moved_piece)
+        self.set_board(moved_piece.get_pos(), moved_piece)
         if taken_piece is not None:
-            self.place_piece(taken_piece.get_pos(), taken_piece)
+            self.set_board(taken_piece.get_pos(), taken_piece)
+        else:
+            self.set_board(action_pos, taken_piece)
         return moved_piece
 
     def make_castle(self, player):

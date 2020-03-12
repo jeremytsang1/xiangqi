@@ -118,6 +118,85 @@ class XiangqiGameTest(unittest.TestCase):
         check_conditions = (game.is_in_check('red'), game.is_in_check('black'))
         self.assertTrue((False, False), check_conditions)
 
+    def test_make_move_00(self):
+        """Test the exposure prevention."""
+        game = xg.XiangqiGame()
+        players = game.get_players()
+        red = players[xg.Player.get_RED()]
+        black = players[xg.Player.get_BLACK()]
+        board = game.get_board()
+        # ----------------------------------------
+        sb0, sb1, sb2, sb3, sb4 = black.get_pieces()['soldier']
+        sr0, sr1, sr2, sr3, sr4 = red.get_pieces()['soldier']
+        # ----------------------------------------
+        cb0, cb1 = black.get_pieces()['cannon']
+        cr0, cr1 = red.get_pieces()['cannon']
+        # ----------------------------------------
+        chb0, chb1 = black.get_pieces()['chariot']
+        chr0, chr1 = red.get_pieces()['chariot']
+        # ----------------------------------------
+        hb0, hb1 = black.get_pieces()['horse']
+        hr0, hr1 = red.get_pieces()['horse']
+        # ----------------------------------------
+        eb0, eb1 = black.get_pieces()['elephant']
+        er0, er1 = red.get_pieces()['elephant']
+        # ----------------------------------------
+        ab0, ab1 = black.get_pieces()['advisor']
+        ar0, ar1 = red.get_pieces()['advisor']
+        # ----------------------------------------
+        gb0 = black.get_pieces()['general'][0]
+        gr0 = red.get_pieces()['general'][0]
+        # ---------------------------------------------------------------------
+
+        test_cases = (
+            {
+                'piece': sr2,
+                'alg': ('e4', 'e5'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((4, 4),),
+            },
+            {
+                'piece': sb2,
+                'alg': ('e7', 'e6'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((5, 4),),
+            },
+            {
+                'piece': sr2,
+                'alg': ('e5', 'e6'),
+                'taken': sb2,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((4, 3), (3, 4), (4, 5))
+            },
+            {
+                'piece': cb0,
+                'alg': ('b8', 'b1'),
+                'taken': gr0,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (8, 1), (9, 3),
+                )
+            },
+            {
+                'piece': sr2,
+                'alg': ('e6', 'e7'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((3, 3), (2, 4), (3, 5))
+            },
+        )
+        for i, dct in enumerate(test_cases):
+            self.run_move_test(dct, game)
+
+        self.see(game)
+
     def run_move_test(self, dct, game):
         """Assumes dcts are in correct Player order."""
         piece = dct['piece']

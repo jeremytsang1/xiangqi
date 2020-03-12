@@ -488,7 +488,6 @@ class XiangqiGameTest(unittest.TestCase):
 
         for i, dct in enumerate(test_cases):
             self.run_move_test(dct, game)
-        self.see(game)
 
     def run_move_test(self, dct, game):
         """Assumes dcts are in correct Player order."""

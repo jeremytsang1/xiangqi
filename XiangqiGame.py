@@ -66,7 +66,7 @@ class XiangqiGame:
         except AlgStrFormattingError:
             return False
 
-        in_check_at_start = self.is_in_check(self._current_player)
+        in_check_at_start = self.is_in_check(self._current_player.get_color())
 
         # TODO: If in check player use restricted move list.
 

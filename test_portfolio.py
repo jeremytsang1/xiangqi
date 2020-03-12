@@ -33,7 +33,7 @@ class XiangqiGameTest(unittest.TestCase):
     def test_make_move_manual_01(self):
         game = xg.XiangqiGame()
         players = game.get_players()
-        red = players[xg.Player.get_RED()],
+        red = players[xg.Player.get_RED()]
         black = players[xg.Player.get_BLACK()]
         board = game.get_board()
         sb0, sb1, sb2, sb3, sb4 = black.get_pieces()['soldier']

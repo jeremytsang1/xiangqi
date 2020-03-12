@@ -50,7 +50,9 @@ class XiangqiGame:
         bool
             True if the player is in check. Otherwise False.
         """
-        return self._players[color].is_in_check()
+        player = self._players[color]
+
+        return player.get_in_check()
 
     def make_move(self, alg_start, alg_end):
         # Prevent moves if game is already over.

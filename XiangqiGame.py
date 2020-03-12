@@ -1070,6 +1070,29 @@ class Player:
         """
         pass
 
+    def get_threat(self, board):
+        """Get all the positions under attack by the player's pieces.
+
+        Parameters
+        ----------
+        board: Board
+            Current play board.
+
+        Returns
+        -------
+        dict
+            Keys are positions under attack. Values are sets of pieces
+            who can attack the position.
+        """
+        threat = {}
+        Player.get_all_pieces(self)
+        for piece in Player.get_all_pieces(self):
+            for move in piece.get_moves(board):
+                if move not in threat:
+                    threat[move] = set()
+                threat[move].add(piece)
+        return threat
+
     def set_opponent(self, opponent):
         """Setter. `opponent` must be object of type Player."""
         self._opponent = opponent

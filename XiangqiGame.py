@@ -1156,7 +1156,19 @@ class Player:
         bool
             True if calling Player is in check. Otherwise False.
         """
-        pass
+        # Both player's can't be in check at the same time.
+        opponent = self._opponent
+
+        if opponent.get_in_check():
+            return False
+
+        threat = opponent.get_threat(board)
+        general = self._pieces[self.get_GENERAL()][0]
+
+        if general.get_pos() in threat:
+            return True
+
+        return False
 
     def get_threat(self, board):
         """Get all the positions under attack by the player's pieces.

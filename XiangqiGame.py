@@ -88,6 +88,36 @@ class XiangqiGame:
         return True
 
     def move_mover(self, beg_pos, end_pos, mover, inactive):
+        """Move the piece of the current player (the "mover").
+
+        Raises
+        ------
+        MoverMoveResultedInOwnCheckError:
+            When attempting to move the piece in such a way that would leave
+            the mover's general open to direct attack on the next turn.
+        NoPieceAtStartPosError:
+            When trying to move a none-existant piece at beg_pos.
+        WrongPieceOwner:
+            When attempting to move a piece that does not belong to mover.
+        NotInMoveListError:
+            When attempting to move the piece that is not in accordance to its
+            moves dictated by its nature.
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Position of the mover's piece.
+        end_pos: tuple of int
+            Position to move the mover's piece.
+        mover: Player
+            Current player player making the move.
+        inactive: Player
+            Player that is not making the move.
+
+        Returns
+        -------
+        None
+        """
         # Make the move. Board is updated and taken is currently no longer at
         # `end_pos`
         taken = self._board.make_move(beg_pos, end_pos, mover)

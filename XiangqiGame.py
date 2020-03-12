@@ -139,7 +139,6 @@ class XiangqiGame:
 
         # Check if mover is now in check as a result of the move (e.g. moving a
         # pawn to the left resulting in inactive general seeing mover general.
-
         if mover.is_in_check(self._board):
             # If move exposes general, abort the move.
             moved = self.undo_move(taken, inactive)

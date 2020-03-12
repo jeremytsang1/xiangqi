@@ -150,7 +150,7 @@ class XiangqiGame:
             mover.set_in_check(False)
 
     def update_game_state(self):
-        pieces = self._inactive.get_all_pieces()
+        pieces = self._inactive.get_all_pieces(self._inactive)
         valid_move_count = 0  # if no valid moves, then game is over.
 
         # Check each each of the inactives pieces to see if it has any valid
@@ -160,7 +160,7 @@ class XiangqiGame:
             beg_pos = piece.get_pos()
 
             # Get all possible moves for the given piece.
-            end_positions = piece.get_moves()
+            end_positions = piece.get_moves(self._board)
 
             for end_pos in end_positions:
                 try:

@@ -132,15 +132,16 @@ class XiangqiGameTest(unittest.TestCase):
 
         self.verify_move(game, piece, alg_beg, alg_end, result)
         self.verify_game_info(*info)
-        self.verify_moves(board, piece, moves)
+        self.verify_future_moves(board, piece, moves)
 
         if taken is not None:
             self.verify_is_missing(taken, player)
 
     def verify_move(self, game, piece, alg_beg, alg_end, result=True):
-        result = game.make_move(alg_beg, alg_end)
-        self.assertTrue(result)
-        expected = xg.AlgNot.alg_to_row_col(alg_end)
+        an = xg.AlgNot.alg_to_row_col
+        actual_result = game.make_move(alg_beg, alg_end)
+        self.assertEqual(result, actual_result)
+        expected = an(alg_end) if result else an(alg_beg)
         actual = piece.get_pos()
         self.assertEqual(expected, actual)
 
@@ -150,7 +151,7 @@ class XiangqiGameTest(unittest.TestCase):
         self.assertEqual(black_check, game.is_in_check('black'))
         self.assertEqual(game_state, game.get_game_state())
 
-    def verify_moves(self, board, piece, moves):
+    def verify_future_moves(self, board, piece, moves):
         self.assertEqual(set(moves), set(piece.get_moves(board)))
 
     def verify_is_missing(self, taken, player):

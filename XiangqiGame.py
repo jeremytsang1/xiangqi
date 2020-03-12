@@ -81,8 +81,6 @@ class XiangqiGame:
         except IllegalMoveError:
             return False
 
-        print("TAKEN: ", taken)
-        print("INACTIVE:", self._inactive)
         if taken is not None:
             self._inactive.remove_piece(taken)
 

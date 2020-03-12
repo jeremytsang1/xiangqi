@@ -81,8 +81,7 @@ class XiangqiGame:
         self._inactive.set_in_check(self._inactive.is_in_check(self._board))
 
         # TODO: Check if the game is over
-
-        # TODO: self.update_game_state()
+        self.update_game_state()
 
         # TODO: alternate mover
 

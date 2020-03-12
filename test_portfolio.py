@@ -171,7 +171,7 @@ class XiangqiGameTest(unittest.TestCase):
                 'taken': sb2,
                 'result': True,
                 'info': (False, False, 'UNFINISHED'),
-                'moves': ((4, 3), (3, 4), (4, 5))
+                'moves': ((4, 3), (3, 4), (4, 5)),
             },
             {
                 'piece': cb0,
@@ -181,7 +181,7 @@ class XiangqiGameTest(unittest.TestCase):
                 'info': (False, False, 'UNFINISHED'),
                 'moves': (
                     (8, 1), (9, 3),
-                )
+                ),
             },
             {
                 'piece': sr2,
@@ -189,11 +189,175 @@ class XiangqiGameTest(unittest.TestCase):
                 'taken': None,
                 'result': True,
                 'info': (False, False, 'UNFINISHED'),
-                'moves': ((3, 3), (2, 4), (3, 5))
+                'moves': ((3, 3), (2, 4), (3, 5)),
             },
+            {
+                'piece': sb0,
+                'alg': ('a7', 'a6'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((5, 0),),
+            },
+            {
+                'piece': sr2,
+                'alg': ('e7', 'e8'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((2, 3), (1, 4), (2, 5)),
+            },
+            {
+                'piece': sb0,
+                'alg': ('a6', 'a5'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((6, 0), (5, 1)),
+            },
+            {
+                'piece': sr2,
+                'alg': ('e8', 'e9'),
+                'taken': None,
+                'result': True,
+                'info': (False, True, 'UNFINISHED'),  # Check black.
+                'moves': ((1, 3), (0, 4), (1, 5)),
+            },
+            {
+                'piece': sb0,
+                'alg': ('a5', 'a4'),
+                'taken': None,
+                'result': False,  # Need to get out of check.
+                'info': (False, True, 'UNFINISHED'),
+                'moves': ((6, 0), (5, 1)),
+            },
+            {  # It is still black's turn b/c didn't get out of check.,
+                'piece': sr2,
+                'alg': ('e9', 'e10'),
+                'taken': None,
+                'result': False,
+                'info': (False, True, 'UNFINISHED'),
+                'moves': ((1, 3), (0, 4), (1, 5)),
+            },
+            {  # Get out of check.
+                'piece': ab0,
+                'alg': ('d10', 'e9'),
+                'taken': sr2,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((0, 3), (2, 3), (2, 5)),
+            },
+            {
+                'piece': chr0,
+                'alg': ('a1', 'a2'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (7, 0),
+                    (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8),
+                    (9, 0)),
+            },
+            {  # Move elephant out of the way
+                'piece': eb0,
+                'alg': ('c10', 'a8'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((0, 2), (4, 2)),
+            },
+            {
+                'piece': chr1,
+                'alg': ('i1', 'i2'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (7, 8),
+                    (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 6), (8, 7),
+                    (9, 8)),
+            },
+            {  # Move elephant out of the way
+                'piece': eb1,
+                'alg': ('g10', 'i8'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((0, 6), (4, 6)),
+            },
+            {  # Move right chariot to center.
+                'piece': chr1,
+                'alg': ('i2', 'd2'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (7, 3), (6, 3), (5, 3), (4, 3), (3, 3), (2, 3), (1, 3), (0, 3),
+                    (8, 1), (8, 2), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8),
+                ),
+            },
+            {  # Move cannon to get stuck
+                'piece': cb1,
+                'alg': ('h8', 'h7'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (1, 7), (2, 7),
+                    (4, 7), (5, 7), (6, 7), (9, 7),
+                ),
+            },
+            {  # Move cannon to attack general
+                'piece': cr0,
+                'alg': ('b3', 'e3'),
+                'taken': None,
+                'result': True,
+                'info': (False, True, 'UNFINISHED'),
+                'moves': (
+                    (8, 4), (6, 4), (5, 4), (4, 4), (3, 4), (2, 4), (0, 4),
+                    (7, 0), (7, 1), (7, 2), (7, 3), (7, 5), (7, 6),
+                ),
+            },
+            {  # Move cannon to attack general
+                'piece': ab0,
+                'alg': ('e9', 'd10'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': ((1, 4),),
+            },
+            {  # Move cannon to attack general
+                'piece': chr1,
+                'alg': ('d2', 'd10'),
+                'taken': ab0,
+                'result': True,
+                'info': (False, True, 'UNFINISHED'),
+                'moves': (
+                    (0, 1), (0, 2), (0, 4),
+                    (1, 3), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), (8, 3),
+                ),
+            },
+            # {
+            #     'piece': sb0,
+            #     'alg': ('a5', 'a4'),
+            #     'taken': sr0,
+            #     'result': True,
+            #     'info': (False, False, 'UNFINISHED'),
+            #     'moves': ((0, 7), (1, 6),)
+            # },
+            # {
+            #     'piece': ,
+            #     'alg': ('', ''),
+            #     'taken': None,
+            #     'result': True,
+            #     'info': (False, False, 'UNFINISHED'),
+            #     'moves': (,),
+            # },
         )
         for i, dct in enumerate(test_cases):
+            print(79 * "-")
             self.run_move_test(dct, game)
+            print(board)
 
         self.see(game)
 

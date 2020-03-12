@@ -987,7 +987,8 @@ class Advisor(Piece):
 class Elephant(Piece):
     _ABBREV = 'e'
     _INIT_COLS = (2, 6)  # Index with _id_num.
-    _DIAG_DIST = 2
+    _ATTAC_DIST = 2
+    _BLOCK_DIST = 1
 
     def __init__(self, player, id_num):
         """Create an object of type Adivsor with location based on player and
@@ -1010,8 +1011,8 @@ class Elephant(Piece):
         moves = list()
 
         for diag_dir in board.get_diag_dirs():
-            adj_pos = board.find_diag(current_pos, diag_dir, dist=1)
-            pos = board.find_diag(current_pos, diag_dir, dist=self._DIAG_DIST)
+            adj_pos = board.find_diag(current_pos, diag_dir, dist=self._BLOCK_DIST)
+            pos = board.find_diag(current_pos, diag_dir, dist=self._ATTAC_DIST)
             in_bounds = pos is not None
             # if far is in bounds, then adj is definitely in bounds as well so
             # don't need to check adj OOB

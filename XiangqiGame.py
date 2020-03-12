@@ -1139,6 +1139,20 @@ class Player:
             if isinstance(piece, dct['class']):
                 return dct['key']
 
+    def remove_piece(self, piece):
+        key = self.find_key(piece)
+        # TODO: check if piece is already removed?
+        self._pieces[key].remove(piece)
+
+    def add_piece(self, piece):
+        key = self.find_key(piece)
+
+        # Avoid re-adding Pieces that already belong to the player.
+        if piece in self._pieces[key]:
+            raise AlreadyInPieceList(piece, self)
+
+        self._pieces[key].append(piece)
+
     def set_opponent(self, opponent):
         """Setter. `opponent` must be object of type Player."""
         self._opponent = opponent

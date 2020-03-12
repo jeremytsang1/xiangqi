@@ -1076,6 +1076,7 @@ class Player:
         self._opponent = None
         self._home_row = Player._HOME_ROWS[self._color]
         self._fwd_dir = Player._FWD_DIRS[self._color]
+        self._in_check = False
 
     def __repr__(self):
         """Return the color string of the player."""
@@ -1084,6 +1085,9 @@ class Player:
     def __str__(self):
         """Return the color string of the player."""
         return self._color
+
+    def get_in_check(self):
+        return self._in_check
 
     def is_in_check(self):
         """Determine if the calling Player is in check.

@@ -36,12 +36,20 @@ class XiangqiGameTest(unittest.TestCase):
         red = players[xg.Player.get_RED()]
         black = players[xg.Player.get_BLACK()]
         board = game.get_board()
+        hr0, hr1 = red.get_pieces()['horse']
         sb0, sb1, sb2, sb3, sb4 = black.get_pieces()['soldier']
+        sr0, sr1, sr2, sr3, sr4 = red.get_pieces()['soldier']
         eb0, eb1 = black.get_pieces()['elephant']
-        game.make_move('b1', 'c3', red)  # hr0
-        game.make_move('c4', 'c5', red)  # sr1
-        game.make_move('c3', 'd5', red)  # hr0
+        gb0 = black.get_pieces()['general'][0]
+
+        game.make_move('b1', 'c3', red)
+        self.assertEqual((7, 2), hr0.get_pos())
+        game.make_move('c4', 'c5', red)
+        self.assertEqual((5, 2), sr1.get_pos())
+        game.make_move('c3', 'd5', red)
+        self.assertEqual((5, 3), hr0.get_pos())
         game.make_move('d5', 'e7', red)  # hr0 takes sb2
+        black.get_pieces()['soldier']
         self.assertTrue(not black.belongs_to(sb2))
         check_conditions = [
             not game.is_in_check('red'),
@@ -51,13 +59,21 @@ class XiangqiGameTest(unittest.TestCase):
         ]
         self.assertTrue(all(check_conditions))
         game.make_move('e7', 'f9', red)  # hr0 blocks eb1 from left
+        self.assertEqual((1, 5), hr0.get_pos())
         self.assertEqual(set([(2, 8)]), set(eb1.get_moves(board)))
         game.make_move('f9', 'g7', red)  # hr0 takes sb3
+        self.assertEqual((3, 6), hr0.get_pos())
         self.assertTrue(not red.belongs_to(sb3))
         game.make_move('g7', 'h9', red)  # hr0 blocks eb1 from right
+        self.assertEqual((1, 7), hr0.get_pos())
         self.assertEqual(set([(2, 4)]), set(eb1.get_moves(board)))
         game.make_move('h9', 'f8', red)  # hr0 checks black king
-        # black should be in check now
+        self.assertEqual((2, 5), hr0.get_pos())
+        # TODO: black should be in check now
+        game.make_move('e10', 'e9', black)  # gb0 moves out of check
+        self.assertEqual((1, 4), gb0.get_pos())
+        self.assertTrue(not game.is_in_check('black'))
+
 
     def test_make_move_invalid_alg_not(self):
         game = xg.XiangqiGame()

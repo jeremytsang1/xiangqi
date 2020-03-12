@@ -807,7 +807,7 @@ class General(Piece):
             if piece is None or piece is enemy_gen:
                 intervening = board.find_intervening_ortho(current_pos, pos)
                 if intervening is None or intervening is enemy_gen:
-                    castle.append(pos)
+                    castle_sight.append(pos)
                 else:
                     break
             else:

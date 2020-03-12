@@ -1148,7 +1148,7 @@ class Player:
     def get_in_check(self):
         return self._in_check
 
-    def is_in_check(self):
+    def is_in_check(self, board):
         """Determine if the calling Player is in check.
 
         Returns

@@ -24,7 +24,9 @@ class XiangqiGame:
         self.set_opponents()  # Make players track each other.
         self._board = Board(self._players.values())
         self._game_state = XiangqiGame._UNFINISHED
-        self._current_player = self._players[Player.get_RED()]
+
+        self._mover = self._players[Player.get_RED()]
+        self._inactive = self._players[Player.get_BLACK()]
 
     def get_game_state(self):
         """Getter. Return the game state.
@@ -56,8 +58,8 @@ class XiangqiGame:
 
     def make_move(self, alg_start, alg_end, mover=None):
         # TODO: get rid of mover
-        if mover is not None:
-            self._current_player = mover
+        if mover is not None and mover is not self._mover:
+            self.switch_mover(self._mover)
         # Prevent moves if game is already over.
         if self._game_state != XiangqiGame._UNFINISHED:
             return False
@@ -69,24 +71,24 @@ class XiangqiGame:
         except AlgStrFormattingError:
             return False
 
-        in_check_at_start = self.is_in_check(self._current_player.get_color())
+        in_check_at_start = self.is_in_check(self._mover.get_color())
 
-        # TODO: If in check player use restricted move list.
+        # TODO: If in check, mover to use restricted move list.
 
         # Prevent illegal moves.
         try:
-            taken_piece = self._board.make_move(pos_start, pos_end,
-                                                self._current_player)
+            taken = self._board.make_move(pos_start, pos_end, self._mover)
         except IllegalMoveError:
             return False
 
-        opponent = self._current_player.get_opponent()
-        if taken_piece is not None:
-            opponent.remove_piece(taken_piece)
+        print("TAKEN: ", taken)
+        print("INACTIVE:", self._inactive)
+        if taken is not None:
+            self._inactive.remove_piece(taken)
 
         # TODO: self.update_game_state()
 
-        # TODO: alternate current player
+        # TODO: alternate mover
 
         return True
 
@@ -115,6 +117,15 @@ class XiangqiGame:
 
         for i, player in enumerate(player_list):
             player.set_opponent(player_list[i - 1])
+
+    def switch_mover(self, current_mover):
+        if current_mover.get_color() == current_mover.get_RED():
+            self._mover = self._players['black']
+            self._inactive = self._players['red']
+        else:
+            self._mover = self._players['red']
+            self._inactive = self._players['black']
+
 
 
 class Board:
@@ -1189,18 +1200,19 @@ class Player:
         threat = {}
         Player.get_all_pieces(self)
         for piece in Player.get_all_pieces(self):
-            # Add standard moves to threat.
-            for move in piece.get_moves(board):
-                if move not in threat:
-                    threat[move] = set()
-                threat[move].add(piece)
             # add General castle sight to threat as well.
             if isinstance(piece, General):
                 general = piece
                 for pos in (general.get_enemy_castle_sight(board)):
+                    if pos not in threat:
+                        threat[pos] = set()
+                    threat[pos].add(general)
+            else:
+                # Add standard moves to threat.
+                for move in piece.get_moves(board):
                     if move not in threat:
                         threat[move] = set()
-                    threat[move].add(general)
+                    threat[move].add(piece)
         return threat
 
     def find_key(self, piece):

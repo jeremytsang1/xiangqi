@@ -118,6 +118,54 @@ class XiangqiGameTest(unittest.TestCase):
         check_conditions = (game.is_in_check('red'), game.is_in_check('black'))
         self.assertTrue((False, False), check_conditions)
 
+    def run_move_test(self, dct, game):
+        """Assumes dcts are in correct Player order."""
+        piece = dct['piece']
+        alg_beg, alg_end = dct['alg']
+        taken = dct['taken']
+        info = (game, *dct['info'])
+        result = dct['result']
+        moves = dct['moves']
+
+        board = game.get_board()
+        player = piece.get_player()
+
+        self.verify_move(game, piece, alg_beg, alg_end, result)
+        self.verify_game_info(*info)
+        self.verify_moves(board, piece, moves)
+
+        if taken is not None:
+            self.verify_is_missing(taken, player)
+
+    def verify_move(self, game, piece, alg_beg, alg_end, result=True):
+        result = game.make_move(alg_beg, alg_end)
+        self.assertTrue(result)
+        expected = xg.AlgNot.alg_to_row_col(alg_end)
+        actual = piece.get_pos()
+        self.assertEqual(expected, actual)
+
+    def verify_game_info(self, game, red_check, black_check,
+                         game_state="UNFINISHED"):
+        self.assertEqual(red_check, game.is_in_check('red'))
+        self.assertEqual(black_check, game.is_in_check('black'))
+        self.assertEqual(game_state, game.get_game_state())
+
+    def verify_moves(self, board, piece, moves):
+        self.assertEqual(set(moves), set(piece.get_moves(board)))
+
+    def verify_is_missing(self, taken, player):
+        self.assertTrue(not player.belongs_to(taken))
+
+    def see(self, game):
+        players = (game.get_players()['red'], game.get_players()['black'])
+        print()
+        for player in players:
+            print(20 * '-', player.get_color().upper(), 20 * '-', sep='')
+            for key, sublist in player.get_pieces().items():
+                print(20 * '-')
+                print(f'{key}: {sublist}')
+        print(20 * '-', player.get_color().upper(), 20 * '-', sep='')
+
     def test_make_move_invalid_alg_not(self):
         game = xg.XiangqiGame()
         test_cases = (

@@ -188,6 +188,31 @@ class Board:
         self._board[pos[self._ROW]][pos[self._COL]] = elt
 
     def make_move(self, beg_pos, end_pos, moving_player):
+        """Moves pieces on the board.
+
+        Raises
+        ------
+        NoPieceAtStartPosError:
+            When the position beg_pos refers to an unoccupied position.
+        WrongPieceOwner:
+            When the Piece at beg_pos does not belong to moving_player.
+        NotInMoveListError:
+            When the end_pos is not in the move list fo the Piece.
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Position of the piece to move.
+        end_pos: tuple of int
+            Position of where to move the piece.
+        moving_player: Player
+            Player making the move.
+
+        Returns
+        -------
+        Piece
+            Piece that was captured if end_pos was occupied. Otherwise None.
+        """
         beg_piece = self.get_piece(beg_pos)
         end_piece = self.get_piece(end_pos)
 

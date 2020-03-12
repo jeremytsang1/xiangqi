@@ -889,6 +889,9 @@ class General(Piece):
         for path_dir in board.get_ortho_dirs():
             path = board.find_ortho_path(pos, path_dir, self._ORTHO_DIST)
             super().remove_friendly(path, board)
+            # Restrict to castle
+            path = [tmp_pos for tmp_pos in path
+                    if board.is_in_castle(tmp_pos, self._player)]
             moves += path
 
         # Get enemy threat.

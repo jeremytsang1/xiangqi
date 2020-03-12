@@ -83,7 +83,8 @@ class XiangqiGame:
         # TODO: Check if the game is over
         self.update_game_state()
 
-        # TODO: alternate mover
+        # alternate mover
+        self.switch_mover(self._mover)
 
         return True
 

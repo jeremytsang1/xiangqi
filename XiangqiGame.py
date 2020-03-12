@@ -66,11 +66,20 @@ class XiangqiGame:
         except AlgStrFormattingError:
             return False
 
+        in_check_at_start = self.is_in_check(self._current_player)
+
+        # TODO: If in check player use restricted move list.
+
         # Prevent illegal moves.
         try:
-            self._board.make_move(pos_start, pos_end, self._current_player)
+            taken_piece = self._board.make_move(pos_start, pos_end,
+                                                self._current_player)
         except IllegalMoveError:
             return False
+
+        opponent = self._current_player.get_opponent()
+        if taken_piece is not None:
+            opponent.remove_piece(taken_piece)
 
         # TODO: self.update_game_state()
 

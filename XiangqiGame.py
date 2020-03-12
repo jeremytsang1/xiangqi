@@ -783,13 +783,12 @@ class General(Piece):
             super().remove_friendly(path, board)
             moves += path
 
-        # Get enemy line of sight.
+        # Get enemy threat.
         opponent = self._player.get_opponent()
-        enemy_gen = opponent.get_pieces()[Player.get_GENERAL()][0]
-        line_of_sight = enemy_gen.get_enemy_castle_sight(board, )
+        threat = opponent.get_threat(board)
 
-        # Remove enemy general line of sight
-        return list(set(moves) - set(line_of_sight))
+        # Prevent general from moving in to enemy threat area.
+        return list(set(moves) - threat.keys())
 
     def get_enemy_castle_sight(self, board):
         opponent = self._player.get_opponent()

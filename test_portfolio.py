@@ -389,26 +389,103 @@ class XiangqiGameTest(unittest.TestCase):
                     (6, 0), (5, 1)
                 ),
             },
-            {  # Mate black by red chariot
+            {  # Chariot repositions before capturing horse
                 'piece': chr0,
-                'alg': ('a2', 'd2'),
+                'alg': ('a2', 'b2'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (8, 0), (8, 2), (8, 3),
+                    (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1),
+                    (9, 1)
+                ),
+            },
+            {  # Reposition soldier
+                'piece': sb4,
+                'alg': ('i7', 'i6'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (5, 8),
+                ),
+            },
+            {  # Chariot repositions before capturing horse
+                'piece': chr0,
+                'alg': ('b2', 'b10'),
+                'taken': hb0,
+                'result': True,
+                'info': (False, True, 'UNFINISHED'),
+                'moves': (
+                    (0, 0), (0, 2), (0, 3),
+                    (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1),
+                ),
+            },
+            {  # General evades check
+                'piece': gb0,
+                'alg': ('d10', 'd9'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (2, 3), (1, 4)  # TODO: Careful,  (1, 4) should not be included
+                ),
+            },
+            {  # Chariot reposition
+                'piece': chr0,
+                'alg': ('b10', 'b2'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (8, 0), (8, 2), (8, 3),
+                    (7, 1), (6, 1), (5, 1), (4, 1), (3, 1), (2, 1), (1, 1), (0, 1),
+                    (9, 1)
+                ),
+            },
+            {  # Reposition soldier
+                'piece': sb4,
+                'alg': ('i6', 'i5'),
+                'taken': None,
+                'result': True,
+                'info': (False, False, 'UNFINISHED'),
+                'moves': (
+                    (5, 7), (6, 8)
+                ),
+            },
+            {  # Chariot mates
+                'piece': chr0,
+                'alg': ('b2', 'd2'),
                 'taken': None,
                 'result': True,
                 'info': (False, True, 'RED_WON'),
                 'moves': (
                     (8, 0), (8, 1), (8, 2),
-                    (7, 3), (6, 3), (5, 3), (4, 3), (3, 3), (2, 3), (1, 3), (0, 3),
+                    (7, 3), (6, 3), (5, 3), (4, 3), (3, 3), (2, 3), (1, 3),
                 ),
             },
             {  # Any move after mate should be false
                 'piece': gb0,
-                'alg': ('d10', 'e10'),
+                'alg': ('d9', 'e9'),
                 'taken': None,
                 'result': False,
-                'info': (False, True, 'UNFINISHED'),
-                'moves': tuple(),
+                'info': (False, True, 'RED_WON'),
+                'moves': ((0, 3), (1, 4),)
             },
+            # {  # Mate black by red chariot
+            #     'piece': chr0,
+            #     'alg': ('a2', 'd2'),
+            #     'taken': None,
+            #     'result': True,
+            #     'info': (False, True, 'RED_WON'),
+            #     'moves': (
+            #         (8, 0), (8, 1), (8, 2),
+            #         (7, 3), (6, 3), (5, 3), (4, 3), (3, 3), (2, 3), (1, 3), (0, 3),
+            #     ),
+            # },
         )
+
         for i, dct in enumerate(test_cases):
             self.run_move_test(dct, game)
         self.see(game)

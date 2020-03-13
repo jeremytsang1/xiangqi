@@ -1363,18 +1363,40 @@ class Elephant(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a the elephant can move to. Moves are
+        restricted to player's side of the river only be two diagonals
+        away. Note that if a piece is 1 diagonal away, it will block the
+        position two diagonals away.
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         current_pos = self._positions.peek()
 
         moves = list()
 
+        # Inspect each diagonal direction.
         for diag_dir in board.get_diag_dirs():
+
             adj_pos = board.find_diag(current_pos, diag_dir, dist=self._BLOCK_DIST)
             pos = board.find_diag(current_pos, diag_dir, dist=self._ATTAC_DIST)
             in_bounds = pos is not None
-            # if far is in bounds, then adj is definitely in bounds as well so
+
+            # If pos is in bounds, then adj is definitely in bounds as well so
             # don't need to check adj OOB
+
+            # Make sure not jumping off board.
             if in_bounds:
                 is_unblocked = board.get_piece(adj_pos) is None
+
+                # Only valid if not blocked nor across river.
                 if is_unblocked and not board.is_across_river(pos, self._player):
                     piece = board.get_piece(pos)
                     if not self.is_friendly(piece):

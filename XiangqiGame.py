@@ -397,21 +397,56 @@ class XiangqiGame:
 
 
 class Board:
-    """Class defining the physical game board. Has 5 rows on each side of
-    the river (10 rows total) and 9 columns total. Algebraic notation
-    is not used in this class (only in XiangqiGame). This class uses a
-    row/column index notation where (0, 0) represents the upper left
-    corner and and (10, 9) the lower right corner.
+    """Class defining the physical game board. Has 5 rows on each side of the river
+    (10 rows total) and 9 columns total.
+
+    *****ALGEBRAIC NOTATION IS NOT USED IN THIS CLASS!*****
+    (only minimally used in class XiangqiGame)
+
+    This class uses row/column index notation where (0, 0) (translates to 'a10'
+    in algebraic notation) represents the upper left corner and (10, 9)
+    (translates to 'i1' in algebraic notation) the lower right corner.
+
+    Row 0 represents the top of the board ('black' home row).
+
+    Row 9 represents the bottom of the board ('red' home row).
+
+    "Orthogonal" in this class refers to the vertical or horizontal directions
+    (even though geometrically speaking the diagonals are technically
+    orthogonal as they intersect at right angles).
+
+    Axes respond to the two directions row direction and column direction.
+        - Axis 0 corresponds to rows
+        - Axis 1 corresponds to columns (at times abbreviated as 'cols').
+
+    Positions (abbreviated pos) are represented size 2 tuples of int where
+        - index 0 represents row value
+        - index 1 represents col value
+
+    Note due to fact that positions are ***size 2*** (one for element
+    row and one element for column) the complement of one can computed
+    by subtracting 1 either index 0 or 1 will yield the index of the
+    other element because for a given position. For example
+        position[0] == pos[1 - 1]
+        position[1] == pos[0 - 1] = pos[-1]
+
+    Directions are represented by size 2 tuples of int and contain values
+    either of _FWD, _REV, or 0. Directions can be scaled by multiplying their
+    components by a scale factor.
+
     """
+
+    # Constants
     _ROW_COUNT = 10
     _COL_COUNT = 9
     _AXES_COUNTS = (_ROW_COUNT, _COL_COUNT)
     _RIVER_DIST = 5
-    # Axes constants.
+
+    # Axes constants
     _ROW = 0
     _COL = 1
 
-    # Directions
+    # Direction constants
     _FWD = 1
     _REV = -1
     _DIRECTIONS_DIAG = ((_REV, _REV), (_REV, _FWD), (_FWD, _REV), (_FWD, _FWD))
@@ -426,13 +461,23 @@ class Board:
         starting positions. Players should be the size 2 list of
         players, though they need not be in any particular order.
         """
+        # Represent the board as a 2D nested list where the sublists represent
+        # the rows of the board..
         self._board = [[None for j in range(Board._COL_COUNT)]
                        for i in range(Board._ROW_COUNT)]
+
+        # Place all the Pieces belonging to the players on the Board.
         for piece in Player.get_all_pieces(*players):
             row, col = piece.get_pos()
             self._board[row][col] = piece
+
+        # Designate castle regions by player color strings Player._RED and
+        # Player._BLACK.
         self._castles = {player.get_color(): self.make_castle(player)
                          for player in players}
+
+        # Store the move history in a stack for allowing easier history
+        # rollback.
         self._last_pos = Stack()
 
     def __repr__(self):
@@ -440,17 +485,55 @@ class Board:
         each piece has __repr__ implemented such that its string
         representation is 5 characters or less.
         """
+        # Cell ceiling and floor.
         dashes = "--------"  # TODO: remove hard coded length?
-        divider = "|" + dashes + "".join([f"+{dashes}" for col in range(Board._COL_COUNT)]) + "|"
-        row_template = "|" + "|".join(["{{: ^{}}}".format(len(dashes))
-                                       for i in range(Board._COL_COUNT + 1)]) + "|"
-        header_row = row_template.format(*([""] + [i for i in range(Board._COL_COUNT)]))
+
+        # Uses '|' as cell walls. and '+' for cell corner where wall meets
+        # floor or celing. `divider` will be the entire floor/ceiling for a
+        # given row.
+        divider = (
+            # Leftmost wall.
+            "|"
+            # Extra column to display row numbers.
+            + dashes
+            # Make the celings for all 9 columns.
+            + "".join([f"+{dashes}" for col in range(Board._COL_COUNT)])
+            # Rightmost wall.
+            + "|"
+        )
+
+        # Row template. Prepare a string for use with str.format() to
+        # substitute each Piece in between walls.
+        row_temp = (
+            # Leftmost wall.
+            "|"
+            # Format string to substitute for the Pieces string
+            # representations. Add 1 to account for extra column for row
+            # numbers.
+            + "|".join(["{{: ^{}}}".format(len(dashes))
+                        for i in range(Board._COL_COUNT + 1)])
+            # Rightmost wall.
+            + "|"
+        )
+
+        # Top most row of above all pieces.
+        header_row = row_temp.format(*([""]  # Header above row nums empty.
+                                       # Fill in the row column nums.
+                                       + [i for i in range(Board._COL_COUNT)]))
+
+        # Start concatenating to a single result string.
         res = divider + "\n" + header_row
+
+        # Concantenate each row.
         for i, row in enumerate(self._board):
-            res += ("\n" + divider + "\n"
-                    + row_template.format(*([i] + ["" if elt is None
-                                                   else str(elt) for elt in row])))
+            res += ("\n" + divider + "\n"                     # Celing.
+                    + row_temp.format(*([i]                   # Row num.
+                                        + ["" if elt is None  # Unoccupied.
+                                           else str(elt)      # Occupied.
+                                           for elt in row])))
+        # Finally add the the bottom floor.
         res += "\n" + divider
+
         return res
 
     def get_piece(self, pos):
@@ -462,12 +545,12 @@ class Board:
         Parameters
         ----------
         pos: tuple of int
-            Size 2 tuple with pos[0] being row and pos[1] being column.
+            Position of where to look.
 
         Returns
         -------
         Piece
-            The piece at the specified position. If position is empty,
+            The piece at the specified position. If position is unoccupied
             returns None.
         """
         return self._board[pos[Board._ROW]][pos[Board._COL]]
@@ -493,15 +576,29 @@ class Board:
         Returns
         -------
         None
-
         """
-        old_pos = piece.get_pos()  # Piece still resides at old spot.
-        self.set_board(new_pos, piece)  # Place the piece at its new spot.
+        old_pos = piece.get_pos()               # Piece still at old spot.
+        self.set_board_list(new_pos, piece)     # Place piece at its new spot.
         if old_pos != new_pos:
-            self.set_board(old_pos, None)  # clear the spot moved from.
-            piece.push(new_pos)  # Save the new position
+            self.set_board_list(old_pos, None)  # clear the spot moved from.
+            piece.push(new_pos)                 # Save the new position
 
-    def set_board(self, pos, elt):
+    def set_board_list(self, pos, elt):
+        """Directly access the board nested list.
+
+        Mostly to skip manually indexing.
+
+        Parameters
+        ----------
+        pos: tuple of int
+            Position to assign the new element.
+        elt: Piece
+            Either existing Piece or None to assign the position.
+
+        Returns
+        -------
+        None
+        """
         self._board[pos[self._ROW]][pos[self._COL]] = elt
 
     def make_move(self, beg_pos, end_pos, moving_player):
@@ -533,6 +630,8 @@ class Board:
         beg_piece = self.get_piece(beg_pos)
         end_piece = self.get_piece(end_pos)
 
+        # Validate that there is a piece at the begining position that belongs
+        # to the mover.
         if beg_piece is None:
             raise NoPieceAtStartPosError(beg_pos)
         if beg_piece.get_player() != moving_player:
@@ -545,17 +644,16 @@ class Board:
         if end_pos not in moves:
             raise NotInMoveListError(beg_piece, moves, end_pos)
 
-        # TODO: Check if allowed to take piece would lift mate (if currently in mate)
-
-        # TODO: "make" the move
-        self.place_piece(end_pos, beg_piece)
-        self._last_pos.push(end_pos)
+        self.place_piece(end_pos, beg_piece)  # Move the piece.
+        self._last_pos.push(end_pos)          # Save the location.
         return end_piece
 
     def undo_move(self, taken_piece):
         """Reverses changes to the Board in the previous move. If taken_piece
         was captured in the previous move it is placed back on the board
         to where it was.
+
+        Assumed not called on the first turn.
 
         Parameters
         ----------
@@ -567,21 +665,30 @@ class Board:
         Piece
             The piece that was moved.
         """
-        # Assumes not undoing the first move.
+        # The move's original "end position"
         action_pos = self._last_pos.pop()
+
+        # The move's original moved piece.
         moved_piece = self.get_piece(action_pos)
+
+        # Clear the piece's current location to get where it came from.
         moved_piece.pop()
-        self.set_board(moved_piece.get_pos(), moved_piece)
-        if taken_piece is not None:
-            self.set_board(taken_piece.get_pos(), taken_piece)
-        else:
-            self.set_board(action_pos, taken_piece)
+
+        # Move the original moved piece back to where it originally was.
+        self.set_board_list(moved_piece.get_pos(), moved_piece)
+
+        # Determine what to put back at the original move's end position.
+        if taken_piece is not None:  # End position was unoccupied.
+            self.set_board_list(taken_piece.get_pos(), taken_piece)
+        else:                        # End position was occupied.
+            self.set_board_list(action_pos, taken_piece)
+
         return moved_piece
 
     def make_castle(self, player):
         """Helper method to create record of each player's castle positions.
 
-        Should only be run upon board creation.
+        Should only be called upon board creation.
 
         Parameters
         ----------
@@ -602,20 +709,52 @@ class Board:
         # Center column of the castle is the same column as the
         # player's general.
         general = player.get_pieces()[Player.get_GENERAL()][Board._ROW]
-        center_col = general.get_pos()[1]
+        center_col = general.get_pos()[self._COL]
 
         # Add the displacements (-1, 0, 1) go the castle's center
         # location to get all 9 positions in the castle.
-        displacements = [i for i in range(-1, 2)]
+        displacements = (-1, 0, 1)
+
+        # Find castle positions.
         castle_positions = tuple([(center_row + i, center_col + j)
                                   for i in displacements
                                   for j in displacements])
         return castle_positions
 
     def get_castle(self, color):
+        """Getter.
+
+        Get the castle positions for the given player (specified by the
+        player's color).
+
+        Parameters
+        ----------
+        color: str
+            Color associated with player. Either Player._RED or Player._BLACK.
+
+        Returns
+        -------
+        Tuple of tuple of int
+            Tuple of size 2 tuples (position tuples).
+
+        """
         return self._castles[color]
 
     def is_in_castle(self, pos, player):
+        """Predicate.
+
+        Parameters
+        ----------
+        pos: tuple of int
+            Position to check if in castle.
+        player: Player
+            Player whose castle to check.
+
+        Returns
+        -------
+        bool
+            True if pos is located in player's castle. Otherwise False.
+        """
         return pos in self._castles[player.get_color()]
 
     def find_diag(self, beg_pos, dir_diag, dist=1):
@@ -624,13 +763,9 @@ class Board:
         Parameters
         ----------
         beg_pos: tuple of int
-            Size 2 tuple representing position to check.
-            beg_pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            beg_pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
-
+            Starting position to traverse from.
         dir_diag: tuple of int
             Size 2 tuple that contains only 1 or -1.
-
         dist: int
             Number of diagonals away to inspect.
 
@@ -648,6 +783,7 @@ class Board:
         for i, dir_component in enumerate(dir_diag):
             end_pos[i] += dist * dir_component
 
+        # Discard the new diagonal if it does lie on the Board.
         try:
             self.validate_bounds(end_pos)
         except OutOfBoundsError:
@@ -667,14 +803,10 @@ class Board:
         Parameters
         ----------
         beg_pos: tuple of int
-            Size 2 tuple representing position to check.
-            beg_pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            beg_pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
-
+            Starting position to traverse from.
         dir_ortho: tuple of int
             Size 2 tuple who must contain exactly one 0 while the
             other element must be either -1 or 1.
-
         dist_capped: int
             Maxmimum number of positions to traverse in the path.
 
@@ -682,13 +814,13 @@ class Board:
         -------
         list of tuple
             List of positions from beginning position to next piece or edge.
-
         """
         if Board._FWD in dir_ortho:
             delta_axis = dir_ortho.index(Board._FWD)
         else:
             delta_axis = dir_ortho.index(Board._REV)
 
+        # Takes advantage of ***size 2*** tuple (see class Board docstring).
         direction = dir_ortho[delta_axis]  # Either _FWD or _REV.
         constant_axis = delta_axis - 1     # Axis being traveled along.
 
@@ -700,8 +832,8 @@ class Board:
         # end points depending on direction.
         end_pos = [0, 0]
 
-        # Set the edge of Board to the first guess for the ending
-        # position.
+        # Set the edge of Board to the first guess for the ending position.
+        # Takes advantage of ***size 2*** tuple (see class Board docstring).
         end_pos[constant_axis] = beg_pos[constant_axis]
         end_pos[delta_axis] = (delta_axis_min if direction == Board._REV
                                else delta_axis_max - 1)
@@ -716,16 +848,15 @@ class Board:
                                        + (dist_capped * direction))
 
         current_pos = list(beg_pos)  # Starting position.
-        path = list()  # List of positions to return.
+        path = list()                # List of positions to return.
 
         for delta_elt in range(beg_pos[delta_axis] + direction,  # Exclude beg.
                                end_pos[delta_axis] + direction,  # Include end.
                                direction):
             # Travel one position in specified direction.
             current_pos[delta_axis] = delta_elt
-            # Add said position to the path. Make sure not to use
-            # mutable type due or else the all path positions will
-            # contain the same value.
+            # Add said position to the path. Make sure not to use mutable type
+            # or else the all path positions will contain the same value.
             path.append(tuple(current_pos))
             # If find encounter a piece along the path, stop traversing.
             if self.get_piece(current_pos) is not None:
@@ -735,31 +866,26 @@ class Board:
     def find_intervening_ortho(self, beg_pos, end_pos):
         """Check if there is at least one piece between two positions.
 
-        Raises: TODO
+        Raises
+        ------
+        SamePositionError:
+            When both positions refer the same location.
 
         Parameters
         ----------
         beg_pos: tuple of int
-            Size 2 tuple representing position to check.
-            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+            Starting position.
 
         end_pos: tuple of int
-            Size 2 tuple representing position to check.
-            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+            Ending position
 
         Returns
         -------
         Piece
-            None if there are no pieces on a orthogonal axis between
-            the two positions. Otherwise returns the first piece that
-            is encountered from traversing from beginining position to
-            end position.
+            None if there are no pieces on a orthogonal axis between the two
+            positions. Otherwise returns the first piece that is encountered
+            from traversing from beginining position to end position.
         """
-        for pos in (beg_pos, end_pos):
-            Board.validate_bounds(pos)
-
         # Find which if the two positions are on the same row or same col.
         common_axis = Board.find_common_axis(beg_pos, end_pos)
 
@@ -769,6 +895,7 @@ class Board:
             return None
 
         # The axis that the two positions do not share.
+        # Takes advantage of ***size 2*** tuple (see class Board docstring).
         delta_axis = common_axis - 1
         # Find the direction from the beginning element to the end element.
         direction = Board.get_dir_one_dim(beg_pos[delta_axis],
@@ -794,19 +921,16 @@ class Board:
     def find_common_axis(beg_pos, end_pos):
         """Check if two positions share a row or column.
 
-        Raises
+        Raises:
+        SamePositionError:
+            When the two positions are identical.
 
         Parameters
         ----------
         beg_pos: tuple of int
-            Size 2 tuple representing position to check.
-            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
-
+            First position to compare to.
         end_pos: tuple of int
-            Size 2 tuple representing position to check.
-            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+            Second position to compare with.
 
         Returns
         -------
@@ -818,14 +942,14 @@ class Board:
         beg_row, beg_col = beg_pos
         end_row, end_col = end_pos
 
-        if (beg_row, beg_col) == (end_row, end_col):
+        if (beg_row, beg_col) == (end_row, end_col):  # Refer to same pos.
             raise SamePositionError((beg_row, beg_col))
-        elif beg_row != end_row and beg_col != end_col:
+        elif beg_row != end_row and beg_col != end_col:  # Do not share.
             return -1
         elif beg_row == end_row:
-            return Board._ROW  # Check along row.
+            return Board._ROW  # Share row.
         else:
-            return Board._COL  # Check along col.
+            return Board._COL  # Share col.
 
     @staticmethod
     def validate_bounds(pos):
@@ -844,7 +968,6 @@ class Board:
         -------
         None
         """
-
         if pos[Board._ROW] not in range(Board._ROW_COUNT):
             raise OutOfBoundsError(pos, Board._ROW, Board._ROW_COUNT)
         if pos[Board._COL] not in range(Board._COL_COUNT):
@@ -852,11 +975,12 @@ class Board:
 
     @staticmethod
     def get_dir_one_dim(beg, end):
-        """Find the direction between two pieces.
+        """Find the one-dimensional direction between two pieces.
 
         Raises
         ------
-        SamePositionError if beg and end are equal.
+        SamePositionError:
+            When the positions both refer to the same position.
 
         Parameters
         ----------
@@ -868,8 +992,8 @@ class Board:
         Returns
         -------
         int
-            Direction is either 1 or -1. 1 if end is more than beg and
-            -1 if less.
+            One-dimensional direction is either 1 or -1. 1 if end is more than
+            beginning and -1 if less.
         """
         if beg == end:
             raise SamePositionError(f'ELEMENT {beg}')
@@ -883,16 +1007,13 @@ class Board:
         Parameters
         ----------
         pos: tuple of int
-            Size 2 tuple representing position to check.
-            pos[0] must be in [0, 1, ..., Board._ROW_COUNT - 1]
-            pos[1] must be in [0, 1, ..., Board._COL_COUNT - 1].
+            Position to check.
 
         Returns
         -------
         bool
             True if the position is across the river from the side of
             the Player's home row. False if on the same side.
-
         """
         row = pos[Board._ROW]
         home_row = player.get_home_row()
@@ -910,22 +1031,30 @@ class Board:
 
     @staticmethod
     def get_diag_dirs():
+        """Getter. Returns all diagonal directions."""
         return Board._DIRECTIONS_DIAG
 
     @staticmethod
     def get_ortho_dirs():
+        """Getter. Returns all orthogonal directions"""
         return Board._DIRECTIONS_ORTHO
 
     @staticmethod
     def get_horse_dirs():
+        """Getter. Returns all directions used by Horses as a dictionary with the
+        initial orthogonal directions as keys and resulting jump diagonals as
+        values.
+        """
         return Board._DIRECTIONS_HORSE
 
     @staticmethod
     def get_ROW():
+        """Getter. Return row axis index."""
         return Board._ROW
 
     @staticmethod
     def get_COL():
+        """Getter. Return col axis index."""
         return Board._COL
 
 

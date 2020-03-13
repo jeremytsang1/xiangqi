@@ -1686,6 +1686,22 @@ class Soldier(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a soldier can move to. Movement is
+        restricted to the direction away from the home row by a
+        distance of 1 until crossing the river. At this point the
+        soldier can move from side to side (distance of 1) in addition
+        to away from home row.
+
+        Parameters
+        ----------
+        board: Board
+            Board soldier is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         pos = self._positions.peek()
 
         # Allow column direction away from home row.
@@ -1699,6 +1715,7 @@ class Soldier(Piece):
         path_dirs = [direc for direc in board.get_ortho_dirs()
                      if direc[board.get_ROW()] in row_directions]
 
+        # Find orthogonal pieces with distance 1 in the above directions.
         moves = list()
         for path_dir in path_dirs:
             path = board.find_ortho_path(pos, path_dir, 1)

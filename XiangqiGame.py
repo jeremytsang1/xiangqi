@@ -1182,9 +1182,9 @@ class Piece:
 
 
 class General(Piece):
-    """
-    Class to represent the general piece. Can detect line of sight of enemy
-    general.
+    """Class to represent the general piece. Can detect line of sight of
+    enemy general. Restricted to castle. Can only move orthogonally by
+    1 space. Attacks by contact.
     """
     _ABBREV = 'g'
     _INIT_COLS = (4,)
@@ -1292,6 +1292,8 @@ class General(Piece):
 
 
 class Advisor(Piece):
+    """Class to represent an advisor. Restricted to castle. Can only move
+    diagonally by 1 space. Attacks by contact."""
     _ABBREV = 'a'
     _INIT_COLS = (3, 5)  # Index with _id_num.
     _DIAG_DIST = 1
@@ -1342,6 +1344,8 @@ class Advisor(Piece):
 
 
 class Elephant(Piece):
+    """Class to represent elephant piece. Can move diagonally by 2 spots
+    but can be blocked and cannot cross river. Attacks by contact."""
     _ABBREV = 'e'
     _INIT_COLS = (2, 6)  # Index with _id_num.
     _ATTAC_DIST = 2
@@ -1405,6 +1409,8 @@ class Elephant(Piece):
 
 
 class Horse(Piece):
+    """Class to represent the horse piece. Moves in two steps (ortho then
+    diagonal) but can be blocked orthogonally. Attacks by contact."""
     _ABBREV = 'h'
     _INIT_COLS = (1, 7)  # Index with _id_num.
     _ORTHO_DIST = 1
@@ -1508,6 +1514,8 @@ class Horse(Piece):
 
 
 class Chariot(Piece):
+    """Class to represent chariot piece. Can move until obstruction in
+    orthogonal directions. Attacks by contact."""
     _ABBREV = 'ch'
     _INIT_COLS = (0, 8)  # Index with _id_num.
 
@@ -1556,6 +1564,10 @@ class Chariot(Piece):
 
 
 class Cannon(Piece):
+    """Class to represent cannon piece. Can move orthogonally until
+    obstruction. Attacks from a distance but requires intermediate
+    piece between it and its target. .
+    """
     _ABBREV = 'c'
     _INIT_ROWS = {"black": 2, "red": 7}  # TODO: remove hard coded keys?
     _INIT_COLS = (1, 7)  # Index with _id_num.
@@ -1666,6 +1678,10 @@ class Cannon(Piece):
 
 
 class Soldier(Piece):
+    """class to represent soldier piece. Can only move by 1 space away
+    from its home row until it crosses the river after which it can
+    additionally move 1 space left or right
+    """
     _ABBREV = 's'
     _INIT_ROWS = {"black": 3, "red": 6}  # TODO: remove hard coded keys?
     _INIT_COLS = (0, 2, 4, 6, 8)  # Index with _id_num.

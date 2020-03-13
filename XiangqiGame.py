@@ -1110,12 +1110,26 @@ class Piece:
         self._positions.push(pos)
 
     def pop(self):
+        """Clear the most recent position from the piece's history."""
         return self._positions.pop()
 
     def is_friendly(self, piece):
+        """Predicate. True if piece belongs to same player as calling Piece.
+        Otherwise False.
+
+        Note: not necessarily the negation of is_hostile() due to the
+        possibility Piece may be None (unoccupied) position.
+        """
         return piece is not None and piece.get_player() is self._player
 
     def is_hostile(self, piece):
+        """Predicate. True if piece does not belongs to same player as calling
+        Piece.  Otherwise False.
+
+        Note: not necessarily the negation of is_friendly() due to the
+        possibility Piece may be None (unoccupied) position.
+
+        """
         return piece is not None and piece.get_player() is not self._player
 
     def remove_friendly(self, path, board):
@@ -1132,9 +1146,13 @@ class Piece:
         -------
         None
         """
+        # Stop if path is empty.
         if len(path) < 1:
             return
-        piece = board.get_piece(path[-1])
+        piece = board.get_piece(path[-1])  # Examine pos at end of path.
+
+        # Shorten the path by one position if there is a friendly piece
+        # at the end.
         if (piece is not None and piece.get_player() == self._player):
             path.pop()
 
@@ -1152,9 +1170,13 @@ class Piece:
         -------
         None
         """
+        # Stop if path is empty.
         if len(path) < 1:
             return
-        piece = board.get_piece(path[-1])
+        piece = board.get_piece(path[-1])  # Examine pos at end of path.
+
+        # Shorten the path by one position if there is any piece
+        # at the end.
         if (piece is not None):
             path.pop()
 

@@ -117,7 +117,7 @@ class XiangqiGame:
             Algebraic notatio of the location to move the piece to.
         mover: Player
             Player moving the piece. If set to None the piece is moved
-            by the current player.
+            by the current player. Use for testing.
 
         Returns
         -------
@@ -125,7 +125,7 @@ class XiangqiGame:
             True if the move was valid. False if invalid.
 
         """
-        # TODO: get rid of mover
+        # Use for testing.
         if mover is not None and mover is not self._mover:
             self.switch_mover(self._mover)
         # Prevent moves if game is already over.
@@ -197,15 +197,6 @@ class XiangqiGame:
 
         # Remove captured piece taken from its player (opponent of mover).
         if taken is not None:
-            # --------------------------------------
-            # TODO: remove assertion
-            msg = f'Tried taking already dead piece {taken}'
-            assert inactive.belongs_to(taken), msg
-            # Assumed taken belongs to inactive
-            # TODO: remove assertion
-            msg = f'TRIED TO TAKE FRIENDLY PIECE: {taken}'
-            assert taken.get_player() is inactive, msg
-            # --------------------------------------
             inactive.remove_piece(taken)
 
         # Determine if the virtual move leaves the virtual mover in check.
@@ -347,8 +338,6 @@ class XiangqiGame:
         # If taken is a piece, send it back to its original owner's piece
         # dictionary.
         if taken is not None:
-            # TODO: remove assertion
-            assert taken.get_player() is inactive
             inactive.add_piece(taken)
 
         return moved
@@ -486,7 +475,7 @@ class Board:
         representation is 5 characters or less.
         """
         # Cell ceiling and floor.
-        dashes = "--------"  # TODO: remove hard coded length?
+        dashes = "--------"  # Hard coded width.
 
         # Uses '|' as cell walls. and '+' for cell corner where wall meets
         # floor or celing. `divider` will be the entire floor/ceiling for a
@@ -890,7 +879,6 @@ class Board:
         common_axis = Board.find_common_axis(beg_pos, end_pos)
 
         # No intervening Piece if two positions share neither a row or col.
-        # TODO: maybe move this outside.
         if common_axis == -1:
             return None
 
@@ -1569,7 +1557,7 @@ class Cannon(Piece):
     piece between it and its target. .
     """
     _ABBREV = 'c'
-    _INIT_ROWS = {"black": 2, "red": 7}  # TODO: remove hard coded keys?
+    _INIT_ROWS = {"black": 2, "red": 7}
     _INIT_COLS = (1, 7)  # Index with _id_num.
 
     def __init__(self, player, id_num):
@@ -1683,7 +1671,7 @@ class Soldier(Piece):
     additionally move 1 space left or right
     """
     _ABBREV = 's'
-    _INIT_ROWS = {"black": 3, "red": 6}  # TODO: remove hard coded keys?
+    _INIT_ROWS = {"black": 3, "red": 6}
     _INIT_COLS = (0, 2, 4, 6, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):

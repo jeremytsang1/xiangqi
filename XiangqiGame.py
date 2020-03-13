@@ -1576,6 +1576,23 @@ class Cannon(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a the cannon can move to. Movement is the
+        same as chariot however the cannon cannot attack by direct
+        contact. Rather it must have a "firing platform" in between it
+        and its target. The target may be any distance behind the
+        platform to be considered threatened and the platform may be
+        either friend or foe.
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         pos = self._positions.peek()
         moves = list()
 
@@ -1589,6 +1606,18 @@ class Cannon(Piece):
         return moves
 
     def get_targets(self, board):
+        """Get only the targets (not the paths). Used for determining check.
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         pos = self._positions.peek()
 
         # Look for targets in each of the 4 ortho directions.
@@ -1601,6 +1630,24 @@ class Cannon(Piece):
         return moves
 
     def get_targets_from_path(self, path, path_dir, board):
+        """Find target along a single path.
+
+
+
+        Parameters
+        ----------
+        path: list of tuple of int
+            Path along which cannon can move.
+        path_dir: tuple of int
+            Direction of the path from the canon.
+        board: Board
+            Board cannon is placed on
+
+        Returns
+        -------
+        return type
+            return description
+        """
         targets = []
         # Look for cannon's firing platform if path nonempty.
         if len(path) > 0:

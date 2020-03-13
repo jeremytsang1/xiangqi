@@ -1318,7 +1318,7 @@ class Advisor(Piece):
         Parameters
         ----------
         board: Board
-            Board the general is placed on.
+            Board the advisor is placed on.
 
         Returns
         -------
@@ -1371,7 +1371,7 @@ class Elephant(Piece):
         Parameters
         ----------
         board: Board
-            Board the general is placed on.
+            Board the elephant is placed on.
 
         Returns
         -------
@@ -1435,7 +1435,7 @@ class Horse(Piece):
         Parameters
         ----------
         board: Board
-            Board the general is placed on.
+            Board the Horse is placed on.
 
         Returns
         -------
@@ -1535,7 +1535,7 @@ class Chariot(Piece):
         Parameters
         ----------
         board: Board
-            Board the general is placed on.
+            Board the chariot is placed on.
 
         Returns
         -------
@@ -1586,7 +1586,7 @@ class Cannon(Piece):
         Parameters
         ----------
         board: Board
-            Board the general is placed on.
+            Board the cannon is placed on.
 
         Returns
         -------
@@ -1611,7 +1611,7 @@ class Cannon(Piece):
         Parameters
         ----------
         board: Board
-            Board the general is placed on.
+            Board the cannon is placed on.
 
         Returns
         -------

@@ -2354,6 +2354,7 @@ class AlreadyInPieceList(PlayerError):
 
 
 if __name__ == '__main__':
+    # For python shell manual testing.
     game = XiangqiGame()
     players = game.get_players()
     red, black = players[Player.get_RED()], players[Player.get_BLACK()]

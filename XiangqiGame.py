@@ -1494,13 +1494,14 @@ class Horse(Piece):
         horse_dirs = board.get_horse_dirs()
         diag_positions = list()  # at most size 2
         diag_dirs = horse_dirs[ortho_dir]
+
+        # Look in the two horse diagonal directions.
         for diag_dir in diag_dirs:
             diag_pos = board.find_diag(ortho_pos, diag_dir, self._DIAG_DIST)
-            in_bounds = diag_pos is not None
 
-            if in_bounds:
-                piece = board.get_piece(diag_pos)
-                if not self.is_friendly(piece):
+            if diag_pos is not None:               # Make sure not jumping off board.
+                piece = board.get_piece(diag_pos)  # Get diagonal.
+                if not self.is_friendly(piece):    # Don't kill friendlies.
                     diag_positions.append(diag_pos)
 
         return diag_positions

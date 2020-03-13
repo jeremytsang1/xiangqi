@@ -1205,6 +1205,20 @@ class General(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a the general can move to. Moves are
+        restricted to Castle and do not include positions that can be
+        attacked by enemy pieces (including the enemy general).
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         pos = self._positions.peek()
 
         moves = list()
@@ -1227,10 +1241,23 @@ class General(Piece):
         return list(set(moves) - threat.keys())
 
     def get_enemy_castle_sight(self, board):
+        """Find all positions in the enemy's castle directly visible by the calling
+        General with no intervening pieces.
+
+        Parameters
+        ----------
+        board: Board
+            Board that the calling General is located on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         opponent = self._player.get_opponent()
         enemy_gen = opponent.get_pieces()[Player.get_GENERAL()][0]
         castle = board.get_castle(self._player.get_opponent().get_color())
-        castle_sight = []
+        castle_sight = []  # List of positions the calling general threatens
         current_pos = self._positions.peek()
         col = current_pos[board.get_COL()]
 
@@ -1243,16 +1270,24 @@ class General(Piece):
             intervening = None
 
             if piece is None or piece is enemy_gen:
+                # Note that find_intervening_ortho() will not raise
+                # SamePositionError as the General's will never visit the enemy
+                # castle.
                 intervening = board.find_intervening_ortho(current_pos, pos)
                 if intervening is None or intervening is enemy_gen:
+                    # Inetervening is enemy general allows calling general to
+                    # threaten empty columns behind enemy general (because if
+                    # enemy general moved vertically they would still be in
+                    # line of sight of calling gneral.
                     castle_sight.append(pos)
                 else:
+                    # Encountered General
                     break
             else:
+                # Encountered non-general Piece in castle. All columns behind
+                # it are not visible to calling general.
                 break
 
-            if intervening is None:
-                castle_sight.append(pos)
         return castle_sight
 
 

@@ -1527,13 +1527,29 @@ class Chariot(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a the chariot can move to. Chariot can move
+        as far as it can orthogonally. That is it can move until it
+        reaches an enemy piece (which it can capture), a friendly
+        piece (which it cannot capture), or a board edge.
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+
+        """
         pos = self._positions.peek()
 
         # Find paths in each of the 4 ortho directions.
         moves = list()
         for path_dir in board.get_ortho_dirs():
             path = board.find_ortho_path(pos, path_dir)
-            super().remove_friendly(path, board)
+            super().remove_friendly(path, board)  # Don't capture own.
             moves += path
 
         return moves

@@ -1426,6 +1426,23 @@ class Horse(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a the horse can move to. Moves are computed
+        in two parts. First go one orthogonal with a distance of
+        1. Then go diagonal with diagonal distance of 1. If horizontal
+        direction is blocked this blocks off both of that directions
+        diagonal positions.
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+
+        """
         pos = self._positions.peek()
 
         # Find paths in each of the 4 ortho directions.
@@ -1457,6 +1474,23 @@ class Horse(Piece):
         return moves
 
     def get_diag_positions(self, ortho_pos, ortho_dir, board):
+        """Compute valid diagonal positions after computing the orthogonal
+        position.
+
+        Parameters
+        ----------
+        ortho_pos: tuple of int
+            Position to jump from.
+        ortho_dir: tuple of int
+            Orthogonal direction from horse.
+        board: Board
+            Board the Horse is located on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of diagonal positions.
+        """
         horse_dirs = board.get_horse_dirs()
         diag_positions = list()  # at most size 2
         diag_dirs = horse_dirs[ortho_dir]

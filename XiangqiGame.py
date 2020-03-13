@@ -1312,14 +1312,29 @@ class Advisor(Piece):
         return super().__str__()
 
     def get_moves(self, board):
+        """Get all the moves where a the advisor can move to. Moves are
+        restricted to Castle and can only be diagonal.
+
+        Parameters
+        ----------
+        board: Board
+            Board the general is placed on.
+
+        Returns
+        -------
+        list of tuple of int
+            List of positions.
+        """
         current_pos = self._positions.peek()
 
         moves = list()
 
+        # Inspect each of the diagonal directions.
         for diag_dir in board.get_diag_dirs():
             pos = board.find_diag(current_pos, diag_dir, self._DIAG_DIST)
-            in_bounds = pos is not None
-            if in_bounds and board.is_in_castle(pos, self._player):
+
+            # Restrict to castle.
+            if board.is_in_castle(pos, self._player):
                 piece = board.get_piece(pos)
                 if not self.is_friendly(piece):
                     moves.append(pos)

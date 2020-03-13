@@ -1743,7 +1743,13 @@ class Soldier(Piece):
 
 class Player:
     """Class representing a player with their own set of pieces. Responsible
-    for piece creation."""
+    for piece creation.
+
+    Owns all its pieces at creation but if pieces are captured they
+    are removed from its _pieces and are no longer owned.
+
+    Has access to all pieces owned by it.
+    """
 
     # CONSTANTS
     _RED = 'red'
@@ -1793,7 +1799,7 @@ class Player:
         self._pieces = {dct['key']:
                         [dct['class'](self, i) for i in range(dct['count'])]
                         for dct in Player._PIECE_DCTS}
-        self._opponent = None
+        self._opponent = None  # Wait to assign, not yet created.
         self._home_row = Player._HOME_ROWS[self._color]
         self._fwd_dir = Player._FWD_DIRS[self._color]
         self._in_check = False
@@ -1807,9 +1813,11 @@ class Player:
         return self._color
 
     def get_in_check(self):
+        """Getter. Return its check status."""
         return self._in_check
 
     def set_in_check(self, in_check):
+        """Setter. Set check status."""
         self._in_check = in_check
 
     def is_in_check(self, board):
@@ -1820,15 +1828,16 @@ class Player:
         bool
             True if calling Player is in check. Otherwise False.
         """
-        # Both player's can't be in check at the same time.
         opponent = self._opponent
 
+        # Both player's can't be in check at the same time.
         if opponent.get_in_check():
             return False
 
         threat = opponent.get_threat(board)
         general = self._pieces[self.get_GENERAL()][0]
 
+        # If general under attack, then the Player is currently in check.
         if general.get_pos() in threat:
             return True
 
@@ -1887,15 +1896,54 @@ class Player:
                 return dct['key']
 
     def belongs_to(self, piece):
+        """Predicate.
+
+        Parameters
+        ----------
+        piece: Piece
+            Piece to check if owned by Player.
+
+        Returns
+        -------
+        bool
+            True if owned by player otherwise False.
+        """
         key = self.find_key(piece)
         return piece in self._pieces[key]
 
     def remove_piece(self, piece):
+        """Remove a piece from the player's ownership.
+
+        Mostly used to update player after one if its pieces has been
+        captured.
+
+        Parameters
+        ----------
+        piece: Piece
+            Piece to remove.
+
+        Returns
+        -------
+        None
+
+        """
         key = self.find_key(piece)
-        # TODO: check if piece is already removed?
         self._pieces[key].remove(piece)
 
     def add_piece(self, piece):
+        """(Re)Add a piece to the player's ownership.
+
+        Mostly used for undoing moves.
+
+        Parameters
+        ----------
+        piece: Piece
+            Piece to add.
+
+        Returns
+        -------
+        None
+        """
         key = self.find_key(piece)
 
         # Avoid re-adding Pieces that already belong to the player.
@@ -2031,23 +2079,29 @@ class Stack:
     Taken from CS 162, "Exploration: Linked lists, stacks, queues".
     """
     def __init__(self):
+        """Create empty stack."""
         self._list = []
 
     def get_size(self):
+        """Get number of elements in stack."""
         return len(self._list)
 
     def peek(self):
+        """Get the top element of the stack or None if empty."""
         if self.get_size() == 0:
             return None
         return self._list[-1]
 
     def is_empty(self):
+        """Predicate. True if no elements added. Otherwise False."""
         return len(self._list) == 0
 
     def push(self, data):
+        """Add an element to top of the stack."""
         self._list.append(data)
 
     def pop(self):
+        """Remove top element of the stack and return it. """
         if self.is_empty():
             return None
 
@@ -2138,6 +2192,7 @@ class AlgNot:
 class Error(Exception):
     """Base class for all exceptions."""
     def __init__(self, message):
+        """Create base exception class with error message."""
         Exception.__init__(self, message)
 
 
@@ -2151,6 +2206,7 @@ class AlgStrLengthError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string has invalid
     length."""
     def __init__(self):
+        """Create an instance of AlgStrLengthError"""
         max_row_digits = len(str(Board._ROW_COUNT))
         super().__init__('Algebraic string must be between 2 to '
                          + f'{1 + max_row_digits} '
@@ -2161,6 +2217,7 @@ class AlgLetterError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string's column letter is
     invalid."""
     def __init__(self):
+        """Create an instance AlgLetterError. Shows valid letters."""
         letters = AlgNot.get_ALPHABET()[:Board.get_COL_COUNT()]
         super().__init__(f'Algebraic column letter must be in "{letters}".')
 
@@ -2169,6 +2226,7 @@ class AlgNumFormatError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string's row number is not a
     proper integer."""
     def __init__(self):
+        """Create an instance AlgNumFormatError."""
         super().__init__('Algebraic row number must be a valid integer.')
 
 
@@ -2176,6 +2234,8 @@ class AlgNumOutOfBoundsError(AlgStrFormattingError):
     """Exception class for when Algebraic notation string's row number is not
     within bounds."""
     def __init__(self):
+        """Create an instance AlgNumFormatError. Informs user of valid
+        bounds."""
         super().__init__('Algebraic row number must fall between 1 and '
                          + f'{Board.get_ROW_COUNT()} '
                          + 'inclusive.')
@@ -2190,6 +2250,11 @@ class NoPieceAtStartPosError(IllegalMoveError):
     """Exception class for when attempting to move a piece at a position
     where no piece currently resides."""
     def __init__(self, pos):
+        """
+        Create an instance of NoPieceAtStartPosError.
+
+        pos should be an unoccupied position where trying to move a piece.
+        """
         self._pos = pos
         super().__init__('Attempting to move non-existent piece at '
                          + f'{self._pos}')
@@ -2199,6 +2264,11 @@ class WrongPieceOwner(IllegalMoveError):
     """Exception class for when attempting to move a piece that does not
     belong go the player making the move."""
     def __init__(self, moving_player, pos):
+        """
+        Create an instance of WrongPieceOwner.args
+
+        Warns of moving_player not being owner of piece at pos.
+        """
         self._moving_player = moving_player
         self._pos = pos
         super().__init__('Attempting to move piece at '
@@ -2210,6 +2280,11 @@ class NotInMoveListError(IllegalMoveError):
     """Exception class for trying to move a piece to a position not in its
     move list."""
     def __init__(self, piece, moves, end_pos):
+        """Create an instance of NotInMoveListError.args
+
+        Should warn of illegal move by piece to end_pos, and instead
+        show the available moves that piece can take.
+        """
         self._piece = piece
         self._moves = moves
         self._end_pos = end_pos
@@ -2224,6 +2299,11 @@ class MoverMoveResultedInOwnCheckError(IllegalMoveError):
     they leave their general exposed to direct threat.
     """
     def __init__(self, pos, piece, player):
+        """Create an instance of MoverMoveResultedInOwnCheckError.args
+
+        player should be mover that attempts to move piece to pos but
+        leaves themselves open to attack.
+        """
         self._pos = pos
         self._player = player
         self._msg = (f'Player ({player}) tried moving piece ({piece}) '
@@ -2239,6 +2319,10 @@ class BoardError(Error):
 class SamePositionError(BoardError):
     """Exception class for when expecting two peices on different spaces."""
     def __init__(self, pos):
+        """Create an instance of SamePositionError
+
+        pos should be the common position when two distinct were expected.
+        """
         self._pos = pos
         self._msg = ('Pieces expected to have different'
                      + f' position but both at {pos}')
@@ -2246,8 +2330,13 @@ class SamePositionError(BoardError):
 
 
 class OutOfBoundsError(BoardError):
-    """Exception class for when expecting two peices on different spaces."""
+    """Exception class for when a position is outside the board."""
     def __init__(self, pos, axis, axis_count):
+        """Create an instance of OutOfBoundsError.
+
+        Axis is the offending index of the pos that is out of
+        bounds. and Axis_count should be its max val.
+        """
         self._pos = pos
         self._axis = axis
         self._max_val = axis_count - 1
@@ -2265,6 +2354,11 @@ class AlreadyInPieceList(PlayerError):
     """Exception class for when attempting to add a Piece to a player that
     already owns it."""
     def __init__(self, piece, player):
+        """Create an instance of AlreadyInPieceList.args
+
+        piece should be the piece that is already in (possibly
+        removed) from player's ownership.
+        """
         self._piece = piece
         self._player = player
         self._msg = f'{self._piece} already belongs to {self._player}'

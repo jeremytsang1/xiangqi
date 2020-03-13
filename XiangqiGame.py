@@ -1348,7 +1348,7 @@ class Elephant(Piece):
     _BLOCK_DIST = 1
 
     def __init__(self, player, id_num):
-        """Create an object of type Adivsor with location based on player and
+        """Create an object of type Elephant with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          start_pos=(player.get_HOME_ROWS()[player.get_color()],
@@ -1389,7 +1389,7 @@ class Horse(Piece):
     _DIAG_DIST = 1
 
     def __init__(self, player, id_num):
-        """Create an object of type Adivsor with location based on player and
+        """Create an object of type Horse with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          start_pos=(player.get_HOME_ROWS()[player.get_color()],
@@ -1455,7 +1455,7 @@ class Chariot(Piece):
     _INIT_COLS = (0, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        """Create an object of type Adivsor with location based on player and
+        """Create an object of type Chariot with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          start_pos=(player.get_HOME_ROWS()[player.get_color()],
@@ -1488,7 +1488,7 @@ class Cannon(Piece):
     _INIT_COLS = (1, 7)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        """Create an object of type Adivsor with location based on player and
+        """Create an object of type Cannon with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          start_pos=(self._INIT_ROWS[player.get_color()],
@@ -1551,7 +1551,7 @@ class Soldier(Piece):
     _INIT_COLS = (0, 2, 4, 6, 8)  # Index with _id_num.
 
     def __init__(self, player, id_num):
-        """Create an object of type Adivsor with location based on player and
+        """Create an object of type Soldier with location based on player and
         id_num."""
         super().__init__(player, id_num, abbrev=self._ABBREV,
                          start_pos=(self._INIT_ROWS[player.get_color()],

@@ -13,7 +13,20 @@
 
 
 class XiangqiGame:
-    """Class to start and control the Xiangqi by the user."""
+    """Class to start, control, and facilittate the flow of the Xiangqi game by the
+    user.
+
+    Note that although the method make_move() takes its parameters in algebraic
+    notation they are immediately translated so that all other positions are
+    dealt with in a standard row/col notation (similar to linear algebra
+    matrices conventions) where a pair of indices (row, col) denote the
+    location of an element in the Board.
+
+    Other conventions to note is that `mover` typically denotes the current
+    player (the player 'moving' a piece) and `inactive` typically denotes a
+    said player's opponent (they are 'inactive' while the mover is taking their
+    turn).
+    """
     # Class level constants
     _UNFINISHED = 'UNFINISHED'
     _RED_WON = 'RED_WON'
@@ -21,11 +34,29 @@ class XiangqiGame:
     _LOSS = {'red': _BLACK_WON, 'black': _RED_WON}
 
     def __init__(self):
+        """Creates an instance of a Xiangqi game where the first player to
+        move is player 'red'. Play alternates between valid turns
+        taken by players 'red' and 'black' until one of them has no
+        more valid moves at which point the other is declared the
+        winner. The game does not distinguish between stalemate and
+        checkmate (in both cases the mated player loses).
+        """
+        # Create the two players 'red' and 'black'.
         self._players = {color: Player(color) for color in Player.get_COLORS()}
-        self.set_opponents()  # Make players track each other.
+
+        # Make players track each other. Cannot be taken care of during Player
+        # object creation as the other Player does not even exist yet (i.e. the
+        # second player does not exist while the first player is being
+        # created).
+        self.set_opponents()
+
+        # Create the Board.
         self._board = Board(self._players.values())
+
+        # Start off with neither player victorious.
         self._game_state = XiangqiGame._UNFINISHED
 
+        # Let 'red' move first.
         self._mover = self._players[Player.get_RED()]
         self._inactive = self._players[Player.get_BLACK()]
 
@@ -58,6 +89,42 @@ class XiangqiGame:
         return player.get_in_check()
 
     def make_move(self, alg_start, alg_end, mover=None):
+        """Attempts to take the current player's turn.
+
+        A valid/legal move constitutes of the following criterion:
+            - The game must not have ended.
+
+            - The algebraic notation must be valid for both positions.
+
+            - The alg_start must refer to a position where a piece
+              belonging to the mover currently resides.
+
+            - The alg_end must move be in accordance to how the piece
+              at alg_start moves.
+
+            - Move must not leave the mover in a checked state.
+
+            - If currently in checked state, the move must be such
+              that after it is successful the player is no longer in
+              check.
+
+
+        Parameters
+        ----------
+        alg_start: str
+            Algebraic notation of the piece to move.
+        alg_end: str
+            Algebraic notatio of the location to move the piece to.
+        mover: Player
+            Player moving the piece. If set to None the piece is moved
+            by the current player.
+
+        Returns
+        -------
+        bool
+            True if the move was valid. False if invalid.
+
+        """
         # TODO: get rid of mover
         if mover is not None and mover is not self._mover:
             self.switch_mover(self._mover)
@@ -90,7 +157,9 @@ class XiangqiGame:
         return True
 
     def move_mover(self, beg_pos, end_pos, mover, inactive):
-        """Move the piece of the current player (the "mover").
+        """Update the mover's Piece's location on the board.
+
+        If the method executes successfully the mover will not be in check.
 
         Raises
         ------
@@ -120,11 +189,13 @@ class XiangqiGame:
         -------
         None
         """
-        # Make the move. Board is updated and taken is currently no longer at
-        # `end_pos`
+
+        # Make the move. Board is updated accordingly if there was a
+        # indeed a player at the beg_pos that belonged to the player
+        # whose moves allow it to traverse to the end_pos.
         taken = self._board.make_move(beg_pos, end_pos, mover)
 
-        # Temporarily remove taken from its player.
+        # Remove captured piece taken from its player (opponent of mover).
         if taken is not None:
             # --------------------------------------
             # TODO: remove assertion
@@ -137,8 +208,7 @@ class XiangqiGame:
             # --------------------------------------
             inactive.remove_piece(taken)
 
-        # Check if mover is now in check as a result of the move (e.g. moving a
-        # pawn to the left resulting in inactive general seeing mover general.
+        # Determine if the virtual move leaves the virtual mover in check.
         if mover.is_in_check(self._board):
             # If move exposes general, abort the move.
             moved = self.undo_move(taken, inactive)
@@ -150,6 +220,14 @@ class XiangqiGame:
             mover.set_in_check(False)
 
     def update_game_state(self):
+        """Updates the current player's (mover player) opponent (inactive
+        player) check state after. Assumed to be called after the
+        mover has relocated their piece on the Board.
+
+        Finally computes whether the game has ended by counting all
+        valid moves of the inactive player. If said player has no
+        valid moves then the game has been won by the mover.
+        """
         pieces = self._inactive.get_all_pieces(self._inactive)
         valid_move_count = 0  # if no valid moves, then game is over.
 
@@ -177,22 +255,90 @@ class XiangqiGame:
 
     def validate_virual_move(self, beg_pos, end_pos,
                              vir_mover, vir_inactive):
-        vir_mover_now_exposed = False
+        """Emulates method XiangqiGame.move_mover() to check if a hypothetical
+        move is valid or not.
 
+        Makes the move but if it raises exception then it is
+        determined invalid. If it completes successfully then the move
+        is valid.
+
+        Raises
+        ------
+        MoverMoveResultedInOwnCheckError:
+            When attempting to move the piece in such a way that would leave
+            the mover's general open to direct attack on the next turn.
+        NoPieceAtStartPosError:
+            When trying to move a none-existant piece at beg_pos.
+        WrongPieceOwner:
+            When attempting to move a piece that does not belong to mover.
+        NotInMoveListError:
+            When attempting to move the piece that is not in accordance to its
+            moves dictated by its nature.
+
+        Parameters
+        ----------
+        beg_pos: tuple of int
+            Position of the virtual mover's piece.
+        end_pos: tuple of int
+            Position to move the virtual mover's piece to.
+        vir_mover: Player
+            Player making the virtual move.
+        vir_inactive: Player
+            Opponent of the virtual mover.
+
+        Returns
+        -------
+        None
+        """
+        vir_mover_now_exposed = False  # Boolean flag variable.
+
+        # Make the hypothetical move. Board is updated accordingly if there was
+        # a indeed a player at the beg_pos that belonged to the player whose
+        # moves allow it to traverse to the end_pos. Otherwise raises
+        # appropriate exception.
         taken = self._board.make_move(beg_pos, end_pos, vir_mover)
 
+        # Remove the captured from the virtual mover's opponent to subsequently
+        # allow accrutate determination if the virtual mover is in check
+        # afterwards.
         if taken is not None:
             vir_inactive.remove_piece(taken)
 
+        # Determine if the virtual move leaves the virtual mover in check.
         if vir_mover.is_in_check(self._board):
             vir_mover_now_exposed = True
 
+        # Undo the hypothetical turn regardless if it was valid or not (since
+        # it is a "hypothetical" turn after all).
         moved = self.undo_move(taken, vir_inactive)
 
+        # Raise exception if move would leave general exposed.
         if vir_mover_now_exposed:
             raise MoverMoveResultedInOwnCheckError(end_pos, moved, vir_mover)
 
     def undo_move(self, taken, inactive):
+        """Reverse a move that has just occured.
+
+        Puts the moved piece back where was originally.
+
+        Puts the captured piece back where it was and adds it back to the
+        Player it was taken from.
+
+        Parameters
+        ----------
+        taken: Piece
+            The piece that was captured by the mover of the move to be
+            reversed.
+        inactive: Player
+            Opponent of the player `taken` was taken from (i.e. the opponent of
+            the player who made the move to be reversed).
+
+        Returns
+        -------
+        Piece
+            The Piece that was moved in the reverted move.
+
+        """
         # Assumes taken was originally owned by inactive.
 
         # Restore board position to what it was before move was made.
@@ -231,13 +377,23 @@ class XiangqiGame:
             player.set_opponent(player_list[i - 1])
 
     def switch_mover(self, current_mover):
+        """Makes the opponent of the specified mover the new current mover.
+
+        Parameters
+        ----------
+        current_mover: Player
+            Player to be made into the inactive player.
+
+        Returns
+        -------
+        None
+        """
         if current_mover.get_color() == current_mover.get_RED():
             self._mover = self._players['black']
             self._inactive = self._players['red']
         else:
             self._mover = self._players['red']
             self._inactive = self._players['black']
-
 
 
 class Board:
